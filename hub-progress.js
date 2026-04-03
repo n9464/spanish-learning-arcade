@@ -31,6 +31,7 @@ function countAnsweredResponses(responses) {
   return Object.values(responses).filter((entry) => entry && entry.answered).length;
 }
 
+
 function buildZombieProgressText() {
   const progress = readStoredJson(HUB_STORAGE_KEYS.zombie);
   if (!progress) {
@@ -74,6 +75,7 @@ function buildAccentProgressText() {
 
   return `Step ${step} of 8 • ${answered} questions answered`;
 }
+
 
 function buildVerbProgressText() {
   const progress = readStoredJson(HUB_STORAGE_KEYS.verb);
