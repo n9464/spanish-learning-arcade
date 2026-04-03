@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spanish Reading Comprehension Lab</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="accent-course.css" />
+    <link rel="stylesheet" href="reading-course.css" />
+  </head>
+  <body class="accent-course-page reading-course-page">
+    <div class="night-fx" aria-hidden="true">
+      <div class="mist mist-a"></div>
+      <div class="mist mist-b"></div>
+      <div class="mist mist-c"></div>
+    </div>
+
+    <main class="accent-shell reading-shell">
+      <aside class="accent-sidebar reading-sidebar liquid-glass">
+        <a class="home-link" href="index.html">Back To Hub</a>
+        <p class="eyebrow">Reading Lab</p>
+        <h1>Spanish Reading Comprehension</h1>
+        <p class="subtitle">
+          Move from short, supported texts to longer passages while training main
+          idea, inference, tone, and grammar recognition.
+        </p>
+
+        <section class="accent-progress reading-progress">
+          <div class="accent-progress-top">
+            <strong>Course progress</strong>
+            <span id="courseProgressText">0% complete</span>
+          </div>
+          <div class="accent-progress-bar" aria-hidden="true">
+            <span id="courseProgressFill"></span>
+          </div>
+          <div class="accent-stats-grid">
+            <div class="accent-stat">
+              <span>Answered</span>
+              <strong id="answeredCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Correct</span>
+              <strong id="correctCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Streak</span>
+              <strong id="streakCount">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Steps</h2>
+            <span id="stepCountLabel">Step 1 of 8</span>
+          </div>
+          <nav id="stepNav" class="step-nav" aria-label="Lesson steps"></nav>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Mastery by skill</h2>
+            <span>Live tracker</span>
+          </div>
+          <div id="masteryBoard" class="mastery-board"></div>
+        </section>
+
+        <section class="accent-sidebar-section reading-tools-card">
+          <div class="section-heading-row">
+            <h2>Reading tools</h2>
+            <span>Click-to-learn</span>
+          </div>
+          <div class="tool-stack">
+            <div class="tool-step">
+              <strong>Inline vocabulary</strong>
+              <span>Click a highlighted word for a definition and context note.</span>
+            </div>
+            <div class="tool-step">
+              <strong>Grammar notes</strong>
+              <span>Click a highlighted structure to see what the grammar is doing.</span>
+            </div>
+            <div class="tool-step">
+              <strong>Translation compare</strong>
+              <span>Reveal the English version only after you try the Spanish first.</span>
+            </div>
+          </div>
+          <div class="reading-scale">
+            <div class="reading-rung"><strong>1-2</strong><span>short and supported</span></div>
+            <div class="reading-rung"><strong>3-5</strong><span>more detail and tone</span></div>
+            <div class="reading-rung"><strong>6-8</strong><span>longer reasoning passages</span></div>
+          </div>
+        </section>
+      </aside>
+
+      <section class="accent-main reading-main">
+        <header class="accent-hero reading-hero liquid-glass">
+          <p class="eyebrow">Goal</p>
+          <h2>Read Spanish for meaning, not just word-by-word decoding</h2>
+          <p class="subtitle">
+            Each passage gives you support only where you need it: inline vocab,
+            highlighted grammar, and translation comparison after you read. The
+            questions then push you toward gist, inference, tone, and structure.
+          </p>
+          <div class="hero-badges">
+            <span class="hero-badge">Short to long</span>
+            <span class="hero-badge">Inline support</span>
+            <span class="hero-badge">Grammar highlights</span>
+            <span class="hero-badge">Translation compare</span>
+            <span class="hero-badge">Inference practice</span>
+          </div>
+        </header>
+
+        <section class="lesson-step reading-step is-active" data-step-title="Foundations">
+          <div class="step-header">
+            <p class="step-kicker">Step 1</p>
+            <h3>Very short daily routine text</h3>
+          </div>
+
+          <article class="passage-card liquid-glass">
+            <div class="passage-head">
+              <div>
+                <h4>Passage 1</h4>
+                <p>Short text • low difficulty • focus on main idea</p>
+              </div>
+              <button class="btn btn-secondary" type="button" data-translation-toggle="p1">Show translation</button>
+            </div>
+            <div class="passage-body">
+              <p>
+                Cada mañana, Ana <button class="grammar-mark grammar-reflexive" type="button" data-passage-grammar="p1" data-label="Reflexive present" data-note="se levanta is a reflexive verb in the present tense. It describes a routine action Ana does to herself: she gets herself up.">se levanta</button>
+                <button class="gloss-chip" type="button" data-passage-gloss="p1" data-term="temprano" data-definition="early">temprano</button>.
+                Prepara café y <button class="grammar-mark grammar-irregular" type="button" data-passage-grammar="p1" data-label="Irregular present" data-note="sale is the present-tense form of salir. It is irregular in the yo form, but here it stays in the normal third-person singular pattern.">sale</button>
+                de casa a las siete. Siempre llega a la universidad
+                <button class="gloss-chip" type="button" data-passage-gloss="p1" data-term="con tiempo" data-definition="with time to spare / not late">con tiempo</button>.
+              </p>
+            </div>
+            <div class="passage-support-grid">
+              <div class="passage-panel" data-gloss-panel="p1">Click a highlighted word for inline vocabulary support.</div>
+              <div class="passage-panel" data-grammar-panel="p1">Click a highlighted grammar structure for a quick note.</div>
+            </div>
+            <div class="translation-panel" data-translation-panel="p1" hidden>
+              Every morning, Ana gets up early. She makes coffee and leaves the house at seven. She always gets to the university with time to spare.
+            </div>
+          </article>
+
+          <div id="practice-foundations" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step reading-step" data-step-title="Short texts">
+          <div class="step-header">
+            <p class="step-kicker">Step 2</p>
+            <h3>Short school text with context clues</h3>
+          </div>
+
+          <article class="passage-card liquid-glass">
+            <div class="passage-head">
+              <div>
+                <h4>Passage 2</h4>
+                <p>Short text • low-medium difficulty • focus on context and inference</p>
+              </div>
+              <button class="btn btn-secondary" type="button" data-translation-toggle="p2">Show translation</button>
+            </div>
+            <div class="passage-body">
+              <p>
+                Marta lleva su almuerzo a la escuela porque no le gusta hacer fila en la cafetería.
+                Durante el recreo, se sienta con sus amigas y comparte fruta con ellas.
+                Después del almuerzo, vuelve rápido a clase porque tiene un
+                <button class="gloss-chip" type="button" data-passage-gloss="p2" data-term="examen" data-definition="exam / test">examen</button>
+                de ciencias.
+              </p>
+            </div>
+            <div class="grammar-strip">
+              <button class="grammar-mark grammar-present" type="button" data-passage-grammar="p2" data-label="Present tense for routine" data-note="lleva, se sienta, comparte, and vuelve are present-tense verbs describing what usually happens in a normal school day.">lleva / se sienta / comparte / vuelve</button>
+              <button class="grammar-mark grammar-connector" type="button" data-passage-grammar="p2" data-label="Reason connector" data-note="porque introduces the reason for the action. It tells you why Marta brings lunch and why she returns quickly.">porque</button>
+            </div>
+            <div class="passage-support-grid">
+              <div class="passage-panel" data-gloss-panel="p2">Click a highlighted word for inline vocabulary support.</div>
+              <div class="passage-panel" data-grammar-panel="p2">Click a highlighted grammar structure for a quick note.</div>
+            </div>
+            <div class="translation-panel" data-translation-panel="p2" hidden>
+              Marta brings her lunch to school because she does not like standing in line in the cafeteria. During recess, she sits with her friends and shares fruit with them. After lunch, she goes back to class quickly because she has a science exam.
+            </div>
+          </article>
+
+          <div id="practice-short" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step reading-step" data-step-title="Descriptions">
+          <div class="step-header">
+            <p class="step-kicker">Step 3</p>
+            <h3>Description and tone</h3>
+          </div>
+
+          <article class="passage-card liquid-glass">
+            <div class="passage-head">
+              <div>
+                <h4>Passage 3</h4>
+                <p>Medium text • tone and descriptive inference</p>
+              </div>
+              <button class="btn btn-secondary" type="button" data-translation-toggle="p3">Show translation</button>
+            </div>
+            <div class="passage-body">
+              <p>
+                Nuestro nuevo vecino se llama Don Ernesto. Vive solo, pero casi nunca parece
+                <button class="gloss-chip" type="button" data-passage-gloss="p3" data-term="solo" data-definition="alone / by himself">solo</button>
+                porque siempre saluda a todos en la calle. Los sábados riega las plantas del patio y pone música antigua.
+                Cuando habla de su juventud, sonríe con calma y mira las montañas como si estuviera recordando otra ciudad.
+              </p>
+            </div>
+            <div class="grammar-strip">
+              <button class="grammar-mark grammar-present" type="button" data-passage-grammar="p3" data-label="Present tense description" data-note="The present tense here builds a portrait of Don Ernesto's usual behavior and personality.">vive / saluda / riega / pone</button>
+              <button class="grammar-mark grammar-comparison" type="button" data-passage-grammar="p3" data-label="Comparison image" data-note="como si estuviera creates an image of what he seems to feel or imagine. It helps build tone, not just literal information.">como si estuviera...</button>
+            </div>
+            <div class="passage-support-grid">
+              <div class="passage-panel" data-gloss-panel="p3">Click a highlighted word for inline vocabulary support.</div>
+              <div class="passage-panel" data-grammar-panel="p3">Click a highlighted grammar structure for a quick note.</div>
+            </div>
+            <div class="translation-panel" data-translation-panel="p3" hidden>
+              Our new neighbor is named Don Ernesto. He lives alone, but he almost never seems alone because he always greets everyone on the street. On Saturdays he waters the patio plants and plays old music. When he talks about his youth, he smiles calmly and looks at the mountains as if he were remembering another city.
+            </div>
+          </article>
+
+          <div id="practice-descriptions" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step reading-step" data-step-title="Messages and tone">
+          <div class="step-header">
+            <p class="step-kicker">Step 4</p>
+            <h3>Message reading: formal vs informal</h3>
+          </div>
+
+          <article class="passage-card liquid-glass">
+            <div class="passage-head">
+              <div>
+                <h4>Passage 4</h4>
+                <p>Medium text • tone and register</p>
+              </div>
+              <button class="btn btn-secondary" type="button" data-translation-toggle="p4">Show translation</button>
+            </div>
+            <div class="passage-body">
+              <p>
+                Buenas tardes, profesora. Le escribo porque mañana no podré asistir a clase.
+                He tenido fiebre desde esta mañana y el médico me recomendó descansar.
+                <button class="grammar-mark grammar-formal" type="button" data-passage-grammar="p4" data-label="Formal register" data-note="Le escribo and no podré asistir are part of a respectful, formal message. The writer is clearly addressing a teacher or another authority figure.">Le escribo</button>
+                para informarle de la situación y preguntarle si habrá tarea para entregar el viernes.
+                Muchas gracias por su comprensión.
+              </p>
+            </div>
+            <div class="grammar-strip">
+              <button class="grammar-mark grammar-perfect" type="button" data-passage-grammar="p4" data-label="Present perfect" data-note="He tenido links a current situation that started earlier and is still relevant now. It helps explain the absence.">He tenido</button>
+              <button class="grammar-mark grammar-future" type="button" data-passage-grammar="p4" data-label="Simple future" data-note="podré shows a future or upcoming inability: tomorrow the student will not be able to attend class.">podré</button>
+            </div>
+            <div class="passage-support-grid">
+              <div class="passage-panel" data-gloss-panel="p4">Click a highlighted word or phrase for inline vocabulary support.</div>
+              <div class="passage-panel" data-grammar-panel="p4">Click a highlighted grammar structure for a quick note.</div>
+            </div>
+            <div class="translation-panel" data-translation-panel="p4" hidden>
+              Good afternoon, teacher. I am writing to you because tomorrow I will not be able to attend class. I have had a fever since this morning and the doctor recommended that I rest. I am writing to inform you of the situation and ask whether there will be homework to hand in on Friday. Thank you very much for your understanding.
+            </div>
+          </article>
+
+          <div id="practice-messages" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step reading-step" data-step-title="Narratives">
+          <div class="step-header">
+            <p class="step-kicker">Step 5</p>
+            <h3>Short narrative with past-time contrast</h3>
+          </div>
+
+          <article class="passage-card liquid-glass">
+            <div class="passage-head">
+              <div>
+                <h4>Passage 5</h4>
+                <p>Medium-hard text • preterite vs background description</p>
+              </div>
+              <button class="btn btn-secondary" type="button" data-translation-toggle="p5">Show translation</button>
+            </div>
+            <div class="passage-body">
+              <p>
+                Cuando era niño, Tomás pasaba los veranos en la casa de su abuela, junto al río.
+                Las tardes eran tranquilas y casi siempre hacía calor. Un día, mientras buscaba piedras cerca del agua,
+                <button class="grammar-mark grammar-preterite" type="button" data-passage-grammar="p5" data-label="Preterite event" data-note="encontró marks the main event that suddenly happened inside the background scene.">encontró</button>
+                una caja pequeña debajo de un árbol. La abrió con cuidado y vio cartas antiguas escritas por su abuelo.
+                Desde entonces, empezó a preguntar más sobre la historia de su familia.
+              </p>
+            </div>
+            <div class="grammar-strip">
+              <button class="grammar-mark grammar-imperfect" type="button" data-passage-grammar="p5" data-label="Imperfect background" data-note="era, pasaba, eran, and hacía describe the background setting and repeated conditions in the past.">era / pasaba / eran / hacía</button>
+              <button class="grammar-mark grammar-preterite" type="button" data-passage-grammar="p5" data-label="Preterite events" data-note="encontró, abrió, vio, and empezó move the story forward with completed actions.">encontró / abrió / vio / empezó</button>
+            </div>
+            <div class="passage-support-grid">
+              <div class="passage-panel" data-gloss-panel="p5">Click a highlighted word or phrase for inline vocabulary support.</div>
+              <div class="passage-panel" data-grammar-panel="p5">Click a highlighted grammar structure for a quick note.</div>
+            </div>
+            <div class="translation-panel" data-translation-panel="p5" hidden>
+              When Tomás was a child, he spent the summers at his grandmother's house by the river. The afternoons were calm and it was almost always hot. One day, while he was looking for stones near the water, he found a small box under a tree. He opened it carefully and saw old letters written by his grandfather. From then on, he started asking more about his family's history.
+            </div>
+          </article>
+
+          <div id="practice-narratives" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step reading-step" data-step-title="Information texts">
+          <div class="step-header">
+            <p class="step-kicker">Step 6</p>
+            <h3>Informational passage with structure</h3>
+          </div>
+
+          <article class="passage-card liquid-glass">
+            <div class="passage-head">
+              <div>
+                <h4>Passage 6</h4>
+                <p>Harder text • structure, cause, and result</p>
+              </div>
+              <button class="btn btn-secondary" type="button" data-translation-toggle="p6">Show translation</button>
+            </div>
+            <div class="passage-body">
+              <p>
+                En el pueblo de San Miguel, el mercado local cambió mucho durante los últimos años.
+                Antes solo abría los domingos; <button class="grammar-mark grammar-connector" type="button" data-passage-grammar="p6" data-label="Contrast connector" data-note="sin embargo marks a contrast between the old situation and the new one.">sin embargo</button>,
+                ahora funciona cuatro días por semana. Además, varios agricultores jóvenes empezaron a vender productos orgánicos,
+                <button class="grammar-mark grammar-result" type="button" data-passage-grammar="p6" data-label="Result phrase" data-note="por lo tanto introduces the consequence of the earlier change: more people now visit the market.">por lo tanto</button>
+                más personas visitan el lugar y algunos restaurantes compran allí sus ingredientes.
+                Según los vecinos, el mercado no solo ayuda a la economía del pueblo, sino que también crea un espacio de encuentro para la comunidad.
+              </p>
+            </div>
+            <div class="grammar-strip">
+              <button class="grammar-mark grammar-time" type="button" data-passage-grammar="p6" data-label="Past-to-present contrast" data-note="Antes... ahora sets up a comparison between the earlier state and the current one. It helps organize the informational text.">Antes / ahora</button>
+              <button class="grammar-mark grammar-connector" type="button" data-passage-grammar="p6" data-label="Addition connector" data-note="Además adds another supporting idea, not a contrasting one.">Además</button>
+            </div>
+            <div class="passage-support-grid">
+              <div class="passage-panel" data-gloss-panel="p6">Click a highlighted word or phrase for inline vocabulary support.</div>
+              <div class="passage-panel" data-grammar-panel="p6">Click a highlighted grammar structure for a quick note.</div>
+            </div>
+            <div class="translation-panel" data-translation-panel="p6" hidden>
+              In the town of San Miguel, the local market changed a lot over the last few years. It used to open only on Sundays; however, now it operates four days a week. In addition, several young farmers began to sell organic products; as a result, more people visit the place and some restaurants buy their ingredients there. According to the neighbors, the market not only helps the town's economy, but also creates a meeting space for the community.
+            </div>
+          </article>
+
+          <div id="practice-information" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step reading-step" data-step-title="Opinion and nuance">
+          <div class="step-header">
+            <p class="step-kicker">Step 7</p>
+            <h3>Opinion passage with nuance</h3>
+          </div>
+
+          <article class="passage-card liquid-glass">
+            <div class="passage-head">
+              <div>
+                <h4>Passage 7</h4>
+                <p>Hard text • inference, tone, and viewpoint</p>
+              </div>
+              <button class="btn btn-secondary" type="button" data-translation-toggle="p7">Show translation</button>
+            </div>
+            <div class="passage-body">
+              <p>
+                Muchas personas creen que trabajar desde casa siempre mejora la calidad de vida.
+                Yo no estoy completamente de acuerdo. Es cierto que uno puede ahorrar tiempo y dinero en transporte;
+                no obstante, también puede ser más difícil separar el trabajo del descanso.
+                Cuando todo ocurre en el mismo espacio, el día parece no terminar nunca.
+                <button class="gloss-chip" type="button" data-passage-gloss="p7" data-term="aun así" data-definition="even so / even then">Aun así</button>,
+                pienso que esta forma de trabajo puede funcionar bien si la persona tiene horarios claros y un lugar tranquilo para concentrarse.
+              </p>
+            </div>
+            <div class="grammar-strip">
+              <button class="grammar-mark grammar-opinion" type="button" data-passage-grammar="p7" data-label="Opinion framing" data-note="Yo no estoy completamente de acuerdo signals a personal position. This is important for tone and main idea.">Yo no estoy completamente de acuerdo</button>
+              <button class="grammar-mark grammar-connector" type="button" data-passage-grammar="p7" data-label="Concession" data-note="Es cierto que... no obstante... builds a balanced opinion: the writer admits one advantage before explaining a problem.">Es cierto que... no obstante...</button>
+            </div>
+            <div class="passage-support-grid">
+              <div class="passage-panel" data-gloss-panel="p7">Click a highlighted word or phrase for inline vocabulary support.</div>
+              <div class="passage-panel" data-grammar-panel="p7">Click a highlighted grammar structure for a quick note.</div>
+            </div>
+            <div class="translation-panel" data-translation-panel="p7" hidden>
+              Many people believe that working from home always improves quality of life. I do not completely agree. It is true that a person can save time and money on transportation; however, it can also be harder to separate work from rest. When everything happens in the same space, the day seems never to end. Even so, I think this way of working can function well if the person has clear schedules and a quiet place to focus.
+            </div>
+          </article>
+
+          <div id="practice-opinion" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step reading-step" data-step-title="Long passage review">
+          <div class="step-header">
+            <p class="step-kicker">Step 8</p>
+            <h3>Longer passage mixed review</h3>
+          </div>
+
+          <article class="passage-card liquid-glass">
+            <div class="passage-head">
+              <div>
+                <h4>Passage 8</h4>
+                <p>Longest text • mixed comprehension and grammar</p>
+              </div>
+              <button class="btn btn-secondary" type="button" data-translation-toggle="p8">Show translation</button>
+            </div>
+            <div class="passage-body">
+              <p>
+                Cuando Lucía se mudó a Valencia para empezar la universidad, pensó que lo más difícil sería acostumbrarse a una ciudad nueva.
+                Durante las primeras semanas, efectivamente se perdió varias veces y echó de menos a su familia;
+                sin embargo, lo que más le costó fue aprender a organizar su tiempo.
+                Tenía clases por la mañana, trabajaba algunas horas por la tarde y, además, quería hacer amigos y conocer la ciudad.
+                Al principio intentaba hacer todo al mismo tiempo, de modo que terminaba cansada y frustrada.
+                Poco a poco comprendió que necesitaba una rutina más realista.
+                Ahora usa una agenda, prepara la comida con anticipación y reserva los domingos para descansar o llamar a sus padres.
+                Gracias a esos cambios, no solo se siente más tranquila, sino que también disfruta mucho más de su vida en Valencia.
+              </p>
+            </div>
+            <div class="grammar-strip">
+              <button class="grammar-mark grammar-preterite" type="button" data-passage-grammar="p8" data-label="Narrative event chain" data-note="se mudó, pensó, se perdió, echó de menos, and comprendió move the story through major events and realizations.">se mudó / pensó / se perdió / echó / comprendió</button>
+              <button class="grammar-mark grammar-present" type="button" data-passage-grammar="p8" data-label="Present for current result" data-note="Ahora usa, prepara, reserva, se siente, and disfruta show the stable present situation after the earlier change.">Ahora usa / prepara / reserva / se siente / disfruta</button>
+              <button class="grammar-mark grammar-connector" type="button" data-passage-grammar="p8" data-label="Result and contrast structure" data-note="sin embargo signals contrast, while gracias a esos cambios points to the result of her new routine.">sin embargo / gracias a esos cambios</button>
+            </div>
+            <div class="passage-support-grid">
+              <div class="passage-panel" data-gloss-panel="p8">Click a highlighted word or phrase for inline vocabulary support.</div>
+              <div class="passage-panel" data-grammar-panel="p8">Click a highlighted grammar structure for a quick note.</div>
+            </div>
+            <div class="translation-panel" data-translation-panel="p8" hidden>
+              When Lucía moved to Valencia to start university, she thought the hardest thing would be getting used to a new city. During the first weeks, she did indeed get lost several times and miss her family; however, what cost her the most was learning to organize her time. She had classes in the morning, worked some hours in the afternoon and, in addition, wanted to make friends and get to know the city. At first she tried to do everything at the same time, so she ended up tired and frustrated. Little by little she understood that she needed a more realistic routine. Now she uses a planner, prepares food ahead of time and keeps Sundays for resting or calling her parents. Thanks to those changes, not only does she feel calmer, but she also enjoys her life in Valencia much more.
+            </div>
+          </article>
+
+          <div id="practice-review" class="practice-block"></div>
+        </section>
+
+        <footer class="lesson-controls liquid-glass">
+          <button id="prevStepBtn" class="btn btn-secondary" type="button">Previous step</button>
+          <button id="nextStepBtn" class="btn btn-primary" type="button">Next step</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="reading-course.js"></script>
+  </body>
+</html>

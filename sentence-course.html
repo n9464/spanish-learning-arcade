@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spanish Sentence Structure Lab</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="accent-course.css" />
+    <link rel="stylesheet" href="sentence-course.css" />
+  </head>
+  <body class="accent-course-page sentence-course-page">
+    <div class="night-fx" aria-hidden="true">
+      <div class="mist mist-a"></div>
+      <div class="mist mist-b"></div>
+      <div class="mist mist-c"></div>
+    </div>
+
+    <main class="accent-shell sentence-shell">
+      <aside class="accent-sidebar sentence-sidebar liquid-glass">
+        <a class="home-link" href="index.html">Back To Hub</a>
+        <p class="eyebrow">Sentence Lab</p>
+        <h1>Spanish Sentence Structure</h1>
+        <p class="subtitle">
+          Learn how Spanish builds meaning: default order, flexible order,
+          negation, questions, adjectives, object pronouns, and clitic patterns.
+        </p>
+
+        <section class="accent-progress sentence-progress">
+          <div class="accent-progress-top">
+            <strong>Course progress</strong>
+            <span id="courseProgressText">0% complete</span>
+          </div>
+          <div class="accent-progress-bar" aria-hidden="true">
+            <span id="courseProgressFill"></span>
+          </div>
+          <div class="accent-stats-grid">
+            <div class="accent-stat">
+              <span>Answered</span>
+              <strong id="answeredCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Correct</span>
+              <strong id="correctCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Streak</span>
+              <strong id="streakCount">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Color legend</h2>
+            <span>Read sentence roles fast</span>
+          </div>
+          <div class="legend-strip">
+            <span class="legend-pill legend-subject">Subject</span>
+            <span class="legend-pill legend-verb">Verb</span>
+            <span class="legend-pill legend-object">Object</span>
+            <span class="legend-pill legend-pronoun">Pronoun</span>
+            <span class="legend-pill legend-adjective">Adjective</span>
+            <span class="legend-pill legend-negation">Negation</span>
+          </div>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Steps</h2>
+            <span id="stepCountLabel">Step 1 of 8</span>
+          </div>
+          <nav id="stepNav" class="step-nav" aria-label="Sentence lesson steps"></nav>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Mastery by topic</h2>
+            <span>Live tracker</span>
+          </div>
+          <div id="masteryBoard" class="mastery-board"></div>
+        </section>
+      </aside>
+
+      <section class="accent-main sentence-main">
+        <header class="accent-hero sentence-hero liquid-glass">
+          <p class="eyebrow">Goal</p>
+          <h2>From basic word order to advanced pronoun placement</h2>
+          <p class="subtitle">
+            This lesson shows the logic behind Spanish sentence order so you can stop translating English structure word by word.
+          </p>
+        </header>
+
+        <section class="lesson-step sentence-step is-active" data-step-title="Basic order">
+          <div class="step-header">
+            <p class="step-kicker">Step 1</p>
+            <h3>Basic word order: Spanish starts with SVO, but it is more flexible than English</h3>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>Neutral Spanish order</h4>
+              <div class="sentence-strip">
+                <span class="sentence-part part-subject">María</span>
+                <span class="sentence-part part-verb">compra</span>
+                <span class="sentence-part part-object">pan</span>
+              </div>
+              <p>Like English, the most neutral Spanish order is <strong>Subject + Verb + Object</strong>.</p>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>Spanish can move pieces for focus</h4>
+              <div class="sentence-strip">
+                <span class="sentence-part part-object">El pan</span>
+                <span class="sentence-part part-verb">lo compra</span>
+                <span class="sentence-part part-subject">María</span>
+              </div>
+              <p>Spanish can front elements for emphasis or topic, especially if the meaning stays clear from context or pronouns.</p>
+            </article>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass language-compare">
+              <h4>English vs Spanish</h4>
+              <div class="compare-line"><span>English</span><strong>The teacher explains the lesson.</strong></div>
+              <div class="compare-line"><span>Spanish</span><strong>La profesora explica la lección.</strong></div>
+              <p class="mini-note">Start here when you are unsure. Learn the neutral order first, then learn the marked variations later.</p>
+            </article>
+            <article class="why-box liquid-glass">
+              <h4>Main idea</h4>
+              <p>
+                Spanish is not random. It is <strong>flexible</strong>. The default is simple, and the flexible order is usually used for emphasis, topic, rhythm, or to avoid repetition.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-basic-order" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step sentence-step" data-step-title="Subject omission">
+          <div class="step-header">
+            <p class="step-kicker">Step 2</p>
+            <h3>Subject omission: why Spanish often leaves the subject pronoun out</h3>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>With pronoun</h4>
+              <div class="sentence-strip">
+                <span class="sentence-part part-subject">Yo</span>
+                <span class="sentence-part part-verb">hablo</span>
+                <span class="sentence-part part-object">español</span>
+              </div>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>More natural by default</h4>
+              <div class="sentence-strip">
+                <span class="sentence-part part-verb">Hablo</span>
+                <span class="sentence-part part-object">español</span>
+              </div>
+              <p>The verb ending already tells you who the subject is.</p>
+            </article>
+          </div>
+
+          <div class="callout-row">
+            <aside class="memory-box liquid-glass">
+              <h4>Keep the subject when...</h4>
+              <p>You want contrast, emphasis, or clarity: <strong>Yo no, pero ella sí.</strong></p>
+            </aside>
+            <aside class="compare-card liquid-glass">
+              <h4>Typical beginner mistake</h4>
+              <p>Repeating <strong>yo, tú, él</strong> in every sentence because English does. Spanish usually sounds lighter without them.</p>
+            </aside>
+          </div>
+
+          <div id="practice-subject-omission" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step sentence-step" data-step-title="Adjectives">
+          <div class="step-header">
+            <p class="step-kicker">Step 3</p>
+            <h3>Adjective placement: after the noun is normal, but before the noun can change nuance or meaning</h3>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>Default pattern</h4>
+              <div class="sentence-strip">
+                <span class="sentence-part part-object">la casa</span>
+                <span class="sentence-part part-adjective">roja</span>
+              </div>
+              <p>Most descriptive adjectives come <strong>after</strong> the noun.</p>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>Before the noun</h4>
+              <div class="sentence-strip">
+                <span class="sentence-part part-adjective">gran</span>
+                <span class="sentence-part part-object">hombre</span>
+              </div>
+              <p>Some adjectives move before the noun for style, emphasis, quantity, or a meaning shift.</p>
+            </article>
+          </div>
+
+          <div class="accent-table-wrap liquid-glass">
+            <div class="section-heading-row">
+              <h4>Meaning shifts to watch</h4>
+              <span>Position can matter</span>
+            </div>
+            <table class="sentence-table">
+              <thead>
+                <tr><th>Before noun</th><th>After noun</th><th>Difference</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>un gran hombre</td><td>un hombre grande</td><td>great man vs big man</td></tr>
+                <tr><td>mi vieja amiga</td><td>mi amiga vieja</td><td>longtime friend vs old friend</td></tr>
+                <tr><td>cierta idea</td><td>idea cierta</td><td>a certain idea vs a sure/true idea</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="practice-adjectives" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step sentence-step" data-step-title="Negation">
+          <div class="step-header">
+            <p class="step-kicker">Step 4</p>
+            <h3>Negation: no, nunca, nadie, nada, tampoco, and how Spanish stacks negatives</h3>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>Basic negation</h4>
+              <div class="sentence-strip">
+                <span class="sentence-part part-negation">No</span>
+                <span class="sentence-part part-verb">veo</span>
+                <span class="sentence-part part-object">la película</span>
+              </div>
+              <p><strong>No</strong> goes before the conjugated verb.</p>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>Negative chains</h4>
+              <div class="sentence-strip">
+                <span class="sentence-part part-negation">No</span>
+                <span class="sentence-part part-verb">veo</span>
+                <span class="sentence-part part-negation">nada</span>
+                <span class="sentence-part part-negation">nunca</span>
+              </div>
+              <p>Spanish can use multiple negative words together. This is normal, not “double negative” error logic from English.</p>
+            </article>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass language-compare">
+              <h4>Side by side</h4>
+              <div class="compare-line"><span>English</span><strong>I do not see anything.</strong></div>
+              <div class="compare-line"><span>Spanish</span><strong>No veo nada.</strong></div>
+              <div class="compare-line"><span>English</span><strong>I do not go either.</strong></div>
+              <div class="compare-line"><span>Spanish</span><strong>Yo tampoco voy.</strong></div>
+            </article>
+            <article class="why-box liquid-glass">
+              <h4>Watch out</h4>
+              <p>If a negative word like <strong>nunca</strong> or <strong>nadie</strong> comes <strong>before</strong> the verb, you usually do not add <strong>no</strong>: <strong>Nunca veo televisión.</strong></p>
+            </article>
+          </div>
+
+          <div id="practice-negation" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step sentence-step" data-step-title="Questions">
+          <div class="step-header">
+            <p class="step-kicker">Step 5</p>
+            <h3>Question formation: no “do-support,” flexible inversion, and question words up front</h3>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>Yes / no question</h4>
+              <div class="sentence-strip">
+                <span class="sentence-part part-verb">¿Comes</span>
+                <span class="sentence-part part-object">pizza?</span>
+              </div>
+              <p>Spanish often keeps the normal verb form. Question meaning comes from punctuation, intonation, and context.</p>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>Question word question</h4>
+              <div class="sentence-strip">
+                <span class="sentence-part part-negation">¿Dónde</span>
+                <span class="sentence-part part-verb">vives?</span>
+              </div>
+              <p>Question words like <strong>qué, cuándo, dónde, cómo</strong> usually appear near the front.</p>
+            </article>
+          </div>
+
+          <div class="callout-row">
+            <aside class="memory-box liquid-glass">
+              <h4>No English-style helper verb</h4>
+              <p>English asks <strong>Do you live here?</strong> Spanish says <strong>¿Vives aquí?</strong> There is no extra helper like <strong>do</strong>.</p>
+            </aside>
+            <aside class="compare-card liquid-glass">
+              <h4>Inversion is not required</h4>
+              <p><strong>¿Tú vienes?</strong> can appear for emphasis, but the more neutral version is often simply <strong>¿Vienes?</strong>.</p>
+            </aside>
+          </div>
+
+          <div id="practice-questions" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step sentence-step" data-step-title="Object pronouns">
+          <div class="step-header">
+            <p class="step-kicker">Step 6</p>
+            <h3>Object pronouns: direct, indirect, and double-object logic</h3>
+          </div>
+
+          <div class="accent-table-wrap liquid-glass">
+            <div class="section-heading-row">
+              <h4>Core object pronoun map</h4>
+              <span>Who receives? What is affected?</span>
+            </div>
+            <table class="sentence-table">
+              <thead>
+                <tr><th>Function</th><th>Singular</th><th>Plural</th><th>Question to ask</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Direct object</td><td>lo / la</td><td>los / las</td><td>what? whom?</td></tr>
+                <tr><td>Indirect object</td><td>le</td><td>les</td><td>to whom? for whom?</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>Direct object</h4>
+              <div class="sentence-strip">
+                <span class="sentence-part part-pronoun">La</span>
+                <span class="sentence-part part-verb">veo</span>
+              </div>
+              <p><strong>La</strong> replaces <strong>la película</strong> or another feminine singular direct object.</p>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>Indirect object</h4>
+              <div class="sentence-strip">
+                <span class="sentence-part part-pronoun">Le</span>
+                <span class="sentence-part part-verb">doy</span>
+                <span class="sentence-part part-object">el libro</span>
+              </div>
+              <p><strong>Le</strong> replaces the recipient: <strong>to her / to him / to you</strong>.</p>
+            </article>
+          </div>
+
+          <div id="practice-object-pronouns" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step sentence-step" data-step-title="Placement and clitic doubling">
+          <div class="step-header">
+            <p class="step-kicker">Step 7</p>
+            <h3>Pronoun placement: before conjugated verbs, attached to infinitives and commands, plus clitic doubling</h3>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>Before a conjugated verb</h4>
+              <div class="sentence-strip">
+                <span class="sentence-part part-pronoun">Lo</span>
+                <span class="sentence-part part-verb">quiero</span>
+                <span class="sentence-part part-object">ver</span>
+              </div>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>Attached to infinitive / gerund / affirmative command</h4>
+              <div class="sentence-stack-mini">
+                <div class="sentence-strip"><span class="sentence-part part-verb">Quiero</span><span class="sentence-part part-object">verlo</span></div>
+                <div class="sentence-strip"><span class="sentence-part part-verb">Estoy</span><span class="sentence-part part-object">mirándolo</span></div>
+                <div class="sentence-strip"><span class="sentence-part part-object">Míralo</span></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Clitic doubling</h4>
+              <p><strong>A María la veo.</strong> / <strong>Le di el libro a Ana.</strong></p>
+              <p class="mini-note">Spanish often repeats the object with both <strong>a + noun</strong> and the matching pronoun. This is especially common with people and indirect objects.</p>
+            </article>
+            <article class="why-box liquid-glass">
+              <h4>Se + lo / la / los / las</h4>
+              <p>When <strong>le / les</strong> appears before a direct-object pronoun, it changes to <strong>se</strong>: <strong>Se lo doy.</strong></p>
+            </article>
+          </div>
+
+          <div id="practice-placement" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step sentence-step" data-step-title="Mastery lab">
+          <div class="step-header">
+            <p class="step-kicker">Step 8</p>
+            <h3>Mastery lab: build, correct, and compare full Spanish sentences</h3>
+          </div>
+
+          <div class="summary-chart liquid-glass">
+            <h4>Fast structure cheat sheet</h4>
+            <div class="cheat-grid">
+              <p><strong>Default order:</strong> Subject + Verb + Object</p>
+              <p><strong>Omit subjects:</strong> when the verb already shows who</p>
+              <p><strong>Adjectives:</strong> usually after the noun</p>
+              <p><strong>Negation:</strong> no before the conjugated verb</p>
+              <p><strong>Questions:</strong> no do-support; punctuation + intonation</p>
+              <p><strong>Direct pronouns:</strong> lo, la, los, las</p>
+              <p><strong>Indirect pronouns:</strong> le, les</p>
+              <p><strong>Placement:</strong> before conjugated verbs, attached to infinitives / affirmative commands</p>
+            </div>
+          </div>
+
+          <div class="common-mistakes liquid-glass">
+            <h4>Common learner mistakes</h4>
+            <ul>
+              <li>Keeping English word order too rigidly and assuming Spanish can never move pieces.</li>
+              <li>Repeating subject pronouns in every sentence.</li>
+              <li>Putting descriptive adjectives before the noun by default.</li>
+              <li>Using English-style negation logic and avoiding normal Spanish negative chains.</li>
+              <li>Building questions with an English helper verb pattern.</li>
+              <li>Mixing up direct and indirect object pronouns.</li>
+              <li>Putting pronouns after a conjugated verb when they should go before it.</li>
+              <li>Missing clitic doubling in sentences like <strong>A María la veo</strong>.</li>
+            </ul>
+          </div>
+
+          <div class="diagnostic-grid">
+            <div id="practice-mixed-review" class="practice-block"></div>
+            <div id="practice-correction-lab" class="practice-block"></div>
+          </div>
+        </section>
+
+        <footer class="lesson-controls liquid-glass">
+          <button id="prevStepBtn" class="btn btn-secondary" type="button">Previous step</button>
+          <button id="nextStepBtn" class="btn btn-primary" type="button">Next step</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="sentence-course.js"></script>
+  </body>
+</html>

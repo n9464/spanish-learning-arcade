@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spanish Listening Trainer</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="accent-course.css" />
+    <link rel="stylesheet" href="listening-course.css" />
+  </head>
+  <body class="accent-course-page listening-course-page">
+    <div class="night-fx" aria-hidden="true">
+      <div class="mist mist-a"></div>
+      <div class="mist mist-b"></div>
+      <div class="mist mist-c"></div>
+    </div>
+
+    <main class="accent-shell listening-shell">
+      <aside class="accent-sidebar listening-sidebar liquid-glass">
+        <a class="home-link" href="index.html">Back To Hub</a>
+        <p class="eyebrow">Audio Lab</p>
+        <h1>Spanish Listening Trainer</h1>
+        <p class="subtitle">
+          Train your ear from slow, clear Spanish to faster real-life chunks. The
+          system keeps bringing back the forms you miss.
+        </p>
+
+        <section class="accent-progress listening-progress">
+          <div class="accent-progress-top">
+            <strong>Course progress</strong>
+            <span id="courseProgressText">0% complete</span>
+          </div>
+          <div class="accent-progress-bar" aria-hidden="true">
+            <span id="courseProgressFill"></span>
+          </div>
+          <div class="accent-stats-grid">
+            <div class="accent-stat">
+              <span>Answered</span>
+              <strong id="answeredCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Correct</span>
+              <strong id="correctCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Streak</span>
+              <strong id="streakCount">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Steps</h2>
+            <span id="stepCountLabel">Step 1 of 8</span>
+          </div>
+          <nav id="stepNav" class="step-nav" aria-label="Lesson steps"></nav>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Mastery by skill</h2>
+            <span>Live tracker</span>
+          </div>
+          <div id="masteryBoard" class="mastery-board"></div>
+        </section>
+
+        <section class="accent-sidebar-section audio-system-card">
+          <div class="section-heading-row">
+            <h2>Audio system</h2>
+            <span id="voiceAvailability">Checking...</span>
+          </div>
+          <p id="voiceStatusText" class="mini-note">
+            This lesson uses your browser's Spanish voice when available.
+          </p>
+          <div class="speed-ladder">
+            <div class="speed-rung speed-slow">
+              <strong>Slow warm-up</strong>
+              <span>0.72x</span>
+            </div>
+            <div class="speed-rung speed-guided">
+              <strong>Guided speed</strong>
+              <span>0.86x</span>
+            </div>
+            <div class="speed-rung speed-natural">
+              <strong>Natural speed</strong>
+              <span>1.00x</span>
+            </div>
+            <div class="speed-rung speed-challenge">
+              <strong>Fast catch-it</strong>
+              <span>1.12x</span>
+            </div>
+          </div>
+          <div class="audio-status-row">
+            <span id="playbackStatus">Ready for your first clip.</span>
+            <button id="stopAudioBtn" class="btn-secondary" type="button">Stop audio</button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="accent-main listening-main">
+        <header class="accent-hero listening-hero liquid-glass">
+          <p class="eyebrow">Goal</p>
+          <h2>Catch the verb, infer the subject, rebuild the sentence</h2>
+          <p class="subtitle">
+            Each step adds a new listening habit: hear the ending, map it to a
+            subject, notice dropped pronouns, separate similar sounds, then write
+            back what you heard.
+          </p>
+          <div class="hero-badges">
+            <span class="hero-badge">Slow audio first</span>
+            <span class="hero-badge">Transcript reveal</span>
+            <span class="hero-badge">Replay controls</span>
+            <span class="hero-badge">Dictation practice</span>
+          </div>
+        </header>
+
+        <section class="lesson-step listening-step is-active" data-step-title="Listening foundations">
+          <div class="step-header">
+            <p class="step-kicker">Step 1</p>
+            <h3>Listening foundations</h3>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>What to catch first</h4>
+              <p>
+                In Spanish listening, do not wait for every word. First catch the
+                <strong>verb ending</strong>, then the <strong>subject clue</strong>,
+                then the rest of the sentence.
+              </p>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>Why this matters</h4>
+              <p>
+                Spoken Spanish often drops subject pronouns, so the verb form does a
+                lot of the work. If you hear <strong>-mos</strong>, your ear should
+                already suspect <strong>nosotros</strong>.
+              </p>
+            </article>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="accent-card liquid-glass listening-card">
+              <h4>Listening sequence</h4>
+              <div class="flow-line">
+                <span>Hear the verb</span>
+                <span>Catch the ending</span>
+                <span>Infer the subject</span>
+                <span>Confirm with context</span>
+              </div>
+            </article>
+            <article class="accent-card liquid-glass listening-card">
+              <h4>Transcript highlight key</h4>
+              <div class="transcript-legend">
+                <span class="transcript-part transcript-verb">verb form</span>
+                <span class="transcript-part transcript-subject">subject clue</span>
+                <span class="transcript-part transcript-cue">context clue</span>
+                <span class="transcript-part transcript-contrast">sound contrast</span>
+              </div>
+            </article>
+          </div>
+
+          <div id="practice-foundations" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step listening-step" data-step-title="Hear the conjugation">
+          <div class="step-header">
+            <p class="step-kicker">Step 2</p>
+            <h3>Hear the conjugation inside the sound</h3>
+          </div>
+
+          <div class="rule-grid">
+            <article class="rule-card liquid-glass listening-tone-blue">
+              <div class="rule-card-top">
+                <h4>Present-tense sound map</h4>
+                <span>Listen for endings, not full charts</span>
+              </div>
+              <div class="ending-ladder">
+                <span><strong>-o</strong> usually points to yo</span>
+                <span><strong>-s</strong> often points to tú</span>
+                <span><strong>-mos</strong> usually points to nosotros</span>
+                <span><strong>-n</strong> often points to ellos / ellas / ustedes</span>
+              </div>
+            </article>
+            <article class="rule-card liquid-glass listening-tone-green">
+              <div class="rule-card-top">
+                <h4>Do not over-wait</h4>
+                <span>Build the subject while the sentence continues</span>
+              </div>
+              <p>
+                If you hear <strong>quiero</strong>, your brain can already expect
+                a first-person meaning before the rest of the sentence arrives.
+              </p>
+            </article>
+          </div>
+
+          <div class="accent-table-wrap liquid-glass">
+            <table class="accent-table">
+              <thead>
+                <tr>
+                  <th>Ending clue</th>
+                  <th>Fast listening guess</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>-o</td>
+                  <td>yo</td>
+                  <td>tengo, hablo, como</td>
+                </tr>
+                <tr>
+                  <td>-a / -e</td>
+                  <td>él / ella / usted</td>
+                  <td>vive, puede, quiere</td>
+                </tr>
+                <tr>
+                  <td>-mos</td>
+                  <td>nosotros / nosotras</td>
+                  <td>vamos, tenemos, vivimos</td>
+                </tr>
+                <tr>
+                  <td>-n</td>
+                  <td>ellos / ellas / ustedes</td>
+                  <td>vienen, comen, hablan</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="practice-conjugation" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step listening-step" data-step-title="Dropped subjects">
+          <div class="step-header">
+            <p class="step-kicker">Step 3</p>
+            <h3>Dropped subjects: hear who is there even when no pronoun is spoken</h3>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Pronoun spoken</h4>
+              <div class="compare-line">
+                <span class="compare-word">Yo estudio</span>
+                <span class="compare-note">Clear subject, but often heavier than needed.</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">Ella vive aquí</span>
+                <span class="compare-note">Useful when the speaker wants emphasis or contrast.</span>
+              </div>
+            </article>
+            <article class="compare-card liquid-glass">
+              <h4>Pronoun omitted</h4>
+              <div class="compare-line">
+                <span class="compare-word">Estudio</span>
+                <span class="compare-note">The -o ending already signals yo.</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">Vivimos aquí</span>
+                <span class="compare-note">The -mos ending already signals nosotros.</span>
+              </div>
+            </article>
+          </div>
+
+          <div class="callout-row">
+            <aside class="memory-box liquid-glass">
+              <h4>Memory trick</h4>
+              <p>
+                Ask: <strong>Which ending did I hear?</strong> before you ask:
+                <strong>Did I hear a pronoun?</strong>
+              </p>
+            </aside>
+            <aside class="why-box liquid-glass">
+              <h4>What gets learners</h4>
+              <p>
+                Learners often wait for yo, tú, or ellos. Native speech often skips
+                them, so the verb must carry the load.
+              </p>
+            </aside>
+          </div>
+
+          <div id="practice-dropped-subject" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step listening-step" data-step-title="Similar sounds">
+          <div class="step-header">
+            <p class="step-kicker">Step 4</p>
+            <h3>Similar sounds: catch the small ending that changes the meaning</h3>
+          </div>
+
+          <div class="accent-table-wrap liquid-glass">
+            <table class="accent-table">
+              <thead>
+                <tr>
+                  <th>Sound contrast</th>
+                  <th>What changes</th>
+                  <th>Listening habit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>hablo / habló</td>
+                  <td>speaker vs completed past</td>
+                  <td>Listen for the stress and final vowel quality.</td>
+                </tr>
+                <tr>
+                  <td>vive / viven</td>
+                  <td>singular vs plural</td>
+                  <td>Do not miss the final <strong>-n</strong>.</td>
+                </tr>
+                <tr>
+                  <td>quiero / quiere</td>
+                  <td>yo vs él / ella / usted</td>
+                  <td>Catch the last syllable instead of only the stem.</td>
+                </tr>
+                <tr>
+                  <td>viene / vienen</td>
+                  <td>singular vs plural</td>
+                  <td>Train your ear to hear the plural ending under speed.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="common-mistakes liquid-glass">
+            <h4>Common listening mistakes</h4>
+            <ul>
+              <li>Hearing the stem but missing the last syllable.</li>
+              <li>Assuming a subject pronoun must be spoken.</li>
+              <li>Treating all present-tense forms as the same because the verb root sounds familiar.</li>
+            </ul>
+          </div>
+
+          <div id="practice-sound-contrast" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step listening-step" data-step-title="Reconstruction lab">
+          <div class="step-header">
+            <p class="step-kicker">Step 5</p>
+            <h3>Reconstruction lab: what did you hear?</h3>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="accent-card liquid-glass listening-card">
+              <h4>Reconstruction routine</h4>
+              <ol class="tight-list ordered-list">
+                <li>Listen once for the main verb.</li>
+                <li>Listen again for the subject clue.</li>
+                <li>Grab the object or time phrase.</li>
+                <li>Rebuild the sentence in order.</li>
+              </ol>
+            </article>
+            <article class="accent-card liquid-glass listening-card">
+              <h4>Do not chase every syllable</h4>
+              <p>
+                Catch the pieces in layers. One pass for the verb. One pass for the
+                rest. Reconstruction improves when you stop demanding perfection on
+                the first play.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-reconstruction" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step listening-step" data-step-title="Dictation lab">
+          <div class="step-header">
+            <p class="step-kicker">Step 6</p>
+            <h3>Dictation lab: write back exactly what you hear</h3>
+          </div>
+
+          <div class="callout-row">
+            <aside class="memory-box liquid-glass">
+              <h4>Dictation checklist</h4>
+              <p>
+                Listen for <strong>verb ending</strong>, <strong>negation</strong>,
+                and <strong>small function words</strong> like me, no, a, and que.
+              </p>
+            </aside>
+            <aside class="why-box liquid-glass">
+              <h4>Why dictation helps</h4>
+              <p>
+                Dictation exposes exactly where your listening blurs: endings,
+                pronouns, stress, or linking words.
+              </p>
+            </aside>
+          </div>
+
+          <div class="visual-strip">
+            <div class="syllable-demo liquid-glass">
+              <span class="word-label">No podemos</span>
+              <p>Do not miss the opening <strong>no</strong>.</p>
+            </div>
+            <div class="syllable-demo liquid-glass">
+              <span class="word-label">Me levanto</span>
+              <p>Reflexive <strong>me</strong> is easy to lose in fast speech.</p>
+            </div>
+            <div class="syllable-demo liquid-glass">
+              <span class="word-label">quieren aprender</span>
+              <p>Catch the plural ending in <strong>quieren</strong>.</p>
+            </div>
+          </div>
+
+          <div id="practice-dictation" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step listening-step" data-step-title="Faster real-life chunks">
+          <div class="step-header">
+            <p class="step-kicker">Step 7</p>
+            <h3>Faster real-life chunks</h3>
+          </div>
+
+          <div class="rule-grid">
+            <article class="rule-card liquid-glass listening-tone-orange">
+              <div class="rule-card-top">
+                <h4>Now add more structure</h4>
+                <span>Longer phrases, more grammar, less silence</span>
+              </div>
+              <p>
+                This stage mixes present progressive, near future, preterite, and
+                future forms at faster playback so you learn to recognize the verb
+                shape under pressure.
+              </p>
+            </article>
+            <article class="rule-card liquid-glass listening-tone-violet">
+              <div class="rule-card-top">
+                <h4>Survival habit</h4>
+                <span>Hear the tense before the whole sentence finishes</span>
+              </div>
+              <p>
+                If you catch <strong>estamos + gerund</strong> or
+                <strong>voy a + infinitive</strong> early, comprehension rises fast.
+              </p>
+            </article>
+          </div>
+
+          <div class="speed-route liquid-glass">
+            <div>Slow chunk</div>
+            <div>Guided chunk</div>
+            <div>Natural chunk</div>
+            <div>Challenge chunk</div>
+          </div>
+
+          <div id="practice-speed" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step listening-step" data-step-title="Mixed mastery">
+          <div class="step-header">
+            <p class="step-kicker">Step 8</p>
+            <h3>Mixed mastery</h3>
+          </div>
+
+          <div class="summary-chart liquid-glass">
+            <h4>What strong listeners do</h4>
+            <p>
+              They recognize the conjugation, infer dropped subjects, notice tiny
+              sound contrasts, and rebuild the sentence instead of waiting for a
+              perfect word-for-word transcript.
+            </p>
+          </div>
+
+          <div class="common-mistakes liquid-glass">
+            <h4>Most common listening mistakes</h4>
+            <ul>
+              <li>Ignoring the last syllable of the verb.</li>
+              <li>Missing no, me, te, se, lo, and other short words.</li>
+              <li>Assuming the subject must be spoken.</li>
+              <li>Stopping when one word is unclear instead of tracking the sentence shape.</li>
+            </ul>
+          </div>
+
+          <div id="practice-mixed-review" class="practice-block"></div>
+        </section>
+
+        <footer class="lesson-controls liquid-glass">
+          <button id="prevStepBtn" class="btn btn-secondary" type="button">Previous step</button>
+          <button id="nextStepBtn" class="btn btn-primary" type="button">Next step</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="listening-course.js"></script>
+  </body>
+</html>

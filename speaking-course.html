@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spanish Speaking Studio</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="accent-course.css" />
+    <link rel="stylesheet" href="speaking-course.css" />
+  </head>
+  <body class="accent-course-page speaking-course-page">
+    <div class="night-fx" aria-hidden="true">
+      <div class="mist mist-a"></div>
+      <div class="mist mist-b"></div>
+      <div class="mist mist-c"></div>
+    </div>
+
+    <main class="accent-shell speaking-shell">
+      <aside class="accent-sidebar speaking-sidebar liquid-glass">
+        <a class="home-link" href="index.html">Back To Hub</a>
+        <p class="eyebrow">Speaking Studio</p>
+        <h1>Spanish Speaking Practice</h1>
+        <p class="subtitle">
+          Practice real conversation patterns, answer under light time pressure,
+          and get model replies plus natural variations after every turn.
+        </p>
+
+        <section class="accent-progress speaking-progress">
+          <div class="accent-progress-top">
+            <strong>Course progress</strong>
+            <span id="courseProgressText">0% complete</span>
+          </div>
+          <div class="accent-progress-bar" aria-hidden="true">
+            <span id="courseProgressFill"></span>
+          </div>
+          <div class="accent-stats-grid">
+            <div class="accent-stat">
+              <span>Answered</span>
+              <strong id="answeredCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Correct</span>
+              <strong id="correctCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Streak</span>
+              <strong id="streakCount">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Steps</h2>
+            <span id="stepCountLabel">Step 1 of 8</span>
+          </div>
+          <nav id="stepNav" class="step-nav" aria-label="Lesson steps"></nav>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Mastery by skill</h2>
+            <span>Live tracker</span>
+          </div>
+          <div id="masteryBoard" class="mastery-board"></div>
+        </section>
+
+        <section class="accent-sidebar-section speech-system-card">
+          <div class="section-heading-row">
+            <h2>Speech system</h2>
+            <span id="systemStatusPill">Checking...</span>
+          </div>
+          <div class="system-strip">
+            <div>
+              <span class="system-label">Microphone capture</span>
+              <strong id="micAvailability">Checking...</strong>
+            </div>
+            <div>
+              <span class="system-label">Coach voice</span>
+              <strong id="coachVoiceAvailability">Checking...</strong>
+            </div>
+          </div>
+          <p id="systemStatusText" class="mini-note">
+            This page uses browser speech recognition when available and always
+            keeps a typed fallback so you can still practice.
+          </p>
+          <div class="response-ladder">
+            <div class="response-rung response-rung-wide">
+              <strong>Warm-up</strong>
+              <span>18 seconds</span>
+            </div>
+            <div class="response-rung response-rung-mid">
+              <strong>Guided</strong>
+              <span>15 seconds</span>
+            </div>
+            <div class="response-rung response-rung-natural">
+              <strong>Natural</strong>
+              <span>12 seconds</span>
+            </div>
+            <div class="response-rung response-rung-fast">
+              <strong>Timed</strong>
+              <span>9 seconds</span>
+            </div>
+          </div>
+          <div class="system-actions">
+            <span id="speakingStatus">Ready for your first scenario.</span>
+            <button id="stopSpeechBtn" class="btn-secondary" type="button">Stop coach audio</button>
+            <button id="stopMicBtn" class="btn-secondary" type="button">Stop microphone</button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="accent-main speaking-main">
+        <header class="accent-hero speaking-hero liquid-glass">
+          <p class="eyebrow">Goal</p>
+          <h2>From fixed survival phrases to flexible spoken responses</h2>
+          <p class="subtitle">
+            Each step gives you a conversation pattern, then makes you produce it
+            under light pressure: meet someone, order food, ask for help, make
+            plans, and respond naturally in roleplay.
+          </p>
+          <div class="hero-badges">
+            <span class="hero-badge">Guided scenarios</span>
+            <span class="hero-badge">Sentence building</span>
+            <span class="hero-badge">Timed replies</span>
+            <span class="hero-badge">Model answers</span>
+            <span class="hero-badge">Variation suggestions</span>
+          </div>
+        </header>
+
+        <section class="lesson-step speaking-step is-active" data-step-title="Conversation foundations">
+          <div class="step-header">
+            <p class="step-kicker">Step 1</p>
+            <h3>Conversation foundations</h3>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>Base speaking routine</h4>
+              <p>
+                Start with the safest high-frequency chain:
+                <strong>greeting -> short response -> return question</strong>.
+                This pattern gives you a usable conversation even with basic Spanish.
+              </p>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>Keep it short first</h4>
+              <p>
+                Speaking gets easier when your first answer is compact. A clean,
+                natural phrase like <strong>Muy bien, gracias. ¿Y tú?</strong> is
+                stronger than a long sentence you cannot control yet.
+              </p>
+            </article>
+          </div>
+
+          <div class="pattern-lane">
+            <div class="pattern-chip liquid-glass">
+              <strong>Hola</strong>
+              <span>start the exchange</span>
+            </div>
+            <div class="pattern-chip liquid-glass">
+              <strong>Muy bien, gracias</strong>
+              <span>give a short answer</span>
+            </div>
+            <div class="pattern-chip liquid-glass">
+              <strong>¿Y tú?</strong>
+              <span>keep the conversation moving</span>
+            </div>
+          </div>
+
+          <div id="practice-foundations" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step speaking-step" data-step-title="Meeting someone">
+          <div class="step-header">
+            <p class="step-kicker">Step 2</p>
+            <h3>Meeting someone</h3>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Core identity patterns</h4>
+              <div class="compare-line">
+                <span class="compare-word">Me llamo...</span>
+                <span class="compare-note">My name is...</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">Soy de...</span>
+                <span class="compare-note">I am from...</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">Estudio...</span>
+                <span class="compare-note">I study...</span>
+              </div>
+            </article>
+            <article class="compare-card liquid-glass">
+              <h4>Useful social closers</h4>
+              <div class="compare-line">
+                <span class="compare-word">Mucho gusto</span>
+                <span class="compare-note">Nice to meet you.</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">Encantado / Encantada</span>
+                <span class="compare-note">A natural alternative.</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">¿Y tú?</span>
+                <span class="compare-note">Pass the turn back naturally.</span>
+              </div>
+            </article>
+          </div>
+
+          <div id="practice-meet" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step speaking-step" data-step-title="Ordering food">
+          <div class="step-header">
+            <p class="step-kicker">Step 3</p>
+            <h3>Ordering food</h3>
+          </div>
+
+          <div class="rule-grid">
+            <article class="rule-card liquid-glass speaking-tone-amber">
+              <div class="rule-card-top">
+                <h4>High-frequency ordering frames</h4>
+                <span>Use a frame, then plug in what you want</span>
+              </div>
+              <ul class="tight-list">
+                <li><strong>Quiero...</strong></li>
+                <li><strong>Me gustaría...</strong></li>
+                <li><strong>Para mí...</strong></li>
+              </ul>
+            </article>
+            <article class="rule-card liquid-glass speaking-tone-green">
+              <div class="rule-card-top">
+                <h4>Polite finishers</h4>
+                <span>Short words that make the whole sentence sound better</span>
+              </div>
+              <ul class="tight-list">
+                <li><strong>por favor</strong></li>
+                <li><strong>gracias</strong></li>
+                <li><strong>la cuenta, por favor</strong></li>
+              </ul>
+            </article>
+          </div>
+
+          <div id="practice-food" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step speaking-step" data-step-title="Asking for help">
+          <div class="step-header">
+            <p class="step-kicker">Step 4</p>
+            <h3>Asking for help and directions</h3>
+          </div>
+
+          <div class="pattern-lane">
+            <div class="pattern-chip liquid-glass">
+              <strong>Perdón / Disculpe</strong>
+              <span>open politely</span>
+            </div>
+            <div class="pattern-chip liquid-glass">
+              <strong>¿Dónde está...?</strong>
+              <span>ask where something is</span>
+            </div>
+            <div class="pattern-chip liquid-glass">
+              <strong>¿Puede hablar más despacio?</strong>
+              <span>control the speed of the conversation</span>
+            </div>
+          </div>
+
+          <div id="practice-help" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step speaking-step" data-step-title="Making plans">
+          <div class="step-header">
+            <p class="step-kicker">Step 5</p>
+            <h3>Making plans</h3>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>Invite</h4>
+              <p>
+                <strong>¿Quieres...?</strong> and <strong>¿Te parece bien...?</strong>
+                are common, flexible ways to make plans sound natural.
+              </p>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>Negotiate time</h4>
+              <p>
+                Use <strong>¿A qué hora?</strong> and
+                <strong>¿Qué hora te va bien?</strong> to keep the exchange moving.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-plans" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step speaking-step" data-step-title="Sentence building">
+          <div class="step-header">
+            <p class="step-kicker">Step 6</p>
+            <h3>Sentence building lab</h3>
+          </div>
+
+          <div class="scenario-grid">
+            <article class="accent-card liquid-glass">
+              <h4>Need / want / can</h4>
+              <ul class="tight-list">
+                <li><strong>Quiero + infinitive</strong></li>
+                <li><strong>Necesito + infinitive / noun</strong></li>
+                <li><strong>Puedo + infinitive</strong></li>
+              </ul>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>Near future</h4>
+              <ul class="tight-list">
+                <li><strong>Voy a + infinitive</strong></li>
+                <li><strong>Vamos a + infinitive</strong></li>
+                <li><strong>Lo voy a hacer</strong></li>
+              </ul>
+            </article>
+          </div>
+
+          <div id="practice-build" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step speaking-step" data-step-title="Roleplay simulations">
+          <div class="step-header">
+            <p class="step-kicker">Step 7</p>
+            <h3>Roleplay simulations</h3>
+          </div>
+
+          <div class="scenario-grid">
+            <article class="accent-card liquid-glass">
+              <h4>Restaurant</h4>
+              <p>Reservation, ordering, and paying.</p>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>New person</h4>
+              <p>Introduce yourself and keep the exchange going.</p>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>Directions</h4>
+              <p>Ask for help and react to the answer naturally.</p>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>Repair strategy</h4>
+              <p>Slow the conversation down when you need it.</p>
+            </article>
+          </div>
+
+          <div id="practice-roleplay" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step speaking-step" data-step-title="Mixed mastery">
+          <div class="step-header">
+            <p class="step-kicker">Step 8</p>
+            <h3>Mixed mastery</h3>
+          </div>
+
+          <div class="summary-chart liquid-glass">
+            <h4>What strong speakers do</h4>
+            <p>
+              They use short reliable frames, respond quickly, and then expand. A
+              natural speaking habit comes from repeatable patterns, not from trying
+              to invent every sentence from zero.
+            </p>
+          </div>
+
+          <div class="common-mistakes liquid-glass">
+            <h4>Most common speaking mistakes</h4>
+            <ul>
+              <li>Starting with sentences that are too long.</li>
+              <li>Forgetting a polite closer like <strong>por favor</strong>.</li>
+              <li>Waiting too long instead of using a simple high-frequency frame.</li>
+              <li>Not asking for clarification when the conversation moves too fast.</li>
+            </ul>
+          </div>
+
+          <div id="practice-review" class="practice-block"></div>
+        </section>
+
+        <footer class="lesson-controls liquid-glass">
+          <button id="prevStepBtn" class="btn btn-secondary" type="button">Previous step</button>
+          <button id="nextStepBtn" class="btn btn-primary" type="button">Next step</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="speaking-course.js"></script>
+  </body>
+</html>

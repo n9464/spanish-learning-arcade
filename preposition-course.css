@@ -1,0 +1,418 @@
+.preposition-course-page .accent-hero {
+  background:
+    radial-gradient(circle at top right, rgba(90, 219, 171, 0.18), transparent 34%),
+    radial-gradient(circle at bottom left, rgba(92, 140, 255, 0.14), transparent 38%),
+    var(--glass-bg);
+}
+
+.preposition-sidebar {
+  position: sticky;
+  top: 18px;
+  max-height: calc(100vh - 36px);
+  overflow-y: auto;
+}
+
+.preposition-progress {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.legend-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.legend-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.legend-verb,
+.part-verb,
+.issue-pairings {
+  background: rgba(57, 211, 190, 0.16);
+  color: #d3fff8;
+}
+
+.legend-preposition,
+.part-preposition,
+.issue-core,
+.issue-porPara {
+  background: rgba(239, 176, 93, 0.16);
+  color: #ffdcaf;
+}
+
+.legend-place,
+.part-place,
+.issue-motion,
+.issue-location,
+.issue-contrast {
+  background: rgba(92, 140, 255, 0.16);
+  color: #dce7ff;
+}
+
+.legend-person,
+.part-person,
+.issue-personalA {
+  background: rgba(255, 113, 103, 0.15);
+  color: #ffd7d3;
+}
+
+.legend-purpose,
+.part-purpose,
+.issue-foundation,
+.issue-meaning {
+  background: rgba(180, 155, 255, 0.17);
+  color: #ece2ff;
+}
+
+.diagram-grid,
+.concept-grid,
+.pairing-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.concept-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.diagram-card,
+.prep-card,
+.pairing-card {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.diagram-card h4,
+.prep-card h4,
+.pairing-card h4,
+.feedback-card h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.diagram-card p,
+.prep-card p,
+.compare-card p,
+.summary-chart p,
+.common-mistakes li,
+.feedback-panel p,
+.feedback-panel li,
+.pairing-card li {
+  margin: 0;
+  color: #d8ebf8;
+  line-height: 1.58;
+}
+
+.concept-map {
+  position: relative;
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+}
+
+.compact-map {
+  min-height: 200px;
+}
+
+.concept-center,
+.concept-node {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.concept-center {
+  min-width: 120px;
+  min-height: 64px;
+  background: rgba(57, 211, 190, 0.14);
+}
+
+.concept-node {
+  position: absolute;
+  min-width: 120px;
+}
+
+.node-top {
+  top: 0;
+}
+
+.node-right {
+  right: 0;
+}
+
+.node-bottom {
+  bottom: 0;
+}
+
+.node-left {
+  left: 0;
+}
+
+.prep-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: rgba(239, 176, 93, 0.16);
+  color: #ffe7c9;
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+}
+
+.preposition-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.preposition-table thead th {
+  text-align: left;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 0 0 12px;
+}
+
+.preposition-table tbody td {
+  padding: 12px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: top;
+}
+
+.preposition-table tbody td:first-child {
+  color: #e8f5ff;
+  font-weight: 800;
+}
+
+.contrast-table tbody td:first-child {
+  color: #ffd9b0;
+}
+
+.sentence-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.sentence-part {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.language-compare .compare-line,
+.comparison-stack .compare-line {
+  display: grid;
+  gap: 4px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.language-compare .compare-line:first-of-type,
+.comparison-stack .compare-line:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.language-compare .compare-line span,
+.comparison-stack .compare-line span {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.pairing-card ul,
+.common-mistakes ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+
+.cheat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 18px;
+}
+
+.cheat-grid p {
+  margin: 0;
+}
+
+.feedback-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.feedback-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #d8ecff;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.feedback-model {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mini-note {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.sort-grid,
+.sort-detail-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.sort-detail-card {
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  gap: 6px;
+}
+
+.sort-detail-card p,
+.sort-label,
+.question-helper {
+  margin: 0;
+}
+
+.sort-label {
+  font-weight: 800;
+  color: #eef9ff;
+}
+
+.question-helper {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1180px) {
+  .preposition-sidebar {
+    position: static;
+    max-height: none;
+  }
+
+  .diagram-grid,
+  .concept-grid,
+  .pairing-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .legend-strip,
+  .sentence-strip {
+    gap: 6px;
+  }
+
+  .cheat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .preposition-table thead {
+    display: none;
+  }
+
+  .preposition-table,
+  .preposition-table tbody,
+  .preposition-table tr,
+  .preposition-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .preposition-table tr {
+    padding: 12px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .preposition-table tbody td {
+    border: 0;
+    padding: 4px 0;
+  }
+
+  .concept-map {
+    min-height: 260px;
+  }
+
+  .concept-node {
+    position: static;
+    min-width: 0;
+  }
+
+  .concept-map {
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "center center"
+      "top right"
+      "left bottom";
+    align-content: center;
+  }
+
+  .concept-center {
+    grid-area: center;
+  }
+
+  .node-top {
+    grid-area: top;
+  }
+
+  .node-right {
+    grid-area: right;
+  }
+
+  .node-left {
+    grid-area: left;
+  }
+
+  .node-bottom {
+    grid-area: bottom;
+  }
+}

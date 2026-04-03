@@ -1,0 +1,337 @@
+.pronoun-course-page .accent-hero {
+  background:
+    radial-gradient(circle at top right, rgba(255, 167, 97, 0.18), transparent 34%),
+    radial-gradient(circle at bottom left, rgba(180, 155, 255, 0.14), transparent 38%),
+    var(--glass-bg);
+}
+
+.pronoun-sidebar {
+  position: sticky;
+  top: 18px;
+  max-height: calc(100vh - 36px);
+  overflow-y: auto;
+}
+
+.pronoun-progress {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.legend-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.legend-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.legend-subject,
+.part-subject,
+.issue-subject,
+.issue-foundation {
+  background: rgba(83, 206, 255, 0.16);
+  color: #c6eeff;
+}
+
+.legend-verb,
+.part-verb,
+.issue-placement {
+  background: rgba(57, 211, 190, 0.16);
+  color: #d3fff8;
+}
+
+.legend-object,
+.part-object,
+.issue-direct,
+.issue-indirect {
+  background: rgba(255, 167, 97, 0.16);
+  color: #ffd8b3;
+}
+
+.legend-pronoun,
+.part-pronoun,
+.issue-reflexive,
+.issue-doubleObject {
+  background: rgba(180, 155, 255, 0.17);
+  color: #ece2ff;
+}
+
+.legend-link,
+.part-link,
+.issue-relative,
+.issue-demonstrative,
+.issue-redundancy {
+  background: rgba(255, 113, 103, 0.15);
+  color: #ffd7d3;
+}
+
+.diagram-grid,
+.flowchart-grid,
+.pronoun-card-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.diagram-card,
+.flow-card {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.diagram-card h4,
+.flow-card h4,
+.feedback-card h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.diagram-card p,
+.compare-card p,
+.summary-chart p,
+.common-mistakes li,
+.feedback-panel p,
+.feedback-panel li,
+.flow-card p {
+  margin: 0;
+  color: #d8ebf8;
+  line-height: 1.58;
+}
+
+.pronoun-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.pronoun-table thead th {
+  text-align: left;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 0 0 12px;
+}
+
+.pronoun-table tbody td {
+  padding: 12px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: top;
+}
+
+.pronoun-table tbody td:first-child {
+  color: #e8f5ff;
+  font-weight: 800;
+}
+
+.sentence-strip,
+.transform-row,
+.pronoun-pill-grid,
+.distance-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.pronoun-pill-grid {
+  gap: 10px;
+}
+
+.sentence-part,
+.distance-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.distance-pill {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.near-pill {
+  border: 1px solid rgba(83, 206, 255, 0.24);
+}
+
+.mid-pill {
+  border: 1px solid rgba(255, 167, 97, 0.24);
+}
+
+.far-pill {
+  border: 1px solid rgba(180, 155, 255, 0.24);
+}
+
+.transform-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.transform-arrow {
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.language-compare .compare-line {
+  display: grid;
+  gap: 4px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.language-compare .compare-line:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.language-compare .compare-line span {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cheat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 18px;
+}
+
+.cheat-grid p {
+  margin: 0;
+}
+
+.feedback-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.feedback-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #d8ecff;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.feedback-model {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sort-grid,
+.sort-detail-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.sort-detail-card {
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  gap: 6px;
+}
+
+.sort-detail-card p,
+.sort-label,
+.question-helper,
+.mini-note {
+  margin: 0;
+}
+
+.sort-label {
+  font-weight: 800;
+  color: #eef9ff;
+}
+
+.question-helper,
+.mini-note {
+  color: var(--ink-soft);
+}
+
+.question-helper {
+  font-size: 0.9rem;
+}
+
+.mini-note {
+  font-size: 0.88rem;
+}
+
+@media (max-width: 1180px) {
+  .pronoun-sidebar {
+    position: static;
+    max-height: none;
+  }
+
+  .diagram-grid,
+  .flowchart-grid,
+  .pronoun-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .legend-strip,
+  .sentence-strip,
+  .transform-row,
+  .pronoun-pill-grid,
+  .distance-row {
+    gap: 6px;
+  }
+
+  .cheat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pronoun-table thead {
+    display: none;
+  }
+
+  .pronoun-table,
+  .pronoun-table tbody,
+  .pronoun-table tr,
+  .pronoun-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .pronoun-table tr {
+    padding: 12px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .pronoun-table tbody td {
+    border: 0;
+    padding: 4px 0;
+  }
+}

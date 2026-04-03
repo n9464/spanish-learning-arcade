@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spanish Error Correction Trainer</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="accent-course.css" />
+    <link rel="stylesheet" href="error-course.css" />
+  </head>
+  <body class="accent-course-page error-course-page">
+    <div class="night-fx" aria-hidden="true">
+      <div class="mist mist-a"></div>
+      <div class="mist mist-b"></div>
+      <div class="mist mist-c"></div>
+    </div>
+
+    <main class="accent-shell error-shell">
+      <aside class="accent-sidebar error-sidebar liquid-glass">
+        <a class="home-link" href="index.html">Back To Hub</a>
+        <p class="eyebrow">Correction Lab</p>
+        <h1>Spanish Error Correction Trainer</h1>
+        <p class="subtitle">
+          Train yourself to catch the mistakes learners actually make, then fix
+          them with the right verb form, agreement, accent, preposition, or pronoun.
+        </p>
+
+        <section class="accent-progress error-progress">
+          <div class="accent-progress-top">
+            <strong>Course progress</strong>
+            <span id="courseProgressText">0% complete</span>
+          </div>
+          <div class="accent-progress-bar" aria-hidden="true">
+            <span id="courseProgressFill"></span>
+          </div>
+          <div class="accent-stats-grid">
+            <div class="accent-stat">
+              <span>Answered</span>
+              <strong id="answeredCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Correct</span>
+              <strong id="correctCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Streak</span>
+              <strong id="streakCount">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Steps</h2>
+            <span id="stepCountLabel">Step 1 of 8</span>
+          </div>
+          <nav id="stepNav" class="step-nav" aria-label="Lesson steps"></nav>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Mastery by skill</h2>
+            <span>Live tracker</span>
+          </div>
+          <div id="masteryBoard" class="mastery-board"></div>
+        </section>
+
+        <section class="accent-sidebar-section error-system-card">
+          <div class="section-heading-row">
+            <h2>Correction loop</h2>
+            <span>4-step method</span>
+          </div>
+          <div class="workflow-stack">
+            <div class="workflow-step">
+              <strong>Scan</strong>
+              <span>Look for the word or ending that feels off.</span>
+            </div>
+            <div class="workflow-step">
+              <strong>Name</strong>
+              <span>Decide if the main issue is verb, agreement, preposition, accent, or pronoun.</span>
+            </div>
+            <div class="workflow-step">
+              <strong>Repair</strong>
+              <span>Rewrite the full sentence correctly, not just one word.</span>
+            </div>
+            <div class="workflow-step">
+              <strong>Explain</strong>
+              <span>Ask why the mistake happened so it is less likely to come back.</span>
+            </div>
+          </div>
+          <div class="error-warning-card">
+            <strong>Common cause</strong>
+            <p>
+              Most learner mistakes come from transfer: copying English logic,
+              overusing one familiar form, or forgetting that Spanish marks gender,
+              number, accent, or pronoun function more explicitly.
+            </p>
+          </div>
+        </section>
+      </aside>
+
+      <section class="accent-main error-main">
+        <header class="accent-hero error-hero liquid-glass">
+          <p class="eyebrow">Goal</p>
+          <h2>Catch the error, fix the sentence, and understand the trap behind it</h2>
+          <p class="subtitle">
+            This trainer turns common Spanish mistakes into focused correction drills.
+            Every answer asks you to identify the error family and repair the full sentence,
+            then shows the rule and why learners often get it wrong.
+          </p>
+          <div class="hero-badges">
+            <span class="hero-badge">Verb traps</span>
+            <span class="hero-badge">Agreement fixes</span>
+            <span class="hero-badge">Preposition contrast</span>
+            <span class="hero-badge">Accent repairs</span>
+            <span class="hero-badge">Pronoun control</span>
+          </div>
+        </header>
+
+        <section class="lesson-step error-step is-active" data-step-title="Foundations">
+          <div class="step-header">
+            <p class="step-kicker">Step 1</p>
+            <h3>How to think like an error corrector</h3>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>Do not translate blindly</h4>
+              <p>
+                Correction starts by checking what the sentence is trying to say,
+                then asking whether the Spanish form matches the tense, agreement,
+                relationship, or accent pattern needed.
+              </p>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>Correct the whole sentence</h4>
+              <p>
+                Even when one word is wrong, train yourself to rewrite the entire
+                sentence correctly. That builds complete sentence control instead of
+                isolated patching.
+              </p>
+            </article>
+          </div>
+
+          <div class="error-map">
+            <article class="error-family-card liquid-glass family-verb">
+              <h4>Verb</h4>
+              <p>Wrong person, wrong tense, or wrong irregular form.</p>
+            </article>
+            <article class="error-family-card liquid-glass family-agreement">
+              <h4>Agreement</h4>
+              <p>Gender or number mismatch in nouns, articles, or adjectives.</p>
+            </article>
+            <article class="error-family-card liquid-glass family-preposition">
+              <h4>Preposition</h4>
+              <p>Using the English-style link instead of the Spanish one.</p>
+            </article>
+            <article class="error-family-card liquid-glass family-accent">
+              <h4>Accent</h4>
+              <p>Missing tilde or confusion between meaning-changing forms.</p>
+            </article>
+            <article class="error-family-card liquid-glass family-pronoun">
+              <h4>Pronoun</h4>
+              <p>Wrong pronoun function or wrong pronoun placement.</p>
+            </article>
+          </div>
+
+          <div id="practice-foundations" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step error-step" data-step-title="Verb errors">
+          <div class="step-header">
+            <p class="step-kicker">Step 2</p>
+            <h3>Verb conjugation errors</h3>
+          </div>
+
+          <div class="correction-lane liquid-glass">
+            <div class="lane-card">
+              <strong>Check the subject</strong>
+              <span>Who is doing the action: yo, tú, él, nosotros?</span>
+            </div>
+            <div class="lane-card">
+              <strong>Check the time clue</strong>
+              <span>Words like ayer, mañana, siempre, ya often force a tense choice.</span>
+            </div>
+            <div class="lane-card">
+              <strong>Check irregulars</strong>
+              <span>Common verbs like ir, ser, tener, hacer, and querer often break the pattern.</span>
+            </div>
+          </div>
+
+          <div id="practice-verbs" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step error-step" data-step-title="Agreement errors">
+          <div class="step-header">
+            <p class="step-kicker">Step 3</p>
+            <h3>Agreement errors</h3>
+          </div>
+
+          <div class="agreement-grid">
+            <article class="contrast-card liquid-glass">
+              <h4>Number agreement</h4>
+              <p>Plural subjects and plural nouns usually need plural articles, verbs, and adjectives.</p>
+            </article>
+            <article class="contrast-card liquid-glass">
+              <h4>Gender agreement</h4>
+              <p>Article + noun + adjective often need matching masculine or feminine forms.</p>
+            </article>
+            <article class="contrast-card liquid-glass">
+              <h4>Watch out</h4>
+              <p>Some nouns break the visual pattern: <strong>el problema</strong>, <strong>la mano</strong>.</p>
+            </article>
+          </div>
+
+          <div id="practice-agreement" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step error-step" data-step-title="Prepositions">
+          <div class="step-header">
+            <p class="step-kicker">Step 4</p>
+            <h3>Wrong prepositions</h3>
+          </div>
+
+          <div class="preposition-grid">
+            <article class="contrast-card liquid-glass">
+              <h4>Motion</h4>
+              <p><strong>a</strong> often points toward a destination: <strong>Voy a Madrid.</strong></p>
+            </article>
+            <article class="contrast-card liquid-glass">
+              <h4>Location</h4>
+              <p><strong>en</strong> usually marks where something is: <strong>Estoy en Madrid.</strong></p>
+            </article>
+            <article class="contrast-card liquid-glass">
+              <h4>Starting point</h4>
+              <p><strong>de</strong> often marks origin or where you come out from: <strong>Salgo de casa.</strong></p>
+            </article>
+          </div>
+
+          <div id="practice-prepositions" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step error-step" data-step-title="Accent fixes">
+          <div class="step-header">
+            <p class="step-kicker">Step 5</p>
+            <h3>Missing accents and meaning changes</h3>
+          </div>
+
+          <div class="accent-watchlist liquid-glass">
+            <span class="watch-chip">tú / tu</span>
+            <span class="watch-chip">él / el</span>
+            <span class="watch-chip">qué / que</span>
+            <span class="watch-chip">está / esta</span>
+            <span class="watch-chip">papá / papa</span>
+            <span class="watch-chip">café / cafe</span>
+            <span class="watch-chip">frío / frio</span>
+            <span class="watch-chip">Perú / Peru</span>
+          </div>
+
+          <div id="practice-accents" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step error-step" data-step-title="Pronoun misuse">
+          <div class="step-header">
+            <p class="step-kicker">Step 6</p>
+            <h3>Pronoun misuse and placement</h3>
+          </div>
+
+          <div class="pronoun-grid">
+            <article class="placement-card liquid-glass">
+              <h4>Direct vs indirect</h4>
+              <p><strong>Lo / la</strong> receive the action. <strong>Le</strong> receives something.</p>
+            </article>
+            <article class="placement-card liquid-glass">
+              <h4>Before a conjugated verb</h4>
+              <p><strong>Se lava.</strong> Pronouns usually go before a normal finite verb.</p>
+            </article>
+            <article class="placement-card liquid-glass">
+              <h4>Attached to infinitives</h4>
+              <p><strong>Voy a levantarme.</strong> With infinitives, attachment is often possible or required.</p>
+            </article>
+          </div>
+
+          <div id="practice-pronouns" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step error-step" data-step-title="Mixed lab">
+          <div class="step-header">
+            <p class="step-kicker">Step 7</p>
+            <h3>Mixed correction lab</h3>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>Priority order</h4>
+              <p>
+                In mixed correction, first find the sentence part that breaks meaning
+                most strongly: the verb, the relation marker, the agreement, the accent,
+                or the pronoun chain.
+              </p>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>One main target</h4>
+              <p>
+                These drills still center on one main correction family. That keeps the
+                focus sharp and helps you build pattern memory instead of guessing.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-mixed" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step error-step" data-step-title="Final review">
+          <div class="step-header">
+            <p class="step-kicker">Step 8</p>
+            <h3>Final review and common traps</h3>
+          </div>
+
+          <div class="common-traps-grid">
+            <article class="accent-card liquid-glass">
+              <h4>Most common learner causes</h4>
+              <ul class="tight-list">
+                <li>Copying English prepositions directly into Spanish</li>
+                <li>Using one familiar verb form for every subject</li>
+                <li>Ignoring gender and number because English marks them less</li>
+                <li>Skipping accents because typing feels slower</li>
+                <li>Mixing up lo / la / le or putting pronouns in the wrong place</li>
+              </ul>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>Best correction habit</h4>
+              <p>
+                When you miss one, do not just memorize the corrected sentence. Ask:
+                what clue should have warned me earlier? That is how correction turns into prevention.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-review" class="practice-block"></div>
+        </section>
+
+        <footer class="lesson-controls liquid-glass">
+          <button id="prevStepBtn" class="btn btn-secondary" type="button">Previous step</button>
+          <button id="nextStepBtn" class="btn btn-primary" type="button">Next step</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="error-course.js"></script>
+  </body>
+</html>

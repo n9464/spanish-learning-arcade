@@ -1,0 +1,342 @@
+.error-shell {
+  align-items: start;
+}
+
+.error-sidebar,
+.error-hero,
+.error-step,
+.error-system-card,
+.workflow-step,
+.error-warning-card,
+.error-family-card,
+.correction-lane,
+.lane-card,
+.contrast-card,
+.placement-card,
+.accent-watchlist,
+.watch-chip,
+.error-compare,
+.compare-panel,
+.status-chip {
+  background: rgba(241, 241, 241, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(15.1px);
+  -webkit-backdrop-filter: blur(15.1px);
+}
+
+.error-main {
+  align-content: start;
+}
+
+.error-system-card {
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.workflow-stack,
+.error-map,
+.correction-lane,
+.agreement-grid,
+.preposition-grid,
+.pronoun-grid,
+.common-traps-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.error-map {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.agreement-grid,
+.preposition-grid,
+.pronoun-grid,
+.common-traps-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.workflow-step,
+.error-warning-card,
+.error-family-card,
+.lane-card,
+.contrast-card,
+.placement-card {
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  gap: 6px;
+}
+
+.workflow-step strong,
+.error-warning-card strong,
+.error-family-card h4,
+.lane-card strong,
+.contrast-card h4,
+.placement-card h4,
+.error-compare h5,
+.compare-panel strong {
+  margin: 0;
+}
+
+.workflow-step span,
+.error-warning-card p,
+.error-family-card p,
+.lane-card span,
+.contrast-card p,
+.placement-card p,
+.compare-panel p,
+.repair-note,
+.repair-instruction,
+.repair-hint,
+.feedback-note,
+.feedback-tags,
+.feedback-panel p {
+  color: #d6e8f7;
+}
+
+.workflow-step,
+.lane-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.family-verb {
+  background: linear-gradient(180deg, rgba(255, 140, 120, 0.16), rgba(255, 140, 120, 0.04)), rgba(241, 241, 241, 0.06);
+}
+
+.family-agreement {
+  background: linear-gradient(180deg, rgba(80, 205, 168, 0.16), rgba(80, 205, 168, 0.04)), rgba(241, 241, 241, 0.06);
+}
+
+.family-preposition {
+  background: linear-gradient(180deg, rgba(115, 157, 255, 0.16), rgba(115, 157, 255, 0.04)), rgba(241, 241, 241, 0.06);
+}
+
+.family-accent {
+  background: linear-gradient(180deg, rgba(255, 186, 103, 0.16), rgba(255, 186, 103, 0.04)), rgba(241, 241, 241, 0.06);
+}
+
+.family-pronoun {
+  background: linear-gradient(180deg, rgba(209, 137, 255, 0.16), rgba(209, 137, 255, 0.04)), rgba(241, 241, 241, 0.06);
+}
+
+.correction-lane {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 14px;
+}
+
+.accent-watchlist {
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.watch-chip {
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 700;
+  color: #eef8ff;
+}
+
+.error-repair-card {
+  display: grid;
+  gap: 14px;
+}
+
+.repair-sentence {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 113, 103, 0.1);
+  border: 1px solid rgba(255, 113, 103, 0.22);
+  color: #ffe3df;
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+
+.repair-task-block {
+  display: grid;
+  gap: 10px;
+}
+
+.repair-instruction {
+  margin: 0;
+  font-size: 0.84rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.error-type-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.error-type-btn {
+  min-height: 40px;
+}
+
+.repair-input {
+  width: 100%;
+  min-height: 104px;
+  resize: vertical;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ink);
+  padding: 12px 14px;
+  font: inherit;
+}
+
+.repair-input:focus {
+  outline: 2px solid rgba(57, 211, 190, 0.42);
+  outline-offset: 1px;
+}
+
+.repair-note {
+  margin: 0;
+  font-size: 0.84rem;
+}
+
+.error-type-btn.is-selected {
+  background: rgba(57, 211, 190, 0.14);
+  border-color: rgba(57, 211, 190, 0.44);
+}
+
+.error-type-btn.is-correct {
+  background: rgba(57, 208, 141, 0.14);
+  border-color: rgba(57, 208, 141, 0.4);
+}
+
+.error-type-btn.is-wrong {
+  background: rgba(255, 113, 103, 0.14);
+  border-color: rgba(255, 113, 103, 0.38);
+}
+
+.error-compare {
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  gap: 10px;
+}
+
+.error-compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.compare-panel {
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  gap: 6px;
+}
+
+.compare-panel.is-wrong {
+  background: rgba(255, 113, 103, 0.08);
+}
+
+.compare-panel.is-correct {
+  background: rgba(57, 208, 141, 0.08);
+}
+
+.status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.status-chip.is-correct {
+  background: rgba(57, 208, 141, 0.16);
+  color: #d9fff0;
+}
+
+.status-chip.is-wrong {
+  background: rgba(255, 113, 103, 0.16);
+  color: #ffe2de;
+}
+
+.feedback-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.feedback-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: rgba(255, 255, 255, 0.08);
+  color: #edf7ff;
+}
+
+.issue-verb,
+.issue-review {
+  background: rgba(255, 140, 120, 0.18);
+}
+
+.issue-agreement {
+  background: rgba(80, 205, 168, 0.18);
+}
+
+.issue-preposition,
+.issue-mixed {
+  background: rgba(115, 157, 255, 0.18);
+}
+
+.issue-accent {
+  background: rgba(255, 186, 103, 0.18);
+}
+
+.issue-pronoun {
+  background: rgba(209, 137, 255, 0.18);
+}
+
+@media (max-width: 1140px) {
+  .error-map,
+  .agreement-grid,
+  .preposition-grid,
+  .pronoun-grid,
+  .common-traps-grid,
+  .correction-lane,
+  .error-compare-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .workflow-step,
+  .lane-card {
+    display: grid;
+  }
+}
+
+@media (max-width: 640px) {
+  .accent-watchlist,
+  .correction-lane {
+    padding: 14px;
+  }
+
+  .repair-sentence {
+    font-size: 0.97rem;
+  }
+}

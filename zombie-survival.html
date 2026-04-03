@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zombie Conjugation Survival</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="night-fx" aria-hidden="true">
+      <div class="mist mist-a"></div>
+      <div class="mist mist-b"></div>
+      <div class="mist mist-c"></div>
+    </div>
+
+    <main class="layout">
+      <section class="panel setup-panel liquid-glass">
+        <a class="home-link" href="index.html">Back To Hub</a>
+        <p class="eyebrow">Zombie Conjugation Survival</p>
+        <h1>Type Or Get Eaten</h1>
+        <p class="subtitle">
+          Survive waves of zombies by typing correct verb conjugations before they
+          reach your safehouse.
+        </p>
+        <p class="menu-hint">Press <kbd>Esc</kbd> anytime to open this panel.</p>
+
+        <div class="briefing">
+          <p><strong>How it works:</strong> each zombie carries a conjugation prompt.</p>
+          <p><strong>Correct:</strong> zombie eliminated. <strong>Wrong:</strong> zombie rushes closer.</p>
+        </div>
+
+        <div class="setup-grid">
+          <label class="field" for="difficultySelect">
+            <span>Difficulty</span>
+            <select id="difficultySelect">
+              <option value="survivor" selected>Survivor</option>
+              <option value="hard">Hard</option>
+              <option value="nightmare">Nightmare</option>
+            </select>
+          </label>
+
+          <label class="toggle" for="irregularToggle">
+            <input id="irregularToggle" type="checkbox" />
+            <span>Include irregular verbs</span>
+          </label>
+
+          <label class="toggle" for="vosotrosToggle">
+            <input id="vosotrosToggle" type="checkbox" />
+            <span>Include vosotros forms</span>
+          </label>
+        </div>
+
+        <fieldset class="tense-fieldset">
+          <legend>Active Tenses</legend>
+          <label><input class="tense-choice" type="checkbox" value="present" checked /> Present</label>
+          <label><input class="tense-choice" type="checkbox" value="preterite" /> Preterite</label>
+          <label><input class="tense-choice" type="checkbox" value="imperfect" /> Imperfect</label>
+          <label><input class="tense-choice" type="checkbox" value="future" /> Future</label>
+          <label><input class="tense-choice" type="checkbox" value="conditional" /> Conditional</label>
+        </fieldset>
+
+        <button id="startBtn" class="btn btn-primary">Start Survival</button>
+        <p id="setupMessage" class="setup-message">
+          Example: <code>yo - tener (presente)</code> -> type <code>tengo</code>
+        </p>
+      </section>
+
+      <section class="panel combat-panel">
+        <div class="battlefield">
+          <div class="battle-grid" aria-hidden="true"></div>
+
+          <div class="battle-ui battle-ui-top">
+            <div class="hud-grid">
+              <div class="hud-pill liquid-glass"><span>Score</span><strong id="scoreValue">0</strong></div>
+              <div class="hud-pill liquid-glass"><span>Wave</span><strong id="waveValue">0/10</strong></div>
+              <div class="hud-pill liquid-glass"><span>Base</span><strong id="baseValue">0/0</strong></div>
+              <div class="hud-pill liquid-glass"><span>Zombies</span><strong id="zombieCountValue">0</strong></div>
+              <div class="hud-pill liquid-glass"><span>Kills</span><strong id="killsValue">0</strong></div>
+              <div class="hud-pill liquid-glass"><span>Streak</span><strong id="streakValue">0</strong></div>
+              <div class="hud-pill liquid-glass"><span>Adaptive</span><strong id="adaptiveValue">ON</strong></div>
+              <div class="hud-pill liquid-glass"><span>Status</span><strong id="statusValue">Idle</strong></div>
+            </div>
+          </div>
+
+          <div class="battle-ui battle-ui-center liquid-glass">
+            <p id="targetLabel" class="target-label">Nearest zombie</p>
+            <h3 id="promptText">Start survival to get your first target.</h3>
+            <p id="metaText" class="meta-text">
+              Type the conjugation and press Enter.
+            </p>
+          </div>
+
+          <div id="safehouse" class="safehouse" aria-label="Safehouse">
+            <div class="safehouse-core"></div>
+            <p>Safehouse</p>
+          </div>
+          <div id="zombieLane" class="zombie-lane">
+            <p class="lane-placeholder">No zombies yet.</p>
+          </div>
+
+          <div class="battle-ui battle-ui-bottom liquid-glass">
+            <div class="typing-row">
+              <input
+                id="answerInput"
+                class="liquid-glass-input"
+                type="text"
+                placeholder="Type conjugation"
+                autocomplete="off"
+                disabled
+              />
+              <button id="submitBtn" class="btn btn-primary" disabled>Eliminate Zombie</button>
+            </div>
+            <p id="feedbackText" class="feedback" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/three@0.161.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.161.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://unpkg.com/three@0.161.0/examples/js/utils/SkeletonUtils.js"></script>
+    <script src="game.js"></script>
+  </body>
+</html>

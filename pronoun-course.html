@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spanish Pronouns Lab</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="accent-course.css" />
+    <link rel="stylesheet" href="pronoun-course.css" />
+  </head>
+  <body class="accent-course-page pronoun-course-page">
+    <div class="night-fx" aria-hidden="true">
+      <div class="mist mist-a"></div>
+      <div class="mist mist-b"></div>
+      <div class="mist mist-c"></div>
+    </div>
+
+    <main class="accent-shell pronoun-shell">
+      <aside class="accent-sidebar pronoun-sidebar liquid-glass">
+        <a class="home-link" href="index.html">Back To Hub</a>
+        <p class="eyebrow">Pronoun Lab</p>
+        <h1>Spanish Pronouns</h1>
+        <p class="subtitle">
+          Learn what each pronoun replaces, where it goes, and how to transform
+          full sentences without creating redundancy errors.
+        </p>
+
+        <section class="accent-progress pronoun-progress">
+          <div class="accent-progress-top">
+            <strong>Course progress</strong>
+            <span id="courseProgressText">0% complete</span>
+          </div>
+          <div class="accent-progress-bar" aria-hidden="true">
+            <span id="courseProgressFill"></span>
+          </div>
+          <div class="accent-stats-grid">
+            <div class="accent-stat">
+              <span>Answered</span>
+              <strong id="answeredCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Correct</span>
+              <strong id="correctCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Streak</span>
+              <strong id="streakCount">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Color legend</h2>
+            <span>Track the swap visually</span>
+          </div>
+          <div class="legend-strip">
+            <span class="legend-pill legend-subject">Subject</span>
+            <span class="legend-pill legend-verb">Verb</span>
+            <span class="legend-pill legend-object">Object / noun</span>
+            <span class="legend-pill legend-pronoun">Pronoun</span>
+            <span class="legend-pill legend-link">Connector / reference</span>
+          </div>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Steps</h2>
+            <span id="stepCountLabel">Step 1 of 8</span>
+          </div>
+          <nav id="stepNav" class="step-nav" aria-label="Pronoun lesson steps"></nav>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Mastery by topic</h2>
+            <span>Live tracker</span>
+          </div>
+          <div id="masteryBoard" class="mastery-board"></div>
+        </section>
+      </aside>
+
+      <section class="accent-main pronoun-main">
+        <header class="accent-hero pronoun-hero liquid-glass">
+          <p class="eyebrow">Goal</p>
+          <h2>From noun-heavy sentences to clean, native-like pronoun use</h2>
+          <p class="subtitle">
+            This course teaches subject, object, reflexive, relative,
+            demonstrative, and double-object pronouns with transformation logic,
+            placement flowcharts, and correction practice.
+          </p>
+        </header>
+
+        <section class="lesson-step pronoun-step is-active" data-step-title="Pronoun map">
+          <div class="step-header">
+            <p class="step-kicker">Step 1</p>
+            <h3>Pronoun map: subject pronouns and the basic idea of replacement</h3>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>What pronouns do</h4>
+              <div class="transform-stack">
+                <div class="transform-row">
+                  <span class="sentence-part part-subject">Yo</span>
+                  <span class="sentence-part part-verb">hablo</span>
+                  <span class="sentence-part part-object">español</span>
+                </div>
+                <div class="transform-arrow">drop the subject if the verb already shows it</div>
+                <div class="transform-row">
+                  <span class="sentence-part part-verb">Hablo</span>
+                  <span class="sentence-part part-object">español</span>
+                </div>
+              </div>
+              <p>
+                Pronouns often replace or point back to information so the
+                sentence does not keep repeating full nouns.
+              </p>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>Subject pronoun set</h4>
+              <div class="pronoun-pill-grid">
+                <span class="sentence-part part-pronoun">yo</span>
+                <span class="sentence-part part-pronoun">tú</span>
+                <span class="sentence-part part-pronoun">él / ella / usted</span>
+                <span class="sentence-part part-pronoun">nosotros</span>
+                <span class="sentence-part part-pronoun">vosotros</span>
+                <span class="sentence-part part-pronoun">ellos / ustedes</span>
+              </div>
+              <p>
+                Subject pronouns tell you who does the action, but Spanish often
+                omits them because the verb ending already carries that meaning.
+              </p>
+            </article>
+          </div>
+
+          <div class="callout-row">
+            <aside class="memory-box liquid-glass">
+              <h4>First decision</h4>
+              <p>
+                Ask whether the pronoun is the <strong>doer</strong>, the thing
+                <strong>affected</strong>, the person <strong>receiving</strong>,
+                or part of a fixed relationship like a relative clause.
+              </p>
+            </aside>
+            <aside class="compare-card liquid-glass">
+              <h4>Avoid redundancy</h4>
+              <p>
+                Spanish rarely needs repeated subject pronouns like
+                <strong>yo yo</strong> or <strong>yo estudio y yo trabajo</strong>
+                unless there is contrast.
+              </p>
+            </aside>
+          </div>
+
+          <div id="practice-foundation" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step pronoun-step" data-step-title="Direct objects">
+          <div class="step-header">
+            <p class="step-kicker">Step 2</p>
+            <h3>Direct object pronouns: replace the thing directly affected</h3>
+          </div>
+
+          <div class="accent-table-wrap liquid-glass">
+            <div class="section-heading-row">
+              <h4>Direct object map</h4>
+              <span>Ask what? or whom?</span>
+            </div>
+            <table class="pronoun-table">
+              <thead>
+                <tr><th>Pronoun</th><th>Replaces</th><th>Example</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>lo</td><td>masculine singular thing or person</td><td>Veo el libro. → Lo veo.</td></tr>
+                <tr><td>la</td><td>feminine singular thing or person</td><td>Veo la película. → La veo.</td></tr>
+                <tr><td>los</td><td>masculine plural</td><td>Compro los zapatos. → Los compro.</td></tr>
+                <tr><td>las</td><td>feminine plural</td><td>Leo las cartas. → Las leo.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>Step-by-step substitution</h4>
+              <div class="transform-stack">
+                <div class="transform-row">
+                  <span class="sentence-part part-verb">Veo</span>
+                  <span class="sentence-part part-object">la película</span>
+                </div>
+                <div class="transform-arrow">replace the direct object noun</div>
+                <div class="transform-row">
+                  <span class="sentence-part part-pronoun">La</span>
+                  <span class="sentence-part part-verb">veo</span>
+                </div>
+              </div>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>Redundancy warning</h4>
+              <p>
+                Do not keep the full noun unless you have a special topicalized
+                structure. <strong>La veo la película</strong> is not the normal
+                replacement pattern.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-direct" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step pronoun-step" data-step-title="Indirect objects">
+          <div class="step-header">
+            <p class="step-kicker">Step 3</p>
+            <h3>Indirect object pronouns: replace the recipient or beneficiary</h3>
+          </div>
+
+          <div class="accent-table-wrap liquid-glass">
+            <div class="section-heading-row">
+              <h4>Indirect object map</h4>
+              <span>Ask to whom? or for whom?</span>
+            </div>
+            <table class="pronoun-table">
+              <thead>
+                <tr><th>Pronoun</th><th>Meaning</th><th>Example</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>me</td><td>to me</td><td>Me dan ayuda.</td></tr>
+                <tr><td>te</td><td>to you</td><td>Te escribo.</td></tr>
+                <tr><td>le</td><td>to him / her / usted</td><td>Le doy el libro.</td></tr>
+                <tr><td>nos</td><td>to us</td><td>Nos mandan un mensaje.</td></tr>
+                <tr><td>os</td><td>to you all (Spain)</td><td>Os cuento la historia.</td></tr>
+                <tr><td>les</td><td>to them / ustedes</td><td>Les preparo la cena.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>Step-by-step substitution</h4>
+              <div class="transform-stack">
+                <div class="transform-row">
+                  <span class="sentence-part part-verb">Doy</span>
+                  <span class="sentence-part part-object">el libro</span>
+                  <span class="sentence-part part-link">a Ana</span>
+                </div>
+                <div class="transform-arrow">replace the recipient</div>
+                <div class="transform-row">
+                  <span class="sentence-part part-pronoun">Le</span>
+                  <span class="sentence-part part-verb">doy</span>
+                  <span class="sentence-part part-object">el libro</span>
+                </div>
+              </div>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>Do not confuse the roles</h4>
+              <p>
+                The thing given stays the direct object. The person receiving it
+                becomes the indirect object.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-indirect" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step pronoun-step" data-step-title="Placement flow">
+          <div class="step-header">
+            <p class="step-kicker">Step 4</p>
+            <h3>Placement rules: use the verb form to decide where the pronoun goes</h3>
+          </div>
+
+          <div class="flowchart-grid">
+            <article class="flow-card liquid-glass">
+              <h4>Conjugated verb?</h4>
+              <p>Put the pronoun before it: <strong>lo veo</strong>, <strong>me levanto</strong>.</p>
+            </article>
+            <article class="flow-card liquid-glass">
+              <h4>Infinitive or gerund?</h4>
+              <p>Either before the first verb or attached: <strong>lo quiero ver</strong> / <strong>quiero verlo</strong>.</p>
+            </article>
+            <article class="flow-card liquid-glass">
+              <h4>Affirmative command?</h4>
+              <p>Attach the pronoun: <strong>dímelo</strong>, <strong>siéntate</strong>.</p>
+            </article>
+            <article class="flow-card liquid-glass">
+              <h4>Negative command?</h4>
+              <p>Put the pronoun before the verb: <strong>no me lo digas</strong>.</p>
+            </article>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass language-compare">
+              <h4>Transformation chain</h4>
+              <div class="compare-line"><span>Conjugated</span><strong>Lo quiero.</strong></div>
+              <div class="compare-line"><span>Infinitive option 1</span><strong>Lo quiero ver.</strong></div>
+              <div class="compare-line"><span>Infinitive option 2</span><strong>Quiero verlo.</strong></div>
+              <div class="compare-line"><span>Negative command</span><strong>No lo veas.</strong></div>
+            </article>
+            <article class="why-box liquid-glass">
+              <h4>Common wrong forms</h4>
+              <p>
+                Avoid <strong>quiero lo ver</strong>, <strong>doy le</strong>, and
+                <strong>no dímelo</strong>. The verb form controls placement.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-placement" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step pronoun-step" data-step-title="Reflexives">
+          <div class="step-header">
+            <p class="step-kicker">Step 5</p>
+            <h3>Reflexive pronouns: the subject acts on itself</h3>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>Reflexive set</h4>
+              <div class="pronoun-pill-grid">
+                <span class="sentence-part part-pronoun">me</span>
+                <span class="sentence-part part-pronoun">te</span>
+                <span class="sentence-part part-pronoun">se</span>
+                <span class="sentence-part part-pronoun">nos</span>
+                <span class="sentence-part part-pronoun">os</span>
+                <span class="sentence-part part-pronoun">se</span>
+              </div>
+              <p>The reflexive pronoun must match the subject.</p>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>Step-by-step transformation</h4>
+              <div class="transform-stack">
+                <div class="transform-row">
+                  <span class="sentence-part part-subject">Ana</span>
+                  <span class="sentence-part part-verb">levanta</span>
+                </div>
+                <div class="transform-arrow">make it reflexive</div>
+                <div class="transform-row">
+                  <span class="sentence-part part-pronoun">se</span>
+                  <span class="sentence-part part-verb">levanta</span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div id="practice-reflexive" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step pronoun-step" data-step-title="Relatives">
+          <div class="step-header">
+            <p class="step-kicker">Step 6</p>
+            <h3>Relative pronouns: connect a noun to extra information without repeating it</h3>
+          </div>
+
+          <div class="accent-table-wrap liquid-glass">
+            <div class="section-heading-row">
+              <h4>Relative pronoun system</h4>
+              <span>Linking words</span>
+            </div>
+            <table class="pronoun-table">
+              <thead>
+                <tr><th>Pronoun</th><th>Main use</th><th>Example</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>que</td><td>general connector</td><td>La casa que veo</td></tr>
+                <tr><td>quien / quienes</td><td>people, often after prepositions</td><td>La mujer con quien hablo</td></tr>
+                <tr><td>el cual / la cual...</td><td>more formal, often after prepositions</td><td>La ciudad en la cual vivo</td></tr>
+                <tr><td>cuyo / cuya...</td><td>whose</td><td>El estudiante cuyo libro encontré</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>Visual link</h4>
+              <div class="transform-stack">
+                <div class="transform-row">
+                  <span class="sentence-part part-object">la mujer</span>
+                  <span class="sentence-part part-link">con quien</span>
+                  <span class="sentence-part part-verb">hablo</span>
+                </div>
+              </div>
+              <p>The relative pronoun points back to <strong>la mujer</strong> and starts the extra clause.</p>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>Why this matters</h4>
+              <p>
+                Relative pronouns stop repetition. Instead of two separate noun
+                phrases, the pronoun links the second clause back to the first noun.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-relative" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step pronoun-step" data-step-title="Demonstratives">
+          <div class="step-header">
+            <p class="step-kicker">Step 7</p>
+            <h3>Demonstrative pronouns: point to this, that, and that over there</h3>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>Distance map</h4>
+              <div class="distance-row">
+                <span class="distance-pill near-pill">este / esta / esto</span>
+                <span class="distance-pill mid-pill">ese / esa / eso</span>
+                <span class="distance-pill far-pill">aquel / aquella / aquello</span>
+              </div>
+              <p>Use them to point near the speaker, near the listener, or farther away.</p>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>Noun vs pronoun</h4>
+              <div class="transform-stack">
+                <div class="transform-row">
+                  <span class="sentence-part part-object">este libro</span>
+                </div>
+                <div class="transform-arrow">remove the noun</div>
+                <div class="transform-row">
+                  <span class="sentence-part part-pronoun">este</span>
+                </div>
+              </div>
+              <p>
+                As pronouns, these forms stand alone. Modern standard Spanish
+                does not require accent marks on them.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-demonstrative" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step pronoun-step" data-step-title="Double objects">
+          <div class="step-header">
+            <p class="step-kicker">Step 8</p>
+            <h3>Double object pronouns: combine indirect and direct objects cleanly</h3>
+          </div>
+
+          <div class="diagram-grid">
+            <article class="diagram-card liquid-glass">
+              <h4>Transformation chain</h4>
+              <div class="transform-stack">
+                <div class="transform-row">
+                  <span class="sentence-part part-verb">Doy</span>
+                  <span class="sentence-part part-object">el libro</span>
+                  <span class="sentence-part part-link">a Ana</span>
+                </div>
+                <div class="transform-arrow">replace recipient</div>
+                <div class="transform-row">
+                  <span class="sentence-part part-pronoun">Le</span>
+                  <span class="sentence-part part-verb">doy</span>
+                  <span class="sentence-part part-object">el libro</span>
+                </div>
+                <div class="transform-arrow">replace the direct object too</div>
+                <div class="transform-row">
+                  <span class="sentence-part part-pronoun">Se</span>
+                  <span class="sentence-part part-pronoun">lo</span>
+                  <span class="sentence-part part-verb">doy</span>
+                </div>
+              </div>
+            </article>
+            <article class="diagram-card liquid-glass">
+              <h4>Main warning</h4>
+              <p>
+                <strong>Le / les</strong> changes to <strong>se</strong> before
+                <strong>lo / la / los / las</strong>. Do not say
+                <strong>le lo doy</strong>.
+              </p>
+            </article>
+          </div>
+
+          <div class="common-mistakes liquid-glass">
+            <h4>Common pronoun mistakes</h4>
+            <ul>
+              <li>Repeating subject pronouns when the verb already shows the subject.</li>
+              <li>Keeping the noun after replacing it with a direct object pronoun.</li>
+              <li>Mixing up direct and indirect objects in give / send / tell sentences.</li>
+              <li>Putting pronouns after a conjugated verb in ordinary statements.</li>
+              <li>Writing <strong>le lo</strong> instead of <strong>se lo</strong>.</li>
+              <li>Using the wrong relative pronoun after a preposition.</li>
+            </ul>
+          </div>
+
+          <div class="diagnostic-grid">
+            <div id="practice-double-object" class="practice-block"></div>
+            <div id="practice-mixed-review" class="practice-block"></div>
+          </div>
+        </section>
+
+        <footer class="lesson-controls liquid-glass">
+          <button id="prevStepBtn" class="btn btn-secondary" type="button">Previous step</button>
+          <button id="nextStepBtn" class="btn btn-primary" type="button">Next step</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="pronoun-course.js"></script>
+  </body>
+</html>

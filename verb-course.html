@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spanish Verb Mastery Lab</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="accent-course.css" />
+    <link rel="stylesheet" href="verb-course.css" />
+  </head>
+  <body class="accent-course-page verb-course-page">
+    <div class="night-fx" aria-hidden="true">
+      <div class="mist mist-a"></div>
+      <div class="mist mist-b"></div>
+      <div class="mist mist-c"></div>
+    </div>
+
+    <main class="accent-shell verb-shell">
+      <aside class="accent-sidebar verb-sidebar liquid-glass">
+        <a class="home-link" href="index.html">Back To Hub</a>
+        <p class="eyebrow">Verb Platform</p>
+        <h1>Spanish Verb Mastery Lab</h1>
+        <p class="subtitle">
+          Learn the high-frequency verb system step by step: forms, patterns,
+          tenses, contrasts, and real-use practice.
+        </p>
+
+        <section class="accent-progress verb-progress">
+          <div class="accent-progress-top">
+            <strong>Course progress</strong>
+            <span id="courseProgressText">0% complete</span>
+          </div>
+          <div class="accent-progress-bar" aria-hidden="true">
+            <span id="courseProgressFill"></span>
+          </div>
+          <div class="accent-stats-grid">
+            <div class="accent-stat">
+              <span>Answered</span>
+              <strong id="answeredCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Correct</span>
+              <strong id="correctCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Streak</span>
+              <strong id="streakCount">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Color legend</h2>
+            <span>Read the patterns fast</span>
+          </div>
+          <div class="legend-strip">
+            <span class="legend-pill legend-stem">Stem</span>
+            <span class="legend-pill legend-ending">Ending</span>
+            <span class="legend-pill legend-person">Person</span>
+            <span class="legend-pill legend-tense">Tense / mood</span>
+          </div>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Steps</h2>
+            <span id="stepCountLabel">Step 1 of 10</span>
+          </div>
+          <nav id="stepNav" class="step-nav" aria-label="Verb course steps"></nav>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Mastery by topic</h2>
+            <span>Live tracker</span>
+          </div>
+          <div id="masteryBoard" class="mastery-board"></div>
+        </section>
+      </aside>
+
+      <section class="accent-main verb-main">
+        <header class="accent-hero verb-hero liquid-glass">
+          <p class="eyebrow">Goal</p>
+          <h2>From infinitives to real control of Spanish verbs</h2>
+          <p class="subtitle">
+            This course is organized in the order that helps most learners: core present tense first,
+            then major irregular patterns, then the practical tense system, then contrast practice and
+            cumulative review.
+          </p>
+        </header>
+
+        <section class="lesson-step verb-step is-active" data-step-title="Foundations">
+          <div class="step-header">
+            <p class="step-kicker">Step 1</p>
+            <h3>Foundations: how Spanish verbs are built</h3>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>What is an infinitive?</h4>
+              <p>
+                The infinitive is the dictionary form of the verb: <strong>hablar, comer, vivir</strong>.
+                It does not yet tell you <strong>who</strong> does the action or <strong>when</strong> it happens.
+              </p>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>-ar, -er, -ir</h4>
+              <p>
+                Spanish verbs fall into three families based on their infinitive ending. The family tells
+                you which ending pattern the verb will usually follow.
+              </p>
+            </article>
+          </div>
+
+          <div class="visual-strip">
+            <article class="morph-card liquid-glass">
+              <h4>Stem + ending</h4>
+              <div class="morph-demo-row">
+                <span class="morph-pill stem-pill">habl</span>
+                <span class="morph-plus">+</span>
+                <span class="morph-pill ending-pill">ar</span>
+              </div>
+              <p><strong>Stem:</strong> the base meaning. <strong>Ending:</strong> the family marker or conjugated ending.</p>
+            </article>
+            <article class="morph-card liquid-glass">
+              <h4>Conjugation</h4>
+              <div class="morph-demo-row">
+                <span class="morph-pill person-pill">yo</span>
+                <span class="morph-plus">+</span>
+                <span class="morph-pill stem-pill">habl</span>
+                <span class="morph-pill ending-pill">o</span>
+              </div>
+              <p>Conjugating means changing the ending to match the <strong>person</strong> and the <strong>tense</strong>.</p>
+            </article>
+            <article class="morph-card liquid-glass">
+              <h4>Regular vs irregular</h4>
+              <p>
+                <strong>Regular</strong> verbs keep the same stem and use normal endings. <strong>Irregular</strong>
+                verbs break the pattern in the stem, the ending, or both.
+              </p>
+            </article>
+          </div>
+
+          <div class="pronoun-grid">
+            <article class="pronoun-card liquid-glass">
+              <span class="legend-pill legend-person">yo</span>
+              <p>I</p>
+            </article>
+            <article class="pronoun-card liquid-glass">
+              <span class="legend-pill legend-person">tú</span>
+              <p>you (informal)</p>
+            </article>
+            <article class="pronoun-card liquid-glass">
+              <span class="legend-pill legend-person">él / ella / usted</span>
+              <p>he / she / you (formal)</p>
+            </article>
+            <article class="pronoun-card liquid-glass">
+              <span class="legend-pill legend-person">nosotros / nosotras</span>
+              <p>we</p>
+            </article>
+            <article class="pronoun-card liquid-glass">
+              <span class="legend-pill legend-person">vosotros / vosotras</span>
+              <p>you all (Spain)</p>
+            </article>
+            <article class="pronoun-card liquid-glass">
+              <span class="legend-pill legend-person">ellos / ellas / ustedes</span>
+              <p>they / you all</p>
+            </article>
+          </div>
+
+          <div class="callout-row">
+            <aside class="memory-box liquid-glass">
+              <h4>Why pronouns often disappear</h4>
+              <p>
+                Spanish endings already show the subject: <strong>hablo</strong> clearly means <strong>I speak</strong>,
+                so <strong>yo</strong> is often optional unless you want emphasis or contrast.
+              </p>
+            </aside>
+            <aside class="why-box liquid-glass">
+              <h4>Quick logic</h4>
+              <p>
+                Read verbs in this order: <strong>tense or mood</strong>, then <strong>person</strong>, then check whether the verb is
+                <strong>regular or irregular</strong>.
+              </p>
+            </aside>
+          </div>
+
+          <div id="practice-foundations" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step verb-step" data-step-title="Present regulars">
+          <div class="step-header">
+            <p class="step-kicker">Step 2</p>
+            <h3>Present tense first: the regular system you will use constantly</h3>
+          </div>
+
+          <div class="accent-table-wrap liquid-glass">
+            <div class="section-heading-row">
+              <h4>Full present tense comparison</h4>
+              <span>hablar / comer / vivir</span>
+            </div>
+            <table class="verb-chart-table">
+              <thead>
+                <tr>
+                  <th>Person</th>
+                  <th>hablar</th>
+                  <th>comer</th>
+                  <th>vivir</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>yo</td><td><span class="morph-stem">habl</span><span class="morph-ending">o</span></td><td><span class="morph-stem">com</span><span class="morph-ending">o</span></td><td><span class="morph-stem">viv</span><span class="morph-ending">o</span></td></tr>
+                <tr><td>tú</td><td><span class="morph-stem">habl</span><span class="morph-ending">as</span></td><td><span class="morph-stem">com</span><span class="morph-ending">es</span></td><td><span class="morph-stem">viv</span><span class="morph-ending">es</span></td></tr>
+                <tr><td>él / ella / usted</td><td><span class="morph-stem">habl</span><span class="morph-ending">a</span></td><td><span class="morph-stem">com</span><span class="morph-ending">e</span></td><td><span class="morph-stem">viv</span><span class="morph-ending">e</span></td></tr>
+                <tr><td>nosotros</td><td><span class="morph-stem">habl</span><span class="morph-ending">amos</span></td><td><span class="morph-stem">com</span><span class="morph-ending">emos</span></td><td><span class="morph-stem">viv</span><span class="morph-ending">imos</span></td></tr>
+                <tr><td>vosotros</td><td><span class="morph-stem">habl</span><span class="morph-ending">áis</span></td><td><span class="morph-stem">com</span><span class="morph-ending">éis</span></td><td><span class="morph-stem">viv</span><span class="morph-ending">ís</span></td></tr>
+                <tr><td>ellos / ustedes</td><td><span class="morph-stem">habl</span><span class="morph-ending">an</span></td><td><span class="morph-stem">com</span><span class="morph-ending">en</span></td><td><span class="morph-stem">viv</span><span class="morph-ending">en</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="rule-grid">
+            <article class="rule-card liquid-glass">
+              <div class="rule-card-top">
+                <h4>What stays the same</h4>
+                <span>Usually the stem</span>
+              </div>
+              <p>The stem carries the core meaning: <strong>habl-, com-, viv-</strong>. In regular verbs, the stem stays stable.</p>
+            </article>
+            <article class="rule-card liquid-glass">
+              <div class="rule-card-top">
+                <h4>What changes</h4>
+                <span>The ending</span>
+              </div>
+              <p>The ending tells you who does the action. That is why <strong>hablo, hablas, hablamos</strong> all mean different subjects.</p>
+            </article>
+            <article class="rule-card liquid-glass">
+              <div class="rule-card-top">
+                <h4>Negative forms and questions</h4>
+                <span>No extra helper verb</span>
+              </div>
+              <p><strong>No hablo mucho.</strong> <strong>¿Vives aquí?</strong> Spanish usually keeps the same verb form and adds <strong>no</strong> or question intonation / punctuation.</p>
+            </article>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Useful examples</h4>
+              <div class="example-stack">
+                <p><strong>Hablo</strong> con mi familia todos los días. <span>I speak with my family every day.</span></p>
+                <p><strong>No comemos</strong> carne hoy. <span>We are not eating meat today.</span></p>
+                <p><strong>¿Viven</strong> cerca de aquí? <span>Do they live near here?</span></p>
+              </div>
+            </article>
+            <article class="why-box liquid-glass">
+              <h4>Memory trick</h4>
+              <p>
+                Present tense regular verbs are the base engine. If you can see the family quickly, the endings become much easier to attach.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-present-regular" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step verb-step" data-step-title="Irregular present">
+          <div class="step-header">
+            <p class="step-kicker">Step 3</p>
+            <h3>The most useful irregular present tense verbs</h3>
+          </div>
+
+          <div class="irregular-grid">
+            <article class="irregular-tile liquid-glass"><h4>ser</h4><p><strong>soy, eres, es...</strong><br />Completely irregular. Use for identity, origin, profession, time.</p></article>
+            <article class="irregular-tile liquid-glass"><h4>estar</h4><p><strong>estoy</strong> in yo, plus accent marks: <strong>estás, está</strong>. Use for location and states.</p></article>
+            <article class="irregular-tile liquid-glass"><h4>tener</h4><p><strong>tengo</strong> in yo and <strong>e → ie</strong> in most other forms: <strong>tienes, tiene</strong>.</p></article>
+            <article class="irregular-tile liquid-glass"><h4>hacer</h4><p><strong>hago</strong> in yo. The rest are mostly familiar: <strong>haces, hace</strong>.</p></article>
+            <article class="irregular-tile liquid-glass"><h4>ir</h4><p><strong>voy, vas, va...</strong> Completely irregular and essential for movement and near future.</p></article>
+            <article class="irregular-tile liquid-glass"><h4>venir</h4><p><strong>vengo</strong> in yo and <strong>e → ie</strong>: <strong>vienes, viene</strong>.</p></article>
+            <article class="irregular-tile liquid-glass"><h4>decir</h4><p><strong>digo</strong> in yo and <strong>e → i</strong>: <strong>dices, dice</strong>.</p></article>
+            <article class="irregular-tile liquid-glass"><h4>poder</h4><p><strong>o → ue</strong>: <strong>puedo, puedes</strong>. No stem change in <strong>nosotros / vosotros</strong>.</p></article>
+            <article class="irregular-tile liquid-glass"><h4>querer</h4><p><strong>e → ie</strong>: <strong>quiero, quieres</strong>. Very common with desires and requests.</p></article>
+            <article class="irregular-tile liquid-glass"><h4>ver</h4><p><strong>veo</strong> is the main irregular point. The rest are short and frequent.</p></article>
+            <article class="irregular-tile liquid-glass"><h4>dar</h4><p><strong>doy</strong> in yo. Short, high-frequency forms.</p></article>
+            <article class="irregular-tile liquid-glass"><h4>saber / conocer</h4><p><strong>sé</strong> and <strong>conozco</strong> are the key yo forms. The rest are much more regular.</p></article>
+          </div>
+
+          <div class="callout-row">
+            <aside class="memory-box liquid-glass">
+              <h4>High-value family trick</h4>
+              <p>
+                Many useful present irregulars belong to families: <strong>-go</strong> verbs (<strong>tengo, vengo, hago, digo</strong>),
+                stem changers (<strong>puedo, quiero</strong>), and complete irregulars (<strong>soy, voy</strong>).
+              </p>
+            </aside>
+            <aside class="why-box liquid-glass">
+              <h4>What to learn first</h4>
+              <p>
+                First memorize the <strong>yo</strong> form and the stem pattern. Then check whether <strong>nosotros</strong> returns to the base stem.
+              </p>
+            </aside>
+          </div>
+
+          <div id="practice-irregular-present" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step verb-step" data-step-title="Patterns and structures">
+          <div class="step-header">
+            <p class="step-kicker">Step 4</p>
+            <h3>Major verb patterns: stem changers, reflexives, gustar-type verbs, and more</h3>
+          </div>
+
+          <div class="pattern-family-grid">
+            <article class="pattern-family liquid-glass">
+              <h4>Stem-changing families</h4>
+              <div class="family-lines">
+                <p><strong>e → ie:</strong> pensar, querer, empezar, sentir</p>
+                <p><strong>o → ue:</strong> poder, volver, dormir</p>
+                <p><strong>e → i:</strong> pedir, seguir</p>
+              </div>
+              <p class="mini-note">Usually no stem change in <strong>nosotros / vosotros</strong> in the present indicative.</p>
+            </article>
+            <article class="pattern-family liquid-glass">
+              <h4>Yo-form irregulars</h4>
+              <div class="family-lines">
+                <p><strong>salgo, pongo, traigo</strong></p>
+                <p><strong>conozco, parezco</strong></p>
+                <p><strong>hago, digo</strong></p>
+              </div>
+              <p class="mini-note">Often the irregularity is concentrated in the <strong>yo</strong> form.</p>
+            </article>
+            <article class="pattern-family liquid-glass">
+              <h4>Spelling changes</h4>
+              <div class="family-lines">
+                <p><strong>llegar → llegué</strong></p>
+                <p><strong>empezar → empecé</strong></p>
+                <p><strong>seguir → sigo</strong></p>
+              </div>
+              <p class="mini-note">These changes keep the sound consistent.</p>
+            </article>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Reflexive verbs</h4>
+              <div class="formula-ladder">
+                <div><span class="legend-pill legend-person">me / te / se / nos / os / se</span><span>+</span><span class="legend-pill legend-tense">conjugated verb</span></div>
+              </div>
+              <p><strong>Me levanto</strong> temprano. <strong>Nos acostamos</strong> tarde.</p>
+            </article>
+            <article class="compare-card liquid-glass">
+              <h4>Gustar-type verbs</h4>
+              <p>
+                The thing liked controls the verb: <strong>Me gusta el libro.</strong> / <strong>Me gustan los libros.</strong>
+              </p>
+              <p class="mini-note">Think: “The book is pleasing to me.”</p>
+            </article>
+          </div>
+
+          <div class="accent-table-wrap liquid-glass">
+            <div class="section-heading-row">
+              <h4>Visual stem-change map</h4>
+              <span>pensar / volver / pedir</span>
+            </div>
+            <table class="verb-chart-table compact-chart">
+              <thead>
+                <tr><th>Person</th><th>pensar</th><th>volver</th><th>pedir</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>yo</td><td>pienso</td><td>vuelvo</td><td>pido</td></tr>
+                <tr><td>tú</td><td>piensas</td><td>vuelves</td><td>pides</td></tr>
+                <tr><td>él / ella</td><td>piensa</td><td>vuelve</td><td>pide</td></tr>
+                <tr><td>nosotros</td><td>pensamos</td><td>volvemos</td><td>pedimos</td></tr>
+                <tr><td>ellos</td><td>piensan</td><td>vuelven</td><td>piden</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="practice-patterns" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step verb-step" data-step-title="Practical builds">
+          <div class="step-header">
+            <p class="step-kicker">Step 5</p>
+            <h3>Infinitives, gerunds, participles, and the practical present systems</h3>
+          </div>
+
+          <div class="rule-grid">
+            <article class="rule-card liquid-glass">
+              <div class="rule-card-top">
+                <h4>Infinitive</h4>
+                <span>Base form</span>
+              </div>
+              <p><strong>hablar, comer, vivir</strong>. Used after many verbs and prepositions: <strong>quiero comer</strong>, <strong>voy a estudiar</strong>.</p>
+            </article>
+            <article class="rule-card liquid-glass">
+              <div class="rule-card-top">
+                <h4>Gerund</h4>
+                <span>-ando / -iendo</span>
+              </div>
+              <p><strong>hablando, comiendo, viviendo</strong>. Use with <strong>estar</strong> for the present progressive: <strong>estoy hablando</strong>.</p>
+            </article>
+            <article class="rule-card liquid-glass">
+              <div class="rule-card-top">
+                <h4>Past participle</h4>
+                <span>-ado / -ido</span>
+              </div>
+              <p><strong>hablado, comido, vivido</strong>. Use with <strong>haber</strong> for the present perfect: <strong>he comido</strong>.</p>
+            </article>
+          </div>
+
+          <div class="timeline-grid">
+            <article class="timeline-card liquid-glass">
+              <h4>Present progressive</h4>
+              <div class="timeline-strip-mini">
+                <span class="timeline-now">NOW</span>
+                <span class="timeline-bar-fill progress-fill"></span>
+              </div>
+              <p><strong>estar + gerund</strong> → action in progress right now.</p>
+              <p class="mini-note">Estoy leyendo. Estamos comiendo.</p>
+            </article>
+            <article class="timeline-card liquid-glass">
+              <h4>Near future</h4>
+              <div class="timeline-strip-mini">
+                <span class="timeline-now">NOW</span>
+                <span class="timeline-arrow">→</span>
+                <span class="timeline-soon">SOON</span>
+              </div>
+              <p><strong>ir + a + infinitive</strong> → plan or near future: <strong>voy a salir</strong>.</p>
+            </article>
+            <article class="timeline-card liquid-glass">
+              <h4>Present perfect</h4>
+              <div class="timeline-strip-mini">
+                <span class="timeline-past">PAST</span>
+                <span class="timeline-arrow">→</span>
+                <span class="timeline-now">NOW</span>
+              </div>
+              <p><strong>haber + participle</strong> → completed action connected to the present: <strong>he visto</strong>.</p>
+            </article>
+          </div>
+
+          <div class="vowel-legend liquid-glass">
+            <div>
+              <strong>Common irregular gerunds</strong>
+              <p>decir → <strong>diciendo</strong>, dormir → <strong>durmiendo</strong>, pedir → <strong>pidiendo</strong></p>
+            </div>
+            <div>
+              <strong>Common irregular participles</strong>
+              <p>hecho, dicho, visto, puesto, escrito, roto, vuelto, abierto, muerto</p>
+            </div>
+          </div>
+
+          <div id="practice-practical-builds" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step verb-step" data-step-title="Past tenses">
+          <div class="step-header">
+            <p class="step-kicker">Step 6</p>
+            <h3>Past time in action: preterite vs imperfect</h3>
+          </div>
+
+          <div class="timeline-grid two-up">
+            <article class="timeline-card liquid-glass">
+              <h4>Preterite</h4>
+              <div class="timeline-track solid-finish">
+                <span class="timeline-event">completed event</span>
+              </div>
+              <p>Use it for finished, bounded actions that move the story forward: <strong>Ayer comí</strong>.</p>
+            </article>
+            <article class="timeline-card liquid-glass">
+              <h4>Imperfect</h4>
+              <div class="timeline-track soft-band">
+                <span class="timeline-event">background / habit / ongoing past</span>
+              </div>
+              <p>Use it for description, routine, age, time, and ongoing background: <strong>Cuando era niño...</strong></p>
+            </article>
+          </div>
+
+          <div class="accent-table-wrap liquid-glass">
+            <div class="section-heading-row">
+              <h4>Regular endings</h4>
+              <span>Preterite and imperfect</span>
+            </div>
+            <table class="verb-chart-table compact-chart">
+              <thead>
+                <tr><th>Tense</th><th>-ar</th><th>-er / -ir</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Preterite yo</td><td>-é</td><td>-í</td></tr>
+                <tr><td>Preterite tú</td><td>-aste</td><td>-iste</td></tr>
+                <tr><td>Preterite él / ella</td><td>-ó</td><td>-ió</td></tr>
+                <tr><td>Imperfect yo</td><td>-aba</td><td>-ía</td></tr>
+                <tr><td>Imperfect nosotros</td><td>-ábamos</td><td>-íamos</td></tr>
+                <tr><td>Imperfect ellos</td><td>-aban</td><td>-ían</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Important irregulars</h4>
+              <p><strong>Preterite:</strong> fui, estuve, tuve, hice, pude, quise, vine, dije.</p>
+              <p><strong>Imperfect:</strong> era, iba, veía.</p>
+            </article>
+            <article class="compare-card liquid-glass">
+              <h4>Logic contrast</h4>
+              <p><strong>Preterite</strong> answers “what happened?”</p>
+              <p><strong>Imperfect</strong> answers “what was going on?” or “what used to happen?”</p>
+            </article>
+          </div>
+
+          <div id="practice-past-system" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step verb-step" data-step-title="Future, conditional, commands">
+          <div class="step-header">
+            <p class="step-kicker">Step 7</p>
+            <h3>Future, conditional, and commands in practical use</h3>
+          </div>
+
+          <div class="rule-grid">
+            <article class="rule-card liquid-glass">
+              <div class="rule-card-top">
+                <h4>Simple future</h4>
+                <span>infinitive + ending</span>
+              </div>
+              <p><strong>hablaré, comeré, viviré</strong>. Used for neutral future, prediction, or probability.</p>
+            </article>
+            <article class="rule-card liquid-glass">
+              <div class="rule-card-top">
+                <h4>Conditional</h4>
+                <span>infinitive + ía endings</span>
+              </div>
+              <p><strong>hablaría, comería, viviría</strong>. Used for would, polite requests, and hypothetical results.</p>
+            </article>
+            <article class="rule-card liquid-glass">
+              <div class="rule-card-top">
+                <h4>Commands</h4>
+                <span>tell someone what to do</span>
+              </div>
+              <p><strong>Habla.</strong> <strong>Coma.</strong> <strong>No salgas.</strong> Direct commands and polite commands use different forms.</p>
+            </article>
+          </div>
+
+          <div class="vowel-legend liquid-glass">
+            <div>
+              <strong>Common irregular future / conditional stems</strong>
+              <p>tendr-, har-, dir-, podr-, querr-, sabr-, vendr-, pondr-, saldr-, cabr-, habr-</p>
+            </div>
+            <div>
+              <strong>Command contrast</strong>
+              <p><strong>Ven</strong> = direct tú command. <strong>Venga</strong> = polite usted command.</p>
+            </div>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Near future vs simple future</h4>
+              <p><strong>Voy a llamar</strong> sounds planned and close.</p>
+              <p><strong>Llamaré</strong> sounds more neutral, predictive, or formal.</p>
+            </article>
+            <article class="compare-card liquid-glass">
+              <h4>Negative commands</h4>
+              <p>Negative tú commands use the subjunctive pattern: <strong>No hables. No digas eso.</strong></p>
+            </article>
+          </div>
+
+          <div id="practice-future-commands" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step verb-step" data-step-title="Subjunctive basics">
+          <div class="step-header">
+            <p class="step-kicker">Step 8</p>
+            <h3>Present subjunctive basics: when Spanish leaves the fact zone</h3>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>When to use it</h4>
+              <p>
+                Use the present subjunctive after expressions of <strong>wish, emotion, doubt, influence, and importance</strong>:
+                <strong>Quiero que vengas</strong>, <strong>Dudo que sea verdad</strong>.
+              </p>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>How to form it</h4>
+              <p>
+                Start with the <strong>yo</strong> present form, drop the <strong>-o</strong>, and add the opposite endings:
+                <strong>hable, coma, viva</strong>.
+              </p>
+            </article>
+          </div>
+
+          <div class="accent-table-wrap liquid-glass">
+            <div class="section-heading-row">
+              <h4>Present subjunctive endings</h4>
+              <span>Opposite-family endings</span>
+            </div>
+            <table class="verb-chart-table compact-chart">
+              <thead>
+                <tr><th>Family</th><th>yo</th><th>tú</th><th>él / ella</th><th>nosotros</th><th>ellos</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>-ar</td><td>-e</td><td>-es</td><td>-e</td><td>-emos</td><td>-en</td></tr>
+                <tr><td>-er / -ir</td><td>-a</td><td>-as</td><td>-a</td><td>-amos</td><td>-an</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Essential irregulars</h4>
+              <p><strong>sea, esté, vaya, sepa, dé, haya</strong></p>
+            </article>
+            <article class="compare-card liquid-glass">
+              <h4>Indicative vs subjunctive</h4>
+              <p><strong>Sé que viene.</strong> = I know he is coming. Fact.</p>
+              <p><strong>Quiero que venga.</strong> = I want him to come. Desired / not yet a fact.</p>
+            </article>
+          </div>
+
+          <div id="practice-subjunctive" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step verb-step" data-step-title="Contrast lab">
+          <div class="step-header">
+            <p class="step-kicker">Step 9</p>
+            <h3>Contrast lab: the high-frequency choices that cause the most confusion</h3>
+          </div>
+
+          <div class="contrast-grid-large">
+            <article class="contrast-panel liquid-glass">
+              <h4>ser vs estar</h4>
+              <p><strong>ser</strong>: identity, classification, origin, time</p>
+              <p><strong>estar</strong>: location, condition, temporary state, result</p>
+              <p class="mini-note">La sopa <strong>está</strong> fría hoy. / La sopa <strong>es</strong> una comida.</p>
+            </article>
+            <article class="contrast-panel liquid-glass">
+              <h4>saber vs conocer</h4>
+              <p><strong>saber</strong>: facts, information, how to do something</p>
+              <p><strong>conocer</strong>: to know people, places, familiarity</p>
+              <p class="mini-note">Sé la respuesta. / Conozco a Marta.</p>
+            </article>
+            <article class="contrast-panel liquid-glass">
+              <h4>ir vs venir</h4>
+              <p><strong>ir</strong> goes away from the speaker’s location. <strong>venir</strong> comes toward the speaker or destination point.</p>
+              <p class="mini-note">Voy a tu casa. / ¿Vienes a mi casa?</p>
+            </article>
+            <article class="contrast-panel liquid-glass">
+              <h4>por vs para with verbs</h4>
+              <p><strong>por</strong>: reason, exchange, movement through, “because of”</p>
+              <p><strong>para</strong>: purpose, destination, deadline, recipient</p>
+              <p class="mini-note">Gracias <strong>por</strong> ayudarme. / Estudio <strong>para</strong> aprender.</p>
+            </article>
+          </div>
+
+          <div id="practice-contrasts" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step verb-step" data-step-title="Mastery lab">
+          <div class="step-header">
+            <p class="step-kicker">Step 10</p>
+            <h3>Mastery lab: survival list, common mistakes, cheat sheet, and cumulative review</h3>
+          </div>
+
+          <div class="survival-grid">
+            <article class="survival-card liquid-glass">
+              <h4>Core identity verbs</h4>
+              <p>ser, estar, tener, hacer</p>
+            </article>
+            <article class="survival-card liquid-glass">
+              <h4>Movement and direction</h4>
+              <p>ir, venir, salir, llegar, traer, volver</p>
+            </article>
+            <article class="survival-card liquid-glass">
+              <h4>High-frequency control verbs</h4>
+              <p>poder, querer, decir, dar, ver, saber, conocer, poner</p>
+            </article>
+            <article class="survival-card liquid-glass">
+              <h4>Daily-life reflexives</h4>
+              <p>llamarse, quedarse, levantarse, acostarse</p>
+            </article>
+            <article class="survival-card liquid-glass">
+              <h4>Stem-changing essentials</h4>
+              <p>dormir, pedir, jugar, sentir, pensar, empezar, seguir</p>
+            </article>
+            <article class="survival-card liquid-glass">
+              <h4>Regular anchors</h4>
+              <p>hablar, comer, vivir, llevar, encontrar</p>
+            </article>
+          </div>
+
+          <div class="summary-chart liquid-glass">
+            <h4>Quick cheat sheet</h4>
+            <div class="cheat-grid">
+              <p><strong>Present:</strong> daily facts, routines, current truth</p>
+              <p><strong>Progressive:</strong> happening right now</p>
+              <p><strong>Ir + a:</strong> near future / plan</p>
+              <p><strong>Future:</strong> neutral future / prediction</p>
+              <p><strong>Preterite:</strong> completed event</p>
+              <p><strong>Imperfect:</strong> background / habit / description</p>
+              <p><strong>Present perfect:</strong> completed action linked to now</p>
+              <p><strong>Conditional:</strong> would / polite / hypothetical</p>
+              <p><strong>Subjunctive:</strong> wish / doubt / emotion / influence</p>
+              <p><strong>Commands:</strong> direct instruction</p>
+            </div>
+          </div>
+
+          <div class="common-mistakes liquid-glass">
+            <h4>Most common Spanish verb mistakes</h4>
+            <ul>
+              <li>Using the infinitive instead of a conjugated form: <strong>yo comer</strong> instead of <strong>yo como</strong>.</li>
+              <li>Forgetting that stem changes usually disappear in <strong>nosotros / vosotros</strong>.</li>
+              <li>Confusing <strong>ser</strong> and <strong>estar</strong> when talking about temporary states.</li>
+              <li>Using <strong>gustar</strong> like English “I like” instead of matching the thing liked.</li>
+              <li>Mixing up <strong>preterite</strong> and <strong>imperfect</strong> in story narration.</li>
+              <li>Forgetting irregular future stems like <strong>tendr-, dir-, har-</strong>.</li>
+              <li>Using indicative after triggers that need the subjunctive.</li>
+            </ul>
+          </div>
+
+          <div class="diagnostic-grid">
+            <div id="practice-tense-quiz" class="practice-block"></div>
+            <div id="practice-pattern-quiz" class="practice-block"></div>
+          </div>
+          <div id="practice-final-review" class="practice-block"></div>
+        </section>
+
+        <footer class="lesson-controls liquid-glass">
+          <button id="prevStepBtn" class="btn btn-secondary" type="button">Previous step</button>
+          <button id="nextStepBtn" class="btn btn-primary" type="button">Next step</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="verb-course.js"></script>
+  </body>
+</html>

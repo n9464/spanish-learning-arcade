@@ -1,0 +1,473 @@
+.verb-course-page .accent-hero {
+  background:
+    radial-gradient(circle at top right, rgba(239, 176, 93, 0.18), transparent 34%),
+    radial-gradient(circle at bottom left, rgba(57, 211, 190, 0.14), transparent 38%),
+    var(--glass-bg);
+}
+
+.verb-sidebar {
+  position: sticky;
+  top: 18px;
+  max-height: calc(100vh - 36px);
+  overflow-y: auto;
+}
+
+.verb-progress {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.legend-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.legend-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.legend-stem,
+.stem-pill,
+.morph-stem {
+  background: rgba(83, 206, 255, 0.16);
+  color: #c6eeff;
+}
+
+.legend-ending,
+.ending-pill,
+.morph-ending {
+  background: rgba(255, 167, 97, 0.16);
+  color: #ffd8b3;
+}
+
+.legend-person,
+.person-pill {
+  background: rgba(160, 126, 255, 0.18);
+  color: #e2d4ff;
+}
+
+.legend-tense {
+  background: rgba(57, 211, 190, 0.16);
+  color: #d1fff8;
+}
+
+.morph-card {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.morph-card h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.morph-card p,
+.pronoun-card p,
+.irregular-tile p,
+.pattern-family p,
+.timeline-card p,
+.contrast-panel p,
+.survival-card p,
+.example-stack p {
+  margin: 0;
+  color: #d5e8f8;
+  line-height: 1.6;
+}
+
+.morph-demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.morph-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.morph-plus {
+  color: var(--ink-soft);
+  font-weight: 800;
+}
+
+.pronoun-grid,
+.irregular-grid,
+.pattern-family-grid,
+.timeline-grid,
+.contrast-grid-large,
+.survival-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.pronoun-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.irregular-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pattern-family-grid,
+.timeline-grid,
+.contrast-grid-large,
+.survival-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.timeline-grid.two-up {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pronoun-card,
+.irregular-tile,
+.pattern-family,
+.timeline-card,
+.contrast-panel,
+.survival-card {
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.pronoun-card {
+  align-content: start;
+}
+
+.irregular-tile h4,
+.pattern-family h4,
+.timeline-card h4,
+.contrast-panel h4,
+.survival-card h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.family-lines {
+  display: grid;
+  gap: 6px;
+}
+
+.mini-note,
+.example-stack span {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.formula-ladder {
+  display: grid;
+  gap: 8px;
+}
+
+.formula-ladder div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.sort-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.sort-label {
+  font-weight: 800;
+}
+
+.compact-choice-grid {
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+}
+
+.verb-chart-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.verb-chart-table thead th {
+  text-align: left;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 0 0 12px;
+}
+
+.verb-chart-table tbody td {
+  padding: 12px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: top;
+}
+
+.verb-chart-table tbody td:first-child {
+  color: #d8ecff;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.compact-chart tbody td {
+  padding: 10px 10px;
+}
+
+.timeline-strip-mini,
+.timeline-track {
+  min-height: 58px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 12px;
+}
+
+.timeline-bar-fill {
+  width: 100px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #39d3be, rgba(57, 211, 190, 0.25));
+}
+
+.timeline-arrow {
+  color: var(--accent);
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.timeline-now,
+.timeline-soon,
+.timeline-past,
+.timeline-event {
+  color: #d8ecff;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.timeline-track.solid-finish {
+  justify-content: flex-start;
+}
+
+.timeline-track.solid-finish .timeline-event {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(239, 176, 93, 0.16);
+  color: #ffd399;
+}
+
+.timeline-track.soft-band {
+  background:
+    linear-gradient(90deg, rgba(57, 211, 190, 0.14), rgba(57, 211, 190, 0.04)),
+    rgba(255, 255, 255, 0.05);
+}
+
+.example-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.cheat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.cheat-grid p {
+  margin: 0;
+}
+
+.verb-main .practice-block {
+  background:
+    radial-gradient(circle at top right, rgba(83, 206, 255, 0.08), transparent 38%),
+    rgba(255, 255, 255, 0.035);
+}
+
+.feedback-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.feedback-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #d8ecff;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.feedback-tag.issue-irregularity {
+  background: rgba(255, 113, 103, 0.15);
+  color: #ffc2bc;
+}
+
+.feedback-tag.issue-person {
+  background: rgba(83, 206, 255, 0.16);
+  color: #c6eeff;
+}
+
+.feedback-tag.issue-tense {
+  background: rgba(57, 211, 190, 0.16);
+  color: #d0fff8;
+}
+
+.feedback-tag.issue-pattern {
+  background: rgba(239, 176, 93, 0.16);
+  color: #ffdbab;
+}
+
+.feedback-tag.issue-meaning {
+  background: rgba(180, 155, 255, 0.17);
+  color: #e6dbff;
+}
+
+.mini-conjugation {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  gap: 10px;
+}
+
+.mini-conjugation h6 {
+  margin: 0;
+  font-size: 0.94rem;
+}
+
+.mini-conjugation p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.mini-conjugation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 14px;
+}
+
+.mini-conjugation-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mini-conjugation-row:first-child,
+.sort-detail-card:first-child {
+  border-top: 0;
+}
+
+.mini-conjugation-row span:first-child {
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.mini-conjugation-row strong {
+  color: #eef7ff;
+}
+
+.sort-detail-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.sort-detail-card {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 10px;
+}
+
+.sort-detail-card p {
+  margin: 4px 0 0;
+}
+
+@media (max-width: 1180px) {
+  .verb-sidebar {
+    position: static;
+    max-height: none;
+  }
+
+  .pronoun-grid,
+  .irregular-grid,
+  .pattern-family-grid,
+  .timeline-grid,
+  .contrast-grid-large,
+  .survival-grid,
+  .timeline-grid.two-up {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .legend-strip,
+  .morph-demo-row,
+  .formula-ladder div {
+    gap: 6px;
+  }
+
+  .pronoun-grid,
+  .irregular-grid,
+  .pattern-family-grid,
+  .timeline-grid,
+  .contrast-grid-large,
+  .survival-grid,
+  .timeline-grid.two-up,
+  .cheat-grid,
+  .mini-conjugation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .verb-chart-table {
+    font-size: 0.88rem;
+  }
+
+  .verb-chart-table thead {
+    display: none;
+  }
+
+  .verb-chart-table,
+  .verb-chart-table tbody,
+  .verb-chart-table tr,
+  .verb-chart-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .verb-chart-table tr {
+    padding: 12px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .verb-chart-table tbody td {
+    border: 0;
+    padding: 4px 0;
+  }
+}

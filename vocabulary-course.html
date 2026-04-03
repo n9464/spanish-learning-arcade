@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spanish Vocabulary System</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="accent-course.css" />
+    <link rel="stylesheet" href="vocabulary-course.css" />
+  </head>
+  <body class="accent-course-page vocabulary-course-page">
+    <div class="night-fx" aria-hidden="true">
+      <div class="mist mist-a"></div>
+      <div class="mist mist-b"></div>
+      <div class="mist mist-c"></div>
+    </div>
+
+    <main class="accent-shell vocabulary-shell">
+      <aside class="accent-sidebar vocabulary-sidebar liquid-glass">
+        <a class="home-link" href="index.html">Back To Hub</a>
+        <p class="eyebrow">Word System</p>
+        <h1>Spanish Vocabulary Learning</h1>
+        <p class="subtitle">
+          Learn words by theme, usefulness, and family pattern, then keep the weak
+          ones coming back through adaptive review.
+        </p>
+
+        <section class="accent-progress vocabulary-progress">
+          <div class="accent-progress-top">
+            <strong>Course progress</strong>
+            <span id="courseProgressText">0% complete</span>
+          </div>
+          <div class="accent-progress-bar" aria-hidden="true">
+            <span id="courseProgressFill"></span>
+          </div>
+          <div class="accent-stats-grid">
+            <div class="accent-stat">
+              <span>Answered</span>
+              <strong id="answeredCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Correct</span>
+              <strong id="correctCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Streak</span>
+              <strong id="streakCount">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Steps</h2>
+            <span id="stepCountLabel">Step 1 of 8</span>
+          </div>
+          <nav id="stepNav" class="step-nav" aria-label="Lesson steps"></nav>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Mastery by skill</h2>
+            <span>Live tracker</span>
+          </div>
+          <div id="masteryBoard" class="mastery-board"></div>
+        </section>
+
+        <section class="accent-sidebar-section review-system-card">
+          <div class="section-heading-row">
+            <h2>Review engine</h2>
+            <span>Adaptive</span>
+          </div>
+          <p class="mini-note">
+            Words with low accuracy, low streak, or weak recent recall get pushed to
+            the front of the review queue.
+          </p>
+          <div class="review-ladder">
+            <div class="review-rung">
+              <strong>New words</strong>
+              <span>highest review priority</span>
+            </div>
+            <div class="review-rung">
+              <strong>Low accuracy</strong>
+              <span>comes back fast</span>
+            </div>
+            <div class="review-rung">
+              <strong>Stable words</strong>
+              <span>reviewed less often</span>
+            </div>
+          </div>
+          <div id="reviewFocusBoard" class="review-focus-board"></div>
+        </section>
+      </aside>
+
+      <section class="accent-main vocabulary-main">
+        <header class="accent-hero vocabulary-hero liquid-glass">
+          <p class="eyebrow">Goal</p>
+          <h2>From isolated word lists to usable vocabulary networks</h2>
+          <p class="subtitle">
+            This system groups vocabulary by theme, frequency, and family pattern,
+            then makes you recall it in context through collocations, example
+            sentences, and adaptive review.
+          </p>
+          <div class="hero-badges">
+            <span class="hero-badge">Themes</span>
+            <span class="hero-badge">Frequency-first</span>
+            <span class="hero-badge">Word families</span>
+            <span class="hero-badge">Collocations</span>
+            <span class="hero-badge">Adaptive review</span>
+          </div>
+        </header>
+
+        <section class="lesson-step vocabulary-step is-active" data-step-title="Foundations">
+          <div class="step-header">
+            <p class="step-kicker">Step 1</p>
+            <h3>How this vocabulary system works</h3>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>Themes</h4>
+              <p>
+                You learn words inside real domains like food, school, emotions,
+                and travel so the meaning stays tied to a situation.
+              </p>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>Frequency</h4>
+              <p>
+                The most useful everyday words come first. Rare vocabulary waits
+                until the core system is already stable.
+              </p>
+            </article>
+          </div>
+
+          <div class="family-grid">
+            <article class="family-card liquid-glass">
+              <h4>Word family example</h4>
+              <div class="family-branch">
+                <span class="family-root">hablar</span>
+                <span class="family-leaf">hablador</span>
+                <span class="family-leaf">hablado</span>
+              </div>
+              <p>One root can unlock many related words faster than isolated memorization.</p>
+            </article>
+            <article class="family-card liquid-glass">
+              <h4>Collocation example</h4>
+              <div class="collocation-line">
+                <span class="collocation-main">tener</span>
+                <span class="collocation-link">+</span>
+                <span class="collocation-main">hambre</span>
+              </div>
+              <p>Words become easier to use when you learn their natural partners.</p>
+            </article>
+          </div>
+
+          <div id="practice-foundations" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step vocabulary-step" data-step-title="Food and daily life">
+          <div class="step-header">
+            <p class="step-kicker">Step 2</p>
+            <h3>Food and daily life</h3>
+          </div>
+
+          <div class="theme-map theme-food liquid-glass">
+            <div class="theme-core">
+              <strong>Food</strong>
+              <span>high-frequency survival words</span>
+            </div>
+            <div class="theme-node">agua</div>
+            <div class="theme-node">comida</div>
+            <div class="theme-node">hambre</div>
+            <div class="theme-node">pedir</div>
+            <div class="theme-node">cocina</div>
+          </div>
+
+          <div class="vocab-card-grid">
+            <article class="vocab-card liquid-glass tone-food">
+              <div class="vocab-card-top">
+                <strong>hambre</strong>
+                <span>very high frequency</span>
+              </div>
+              <p><strong>Visual association:</strong> empty plate, stomach asking for food.</p>
+              <p><strong>Example:</strong> Tengo hambre después de clase.</p>
+              <p><strong>Collocation:</strong> tener hambre</p>
+            </article>
+            <article class="vocab-card liquid-glass tone-food">
+              <div class="vocab-card-top">
+                <strong>pedir</strong>
+                <span>high frequency verb</span>
+              </div>
+              <p><strong>Visual association:</strong> hand raised to order.</p>
+              <p><strong>Example:</strong> Quiero pedir un café.</p>
+              <p><strong>Collocations:</strong> pedir comida, pedir agua, pedir la cuenta</p>
+            </article>
+          </div>
+
+          <div id="practice-food" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step vocabulary-step" data-step-title="School and work">
+          <div class="step-header">
+            <p class="step-kicker">Step 3</p>
+            <h3>School and work</h3>
+          </div>
+
+          <div class="theme-map theme-school liquid-glass">
+            <div class="theme-core">
+              <strong>School</strong>
+              <span>core study vocabulary</span>
+            </div>
+            <div class="theme-node">estudiar</div>
+            <div class="theme-node">tarea</div>
+            <div class="theme-node">examen</div>
+            <div class="theme-node">aprender</div>
+            <div class="theme-node">clase</div>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Useful collocations</h4>
+              <div class="compare-line">
+                <span class="compare-word">hacer la tarea</span>
+                <span class="compare-note">not *tomar la tarea here</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">tener un examen</span>
+                <span class="compare-note">common school phrase</span>
+              </div>
+            </article>
+            <article class="compare-card liquid-glass">
+              <h4>Example context</h4>
+              <div class="compare-line">
+                <span class="compare-word">Aprendo rápido</span>
+                <span class="compare-note">verb for gaining knowledge</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">Estudio por la noche</span>
+                <span class="compare-note">verb for the act of studying</span>
+              </div>
+            </article>
+          </div>
+
+          <div id="practice-school" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step vocabulary-step" data-step-title="Emotions and states">
+          <div class="step-header">
+            <p class="step-kicker">Step 4</p>
+            <h3>Emotions and states</h3>
+          </div>
+
+          <div class="theme-map theme-emotion liquid-glass">
+            <div class="theme-core">
+              <strong>Emotions</strong>
+              <span>useful everyday states</span>
+            </div>
+            <div class="theme-node">feliz</div>
+            <div class="theme-node">triste</div>
+            <div class="theme-node">cansado</div>
+            <div class="theme-node">miedo</div>
+            <div class="theme-node">alegría</div>
+          </div>
+
+          <div class="vocab-card-grid">
+            <article class="vocab-card liquid-glass tone-emotion">
+              <div class="vocab-card-top">
+                <strong>cansado</strong>
+                <span>high frequency state</span>
+              </div>
+              <p><strong>Visual association:</strong> heavy shoulders after a long day.</p>
+              <p><strong>Example:</strong> Estoy cansado después del trabajo.</p>
+              <p><strong>Collocations:</strong> estar cansado, sentirse cansado</p>
+            </article>
+            <article class="vocab-card liquid-glass tone-emotion">
+              <div class="vocab-card-top">
+                <strong>miedo</strong>
+                <span>useful abstract noun</span>
+              </div>
+              <p><strong>Visual association:</strong> step back from something uncertain.</p>
+              <p><strong>Example:</strong> Tengo miedo de ese examen.</p>
+              <p><strong>Collocations:</strong> tener miedo, dar miedo</p>
+            </article>
+          </div>
+
+          <div id="practice-emotions" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step vocabulary-step" data-step-title="Travel and movement">
+          <div class="step-header">
+            <p class="step-kicker">Step 5</p>
+            <h3>Travel and movement</h3>
+          </div>
+
+          <div class="theme-map theme-travel liquid-glass">
+            <div class="theme-core">
+              <strong>Travel</strong>
+              <span>movement and navigation</span>
+            </div>
+            <div class="theme-node">viajar</div>
+            <div class="theme-node">llegar</div>
+            <div class="theme-node">boleto</div>
+            <div class="theme-node">estación</div>
+            <div class="theme-node">mapa</div>
+          </div>
+
+          <div class="accent-table-wrap liquid-glass">
+            <table class="accent-table">
+              <thead>
+                <tr>
+                  <th>Word</th>
+                  <th>Natural partner</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>llegar</td>
+                  <td>llegar a</td>
+                  <td>Llego a la estación a tiempo.</td>
+                </tr>
+                <tr>
+                  <td>boleto</td>
+                  <td>comprar un boleto</td>
+                  <td>Necesito comprar un boleto.</td>
+                </tr>
+                <tr>
+                  <td>mapa</td>
+                  <td>mirar el mapa</td>
+                  <td>Miro el mapa antes de salir.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="practice-travel" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step vocabulary-step" data-step-title="Word families">
+          <div class="step-header">
+            <p class="step-kicker">Step 6</p>
+            <h3>Word families and pattern growth</h3>
+          </div>
+
+          <div class="family-grid">
+            <article class="family-card liquid-glass">
+              <h4>hablar family</h4>
+              <div class="family-branch multi-family">
+                <span class="family-root">hablar</span>
+                <span class="family-leaf">hablado</span>
+                <span class="family-leaf">hablador</span>
+                <span class="family-leaf">habladora</span>
+              </div>
+              <p>One speaking root grows into a participle and descriptive adjectives.</p>
+            </article>
+            <article class="family-card liquid-glass">
+              <h4>viajar family</h4>
+              <div class="family-branch multi-family">
+                <span class="family-root">viajar</span>
+                <span class="family-leaf">viaje</span>
+                <span class="family-leaf">viajero</span>
+                <span class="family-leaf">viajera</span>
+              </div>
+              <p>Knowing the root makes related nouns and people-words easier to decode.</p>
+            </article>
+          </div>
+
+          <div id="practice-families" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step vocabulary-step" data-step-title="Collocations and context">
+          <div class="step-header">
+            <p class="step-kicker">Step 7</p>
+            <h3>Collocations and context clues</h3>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Collocation thinking</h4>
+              <div class="compare-line">
+                <span class="compare-word">tener hambre</span>
+                <span class="compare-note">natural phrase</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">hacer la tarea</span>
+                <span class="compare-note">natural school phrase</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">comprar un boleto</span>
+                <span class="compare-note">natural travel phrase</span>
+              </div>
+            </article>
+            <article class="compare-card liquid-glass">
+              <h4>Context over translation</h4>
+              <div class="compare-line">
+                <span class="compare-word">Tengo hambre</span>
+                <span class="compare-note">state + noun pattern</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">Estoy cansado</span>
+                <span class="compare-note">state adjective pattern</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">Aprendo rápido</span>
+                <span class="compare-note">verb in context, not isolated translation</span>
+              </div>
+            </article>
+          </div>
+
+          <div id="practice-collocations" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step vocabulary-step" data-step-title="Adaptive review">
+          <div class="step-header">
+            <p class="step-kicker">Step 8</p>
+            <h3>Adaptive review lab</h3>
+          </div>
+
+          <div class="summary-chart liquid-glass">
+            <h4>How review priority is chosen</h4>
+            <p>
+              New words start at the top. Then the system favors low-accuracy words,
+              low-streak words, and words you keep missing in context.
+            </p>
+          </div>
+
+          <div class="common-mistakes liquid-glass">
+            <h4>Most common vocabulary mistakes</h4>
+            <ul>
+              <li>Memorizing a translation but not the natural collocation.</li>
+              <li>Knowing a root word but not recognizing its family members.</li>
+              <li>Remembering a word in isolation but failing to use it in a sentence.</li>
+              <li>Reviewing only easy words instead of the weak ones.</li>
+            </ul>
+          </div>
+
+          <div id="practice-review" class="practice-block"></div>
+        </section>
+
+        <footer class="lesson-controls liquid-glass">
+          <button id="prevStepBtn" class="btn btn-secondary" type="button">Previous step</button>
+          <button id="nextStepBtn" class="btn btn-primary" type="button">Next step</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="vocabulary-course.js"></script>
+  </body>
+</html>

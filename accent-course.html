@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spanish Accent Marks Mastery</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="accent-course.css" />
+  </head>
+  <body class="accent-course-page">
+    <div class="night-fx" aria-hidden="true">
+      <div class="mist mist-a"></div>
+      <div class="mist mist-b"></div>
+      <div class="mist mist-c"></div>
+    </div>
+
+    <main class="accent-shell">
+      <aside class="accent-sidebar liquid-glass">
+        <a class="home-link" href="index.html">Back To Hub</a>
+        <p class="eyebrow">Mini-course</p>
+        <h1>Spanish Accent Marks</h1>
+        <p class="subtitle">
+          Learn the full tilde system, see the patterns, and practice until the
+          logic feels automatic.
+        </p>
+
+        <section class="accent-progress">
+          <div class="accent-progress-top">
+            <strong>Course progress</strong>
+            <span id="courseProgressText">0% complete</span>
+          </div>
+          <div class="accent-progress-bar" aria-hidden="true">
+            <span id="courseProgressFill"></span>
+          </div>
+          <div class="accent-stats-grid">
+            <div class="accent-stat">
+              <span>Answered</span>
+              <strong id="answeredCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Correct</span>
+              <strong id="correctCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Streak</span>
+              <strong id="streakCount">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Steps</h2>
+            <span id="stepCountLabel">Step 1 of 8</span>
+          </div>
+          <nav id="stepNav" class="step-nav" aria-label="Lesson steps"></nav>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Mastery by rule</h2>
+            <span>Live tracker</span>
+          </div>
+          <div id="masteryBoard" class="mastery-board"></div>
+        </section>
+      </aside>
+
+      <section class="accent-main">
+        <header class="accent-hero liquid-glass">
+          <p class="eyebrow">Goal</p>
+          <h2>From first rules to confident writing</h2>
+          <p class="subtitle">
+            This lesson shows where stress goes, when a written tilde appears, how
+            to classify words, and how to justify every accent mark you write.
+          </p>
+        </header>
+
+        <section class="lesson-step is-active" data-step-title="Foundations">
+          <div class="step-header">
+            <p class="step-kicker">Step 1</p>
+            <h3>Foundations: stress and written accent</h3>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>What is a tilde?</h4>
+              <p>
+                In Spanish, a <strong>tilde</strong> is the written accent mark
+                placed on a vowel: <strong>á, é, í, ó, ú</strong>. It tells you that
+                the stressed syllable must be read in a specific place or that a
+                special accent rule is active.
+              </p>
+            </article>
+
+            <article class="accent-card liquid-glass">
+              <h4>Stress is not the same as a tilde</h4>
+              <p>
+                Every Spanish word has a <strong>stressed syllable</strong>. That is
+                where your voice naturally leans. Only some words also need a
+                <strong>written tilde</strong>.
+              </p>
+            </article>
+          </div>
+
+          <div class="visual-strip">
+            <div class="syllable-demo liquid-glass">
+              <span class="word-label">casa</span>
+              <div class="syllable-row">
+                <span class="syllable-chip is-stress">ca</span>
+                <span class="syllable-chip">sa</span>
+              </div>
+              <p>Stress exists, but there is no written tilde.</p>
+            </div>
+            <div class="syllable-demo liquid-glass">
+              <span class="word-label">café</span>
+              <div class="syllable-row">
+                <span class="syllable-chip">ca</span>
+                <span class="syllable-chip is-stress">fé</span>
+              </div>
+              <p>The stress is on the last syllable, and a written tilde is required.</p>
+            </div>
+            <div class="syllable-demo liquid-glass">
+              <span class="word-label">música</span>
+              <div class="syllable-row">
+                <span class="syllable-chip is-stress">mú</span>
+                <span class="syllable-chip">si</span>
+                <span class="syllable-chip">ca</span>
+              </div>
+              <p>The stress is earlier, so the written tilde makes that visible.</p>
+            </div>
+          </div>
+
+          <div class="callout-row">
+            <aside class="memory-box liquid-glass">
+              <h4>Memory trick</h4>
+              <p>
+                Think of stress as the <strong>sound</strong> and the tilde as the
+                <strong>spelling clue</strong>. Every word has the sound. Only some
+                spellings need the clue.
+              </p>
+            </aside>
+
+            <aside class="why-box liquid-glass">
+              <h4>Why “café” has a tilde</h4>
+              <p>
+                <strong>ca-fé</strong> is stressed on the last syllable. It is an
+                <strong>aguda</strong> ending in a vowel, so it must carry a tilde.
+              </p>
+            </aside>
+          </div>
+
+          <div id="practice-foundations" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step" data-step-title="Agudas and graves">
+          <div class="step-header">
+            <p class="step-kicker">Step 2</p>
+            <h3>Agudas and graves / llanas</h3>
+          </div>
+
+          <div class="rule-grid">
+            <article class="rule-card liquid-glass type-aguda">
+              <div class="rule-card-top">
+                <h4>Palabras agudas</h4>
+                <span>Stress on the last syllable</span>
+              </div>
+              <div class="stress-diagram">
+                <span class="stress-slot">4</span>
+                <span class="stress-slot">3</span>
+                <span class="stress-slot">2</span>
+                <span class="stress-slot is-hot">1</span>
+              </div>
+              <p>
+                An aguda takes a tilde <strong>only if it ends in vowel, n, or s</strong>.
+              </p>
+              <div class="example-grid">
+                <div>
+                  <h5>With tilde</h5>
+                  <ul>
+                    <li>ca-fé</li>
+                    <li>can-ción</li>
+                    <li>so-fá</li>
+                    <li>com-pás</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5>Without tilde</h5>
+                  <ul>
+                    <li>re-loj</li>
+                    <li>ver-dad</li>
+                    <li>fe-liz</li>
+                    <li>doc-tor</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <article class="rule-card liquid-glass type-grave">
+              <div class="rule-card-top">
+                <h4>Palabras graves / llanas</h4>
+                <span>Stress on the penultimate syllable</span>
+              </div>
+              <div class="stress-diagram">
+                <span class="stress-slot">4</span>
+                <span class="stress-slot">3</span>
+                <span class="stress-slot is-hot">2</span>
+                <span class="stress-slot">1</span>
+              </div>
+              <p>
+                A grave takes a tilde <strong>when it does not end in vowel, n, or s</strong>.
+              </p>
+              <div class="example-grid">
+                <div>
+                  <h5>With tilde</h5>
+                  <ul>
+                    <li>lá-piz</li>
+                    <li>ár-bol</li>
+                    <li>fá-cil</li>
+                    <li>a-zú-car</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5>Without tilde</h5>
+                  <ul>
+                    <li>ca-sa</li>
+                    <li>jo-ven</li>
+                    <li>me-sa</li>
+                    <li>re-su-men</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Side by side</h4>
+              <div class="compare-line">
+                <span class="compare-word">canción</span>
+                <span class="compare-note">aguda + ends in n = tilde</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">reloj</span>
+                <span class="compare-note">aguda + ends in j = no tilde</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">árbol</span>
+                <span class="compare-note">grave + ends in l = tilde</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">casa</span>
+                <span class="compare-note">grave + ends in vowel = no tilde</span>
+              </div>
+            </article>
+
+            <article class="why-box liquid-glass">
+              <h4>Pattern summary</h4>
+              <p>
+                Agudas are marked when they finish with the “friendly” endings
+                <strong>vowel, n, s</strong>. Graves are the opposite: they are marked
+                when they finish with something else.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-agudas-graves" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step" data-step-title="Esdrújulas and sobresdrújulas">
+          <div class="step-header">
+            <p class="step-kicker">Step 3</p>
+            <h3>Esdrújulas and sobresdrújulas</h3>
+          </div>
+
+          <div class="rule-grid">
+            <article class="rule-card liquid-glass type-esdrujula">
+              <div class="rule-card-top">
+                <h4>Palabras esdrújulas</h4>
+                <span>Stress on the third syllable from the end</span>
+              </div>
+              <div class="stress-diagram">
+                <span class="stress-slot">4</span>
+                <span class="stress-slot is-hot">3</span>
+                <span class="stress-slot">2</span>
+                <span class="stress-slot">1</span>
+              </div>
+              <p>Esdrújulas always carry a tilde.</p>
+              <ul class="tight-list">
+                <li>mú-si-ca</li>
+                <li>te-lé-fo-no</li>
+                <li>pá-ja-ro</li>
+                <li>sá-ba-do</li>
+              </ul>
+            </article>
+
+            <article class="rule-card liquid-glass type-sobresdrujula">
+              <div class="rule-card-top">
+                <h4>Palabras sobresdrújulas</h4>
+                <span>Stress before the third syllable from the end</span>
+              </div>
+              <div class="stress-diagram">
+                <span class="stress-slot is-hot">4+</span>
+                <span class="stress-slot">3</span>
+                <span class="stress-slot">2</span>
+                <span class="stress-slot">1</span>
+              </div>
+              <p>Sobresdrújulas also always carry a tilde.</p>
+              <ul class="tight-list">
+                <li>ex-plí-ca-me-lo</li>
+                <li>dí-ga-me-lo</li>
+                <li>cuén-ta-se-lo</li>
+                <li>re-pí-ta-se-lo</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Important contrast</h4>
+              <p>
+                There are no correct esdrújulas or sobresdrújulas without a tilde.
+                If you see <strong>telefono</strong> or <strong>explicamelo</strong>,
+                the accent is missing.
+              </p>
+            </article>
+
+            <article class="memory-box liquid-glass">
+              <h4>Memory trick</h4>
+              <p>
+                The farther the stress moves to the left, the more likely the word
+                needs a visible warning sign. Esdrújulas and sobresdrújulas always
+                wear that sign.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-esdrujulas" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step" data-step-title="Hiatos, diphthongs, triphthongs">
+          <div class="step-header">
+            <p class="step-kicker">Step 4</p>
+            <h3>Hiatos, diphthongs, and triphthongs</h3>
+          </div>
+
+          <div class="vowel-legend liquid-glass">
+            <div>
+              <span class="legend-swatch strong-vowel"></span>
+              <strong>Strong vowels</strong>
+              <span>a, e, o</span>
+            </div>
+            <div>
+              <span class="legend-swatch weak-vowel"></span>
+              <strong>Weak vowels</strong>
+              <span>i, u</span>
+            </div>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>Diphthong</h4>
+              <p>Two vowels stay in the same syllable: <strong>ciu-dad</strong>, <strong>cau-sa</strong>.</p>
+              <p>
+                If the word needs a tilde by the normal rule, the mark goes on the
+                strong vowel or on the second weak vowel if both are weak.
+              </p>
+            </article>
+
+            <article class="accent-card liquid-glass">
+              <h4>Triphthong</h4>
+              <p>Three vowels stay together in one syllable: <strong>es-tu-diáis</strong>.</p>
+              <p>The tilde goes on the strong middle vowel when a tilde is needed.</p>
+            </article>
+
+            <article class="accent-card liquid-glass">
+              <h4>Hiato</h4>
+              <p>Two vowels split into different syllables: <strong>pa-ís</strong>, <strong>ba-úl</strong>.</p>
+              <p>
+                A stressed weak vowel <strong>í / ú</strong> takes a tilde to break the
+                diphthong, even if the general aguda or grave rule would not force it.
+              </p>
+            </article>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Side by side</h4>
+              <div class="compare-line">
+                <span class="compare-word">rio</span>
+                <span class="compare-note">incorrect if you mean <strong>río</strong></span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">río</span>
+                <span class="compare-note">rí-o, stressed weak vowel breaks the pair</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">pais</span>
+                <span class="compare-note">incorrect if you mean <strong>país</strong></span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">país</span>
+                <span class="compare-note">pa-ís, hiato with stressed í</span>
+              </div>
+            </article>
+
+            <article class="why-box liquid-glass">
+              <h4>Why “después” has a tilde</h4>
+              <p>
+                <strong>des-pués</strong> is an aguda ending in <strong>s</strong>. It
+                needs a tilde, and the mark sits on the strong vowel inside the diphthong.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-vowels" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step" data-step-title="Monosyllables and diacritical tildes">
+          <div class="step-header">
+            <p class="step-kicker">Step 5</p>
+            <h3>Monosyllables and the diacritical tilde</h3>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>Monosyllables</h4>
+              <p>
+                One-syllable words normally do <strong>not</strong> take a tilde:
+                <strong>fue, dio, vio, fe, sol, ti, bien</strong>.
+              </p>
+            </article>
+
+            <article class="accent-card liquid-glass">
+              <h4>Diacritical tilde</h4>
+              <p>
+                Some short words take a tilde only to distinguish meaning:
+                <strong>tú / tu</strong>, <strong>él / el</strong>, <strong>mí / mi</strong>,
+                <strong>sí / si</strong>, <strong>sé / se</strong>, <strong>dé / de</strong>,
+                <strong>té / te</strong>, <strong>más / mas</strong>, <strong>aún / aun</strong>.
+              </p>
+            </article>
+          </div>
+
+          <div class="accent-table-wrap liquid-glass">
+            <table class="accent-table">
+              <thead>
+                <tr>
+                  <th>With tilde</th>
+                  <th>Meaning</th>
+                  <th>Without tilde</th>
+                  <th>Meaning</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>tú</td><td>you</td><td>tu</td><td>your</td></tr>
+                <tr><td>él</td><td>he</td><td>el</td><td>the</td></tr>
+                <tr><td>mí</td><td>me</td><td>mi</td><td>my / musical note mi</td></tr>
+                <tr><td>sí</td><td>yes / himself</td><td>si</td><td>if</td></tr>
+                <tr><td>sé</td><td>I know / be (command)</td><td>se</td><td>reflexive pronoun</td></tr>
+                <tr><td>dé</td><td>give (command)</td><td>de</td><td>of / from</td></tr>
+                <tr><td>té</td><td>tea</td><td>te</td><td>you (object pronoun)</td></tr>
+                <tr><td>más</td><td>more</td><td>mas</td><td>but</td></tr>
+                <tr><td>aún</td><td>still / yet</td><td>aun</td><td>even / including</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="practice-diacritics" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step" data-step-title="Questions and exclamations">
+          <div class="step-header">
+            <p class="step-kicker">Step 6</p>
+            <h3>Interrogative and exclamative words</h3>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>Question and exclamation forms</h4>
+              <p>
+                <strong>qué, cómo, cuándo, cuál, cuánto, dónde, quién</strong> take a
+                tilde in direct questions and exclamations:
+                <strong>¿Qué dices?</strong> <strong>¡Cómo llueve!</strong>
+              </p>
+            </article>
+
+            <article class="accent-card liquid-glass">
+              <h4>Indirect questions also keep the tilde</h4>
+              <p>
+                The accent stays even when there are no question marks:
+                <strong>No sé dónde vive.</strong>
+                <strong>Dime cuánto cuesta.</strong>
+              </p>
+            </article>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Meaning contrast</h4>
+              <div class="compare-line">
+                <span class="compare-word">como</span>
+                <span class="compare-note">I eat</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">cómo</span>
+                <span class="compare-note">how</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">donde</span>
+                <span class="compare-note">relative use in some contexts</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">dónde</span>
+                <span class="compare-note">where, in a question or exclamation</span>
+              </div>
+            </article>
+
+            <article class="memory-box liquid-glass">
+              <h4>Memory trick</h4>
+              <p>
+                If the word introduces a hidden question, keep the tilde:
+                <strong>No sé dónde</strong>, <strong>Explícame cómo</strong>,
+                <strong>Cuéntame quién</strong>.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-interrogatives" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step" data-step-title="Workshop">
+          <div class="step-header">
+            <p class="step-kicker">Step 7</p>
+            <h3>Workshop: pattern recognition and mixed drills</h3>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>What strong writers do</h4>
+              <p>
+                They do not guess. They ask:
+              </p>
+              <ol class="tight-list ordered-list">
+                <li>Where is the stress?</li>
+                <li>What word type is it?</li>
+                <li>Does a special rule change the normal pattern?</li>
+              </ol>
+            </article>
+
+            <article class="accent-card liquid-glass">
+              <h4>Important edge case</h4>
+              <p>
+                Adverbs ending in <strong>-mente</strong> keep the accent of the base
+                adjective: <strong>fácil → fácilmente</strong>,
+                <strong>rápido → rápidamente</strong>.
+              </p>
+            </article>
+          </div>
+
+          <div id="practice-workshop" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step" data-step-title="Mastery checks">
+          <div class="step-header">
+            <p class="step-kicker">Step 8</p>
+            <h3>Mastery checks, common mistakes, and cheat sheet</h3>
+          </div>
+
+          <div class="summary-chart liquid-glass">
+            <h4>Quick rule sheet</h4>
+            <table class="accent-table">
+              <thead>
+                <tr>
+                  <th>Topic</th>
+                  <th>Stress or use</th>
+                  <th>When the tilde appears</th>
+                  <th>Examples</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Agudas</td><td>Last syllable</td><td>Ending in vowel, n, s</td><td>café, canción</td></tr>
+                <tr><td>Graves / llanas</td><td>Penultimate</td><td>Not ending in vowel, n, s</td><td>árbol, lápiz</td></tr>
+                <tr><td>Esdrújulas</td><td>Third from end</td><td>Always</td><td>música, pájaro</td></tr>
+                <tr><td>Sobresdrújulas</td><td>Before third from end</td><td>Always</td><td>explícamelo</td></tr>
+                <tr><td>Hiato</td><td>Vowels split</td><td>Stressed í / ú breaks the pair</td><td>país, río, baúl</td></tr>
+                <tr><td>Monosyllables</td><td>One syllable</td><td>Usually never, except diacritical pairs</td><td>fue, vio, té</td></tr>
+                <tr><td>Question words</td><td>Interrogative or exclamative use</td><td>Direct and indirect questions</td><td>qué, cómo, dónde</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="diagnostic-grid">
+            <div id="practice-diagnostic" class="practice-block"></div>
+            <div id="practice-final" class="practice-block"></div>
+          </div>
+
+          <div class="common-mistakes liquid-glass">
+            <h4>Most common accent mistakes in Spanish</h4>
+            <ul>
+              <li>Forgetting that every word has stress, but not every word writes it.</li>
+              <li>Adding a tilde to every aguda or every grave instead of checking the ending.</li>
+              <li>Forgetting stressed <strong>í / ú</strong> in hiatos: <strong>río, país, oír</strong>.</li>
+              <li>Missing accents in indirect questions: <strong>No sé dónde está</strong>.</li>
+              <li>Confusing diacritical pairs such as <strong>tu / tú</strong> and <strong>se / sé</strong>.</li>
+              <li>Dropping the original accent in <strong>-mente</strong> adverbs: <strong>fácilmente</strong>.</li>
+            </ul>
+          </div>
+        </section>
+
+        <footer class="lesson-controls liquid-glass">
+          <button id="prevStepBtn" class="btn btn-secondary" type="button">Previous step</button>
+          <button id="nextStepBtn" class="btn btn-primary" type="button">Next step</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="accent-course.js"></script>
+  </body>
+</html>

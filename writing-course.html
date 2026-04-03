@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spanish Writing Studio</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="accent-course.css" />
+    <link rel="stylesheet" href="writing-course.css" />
+  </head>
+  <body class="accent-course-page writing-course-page">
+    <div class="night-fx" aria-hidden="true">
+      <div class="mist mist-a"></div>
+      <div class="mist mist-b"></div>
+      <div class="mist mist-c"></div>
+    </div>
+
+    <main class="accent-shell writing-shell">
+      <aside class="accent-sidebar writing-sidebar liquid-glass">
+        <a class="home-link" href="index.html">Back To Hub</a>
+        <p class="eyebrow">Writing Studio</p>
+        <h1>Guided Spanish Writing</h1>
+        <p class="subtitle">
+          Build from clear sentences to full paragraphs with scaffolds, correction
+          notes, tone control, and model answers.
+        </p>
+
+        <section class="accent-progress writing-progress">
+          <div class="accent-progress-top">
+            <strong>Course progress</strong>
+            <span id="courseProgressText">0% complete</span>
+          </div>
+          <div class="accent-progress-bar" aria-hidden="true">
+            <span id="courseProgressFill"></span>
+          </div>
+          <div class="accent-stats-grid">
+            <div class="accent-stat">
+              <span>Answered</span>
+              <strong id="answeredCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Correct</span>
+              <strong id="correctCount">0</strong>
+            </div>
+            <div class="accent-stat">
+              <span>Streak</span>
+              <strong id="streakCount">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Steps</h2>
+            <span id="stepCountLabel">Step 1 of 8</span>
+          </div>
+          <nav id="stepNav" class="step-nav" aria-label="Lesson steps"></nav>
+        </section>
+
+        <section class="accent-sidebar-section">
+          <div class="section-heading-row">
+            <h2>Mastery by skill</h2>
+            <span>Live tracker</span>
+          </div>
+          <div id="masteryBoard" class="mastery-board"></div>
+        </section>
+
+        <section class="accent-sidebar-section writing-system-card">
+          <div class="section-heading-row">
+            <h2>Writing workflow</h2>
+            <span>4-step loop</span>
+          </div>
+          <div class="workflow-stack">
+            <div class="workflow-step">
+              <strong>Plan</strong>
+              <span>Choose your tense, subject, and idea.</span>
+            </div>
+            <div class="workflow-step">
+              <strong>Build</strong>
+              <span>Add details with time, reason, and connectors.</span>
+            </div>
+            <div class="workflow-step">
+              <strong>Check</strong>
+              <span>Verify agreement, tense, and tone.</span>
+            </div>
+            <div class="workflow-step">
+              <strong>Improve</strong>
+              <span>Compare with the model answer and rewrite.</span>
+            </div>
+          </div>
+          <div class="writing-checklist-card">
+            <strong>Always ask:</strong>
+            <ul class="tight-list">
+              <li>Is the verb tense consistent?</li>
+              <li>Do adjectives agree?</li>
+              <li>Does the connector match the logic?</li>
+              <li>Is the tone formal or informal enough?</li>
+            </ul>
+          </div>
+        </section>
+      </aside>
+
+      <section class="accent-main writing-main">
+        <header class="accent-hero writing-hero liquid-glass">
+          <p class="eyebrow">Goal</p>
+          <h2>From short correct sentences to clear, connected Spanish writing</h2>
+          <p class="subtitle">
+            This writing system teaches sentence expansion, paragraph logic,
+            connectors, tone, and correction habits so your writing becomes more
+            accurate and easier to understand.
+          </p>
+          <div class="hero-badges">
+            <span class="hero-badge">Sentence ladders</span>
+            <span class="hero-badge">Paragraph scaffolds</span>
+            <span class="hero-badge">Tone control</span>
+            <span class="hero-badge">Error correction</span>
+            <span class="hero-badge">Model answers</span>
+          </div>
+        </header>
+
+        <section class="lesson-step writing-step is-active" data-step-title="Foundations">
+          <div class="step-header">
+            <p class="step-kicker">Step 1</p>
+            <h3>Clear sentence foundations</h3>
+          </div>
+
+          <div class="info-grid">
+            <article class="accent-card liquid-glass">
+              <h4>Core sentence rule</h4>
+              <p>
+                A strong sentence starts with a clear subject, a correctly formed
+                verb, and information that actually belongs together.
+              </p>
+            </article>
+            <article class="accent-card liquid-glass">
+              <h4>Writing priority</h4>
+              <p>
+                Accuracy comes before style. Clear verb tense and agreement matter
+                more than trying to sound advanced too early.
+              </p>
+            </article>
+          </div>
+
+          <div class="sentence-ladder liquid-glass">
+            <div class="ladder-rung">
+              <strong>Leo.</strong>
+              <span>basic but incomplete as writing</span>
+            </div>
+            <div class="ladder-rung">
+              <strong>Leo un artículo.</strong>
+              <span>clearer object</span>
+            </div>
+            <div class="ladder-rung">
+              <strong>Leo un artículo por la noche.</strong>
+              <span>time detail</span>
+            </div>
+            <div class="ladder-rung">
+              <strong>Leo un artículo por la noche porque quiero aprender más.</strong>
+              <span>reason + fuller idea</span>
+            </div>
+          </div>
+
+          <div id="practice-foundations" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step writing-step" data-step-title="Sentence expansion">
+          <div class="step-header">
+            <p class="step-kicker">Step 2</p>
+            <h3>Sentence expansion</h3>
+          </div>
+
+          <div class="expansion-grid">
+            <article class="expand-card liquid-glass">
+              <h4>Base</h4>
+              <p><strong>Trabajo.</strong></p>
+            </article>
+            <article class="expand-card liquid-glass">
+              <h4>Add place</h4>
+              <p><strong>Trabajo en una oficina.</strong></p>
+            </article>
+            <article class="expand-card liquid-glass">
+              <h4>Add time</h4>
+              <p><strong>Trabajo en una oficina por la mañana.</strong></p>
+            </article>
+            <article class="expand-card liquid-glass">
+              <h4>Add reason</h4>
+              <p><strong>Trabajo en una oficina por la mañana porque estudio por la tarde.</strong></p>
+            </article>
+          </div>
+
+          <div id="practice-expansion" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step writing-step" data-step-title="Connectors">
+          <div class="step-header">
+            <p class="step-kicker">Step 3</p>
+            <h3>Connectors that organize your ideas</h3>
+          </div>
+
+          <div class="connector-grid">
+            <article class="connector-card liquid-glass connector-add">
+              <h4>Addition</h4>
+              <div class="word-chip-grid">
+                <span class="word-chip">además</span>
+                <span class="word-chip">también</span>
+                <span class="word-chip">incluso</span>
+              </div>
+            </article>
+            <article class="connector-card liquid-glass connector-contrast">
+              <h4>Contrast</h4>
+              <div class="word-chip-grid">
+                <span class="word-chip">sin embargo</span>
+                <span class="word-chip">pero</span>
+                <span class="word-chip">aunque</span>
+              </div>
+            </article>
+            <article class="connector-card liquid-glass connector-result">
+              <h4>Result</h4>
+              <div class="word-chip-grid">
+                <span class="word-chip">por lo tanto</span>
+                <span class="word-chip">por eso</span>
+                <span class="word-chip">así que</span>
+              </div>
+            </article>
+            <article class="connector-card liquid-glass connector-order">
+              <h4>Sequence</h4>
+              <div class="word-chip-grid">
+                <span class="word-chip">primero</span>
+                <span class="word-chip">después</span>
+                <span class="word-chip">finalmente</span>
+              </div>
+            </article>
+          </div>
+
+          <div id="practice-connectors" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step writing-step" data-step-title="Paragraph structure">
+          <div class="step-header">
+            <p class="step-kicker">Step 4</p>
+            <h3>Paragraph structure</h3>
+          </div>
+
+          <div class="paragraph-map liquid-glass">
+            <div class="paragraph-node node-topic">
+              <strong>1. Topic sentence</strong>
+              <span>State the main idea clearly.</span>
+            </div>
+            <div class="paragraph-node node-support">
+              <strong>2. Support</strong>
+              <span>Add a reason, detail, or explanation.</span>
+            </div>
+            <div class="paragraph-node node-example">
+              <strong>3. Example</strong>
+              <span>Make it concrete.</span>
+            </div>
+            <div class="paragraph-node node-close">
+              <strong>4. Closing</strong>
+              <span>Finish or summarize the idea.</span>
+            </div>
+          </div>
+
+          <div id="practice-paragraphs" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step writing-step" data-step-title="Tone">
+          <div class="step-header">
+            <p class="step-kicker">Step 5</p>
+            <h3>Formal vs informal tone</h3>
+          </div>
+
+          <div class="tone-grid">
+            <article class="tone-card liquid-glass tone-informal">
+              <h4>Informal</h4>
+              <p><strong>Hola, profe.</strong></p>
+              <p><strong>¿Me ayudas con la tarea?</strong></p>
+              <p><strong>Nos vemos.</strong></p>
+            </article>
+            <article class="tone-card liquid-glass tone-formal">
+              <h4>Formal</h4>
+              <p><strong>Buenas tardes, profesora.</strong></p>
+              <p><strong>Quisiera pedirle ayuda con la tarea.</strong></p>
+              <p><strong>Muchas gracias por su tiempo.</strong></p>
+            </article>
+          </div>
+
+          <div id="practice-tone" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step writing-step" data-step-title="Accuracy lab">
+          <div class="step-header">
+            <p class="step-kicker">Step 6</p>
+            <h3>Accuracy lab: tense and agreement</h3>
+          </div>
+
+          <div class="compare-grid">
+            <article class="compare-card liquid-glass">
+              <h4>Check tense</h4>
+              <div class="compare-line">
+                <span class="compare-word">Ayer fui...</span>
+                <span class="compare-note">past time needs a past verb</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">Hoy voy...</span>
+                <span class="compare-note">present time fits present</span>
+              </div>
+            </article>
+            <article class="compare-card liquid-glass">
+              <h4>Check agreement</h4>
+              <div class="compare-line">
+                <span class="compare-word">Las clases son interesantes.</span>
+                <span class="compare-note">plural noun + plural adjective</span>
+              </div>
+              <div class="compare-line">
+                <span class="compare-word">Mi amiga está cansada.</span>
+                <span class="compare-note">feminine singular agreement</span>
+              </div>
+            </article>
+          </div>
+
+          <div id="practice-accuracy" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step writing-step" data-step-title="Writing workshop">
+          <div class="step-header">
+            <p class="step-kicker">Step 7</p>
+            <h3>Guided writing workshop</h3>
+          </div>
+
+          <div class="summary-chart liquid-glass">
+            <h4>Before you submit</h4>
+            <p>
+              Use the scaffold first. Then check verb tense, agreement, connector
+              choice, and whether the tone matches the situation.
+            </p>
+          </div>
+
+          <div id="practice-workshop" class="practice-block"></div>
+        </section>
+
+        <section class="lesson-step writing-step" data-step-title="Mixed mastery">
+          <div class="step-header">
+            <p class="step-kicker">Step 8</p>
+            <h3>Mixed mastery check</h3>
+          </div>
+
+          <div class="common-mistakes liquid-glass">
+            <h4>Most common writing mistakes</h4>
+            <ul>
+              <li>Changing tense without noticing.</li>
+              <li>Using a connector that does not match the logic.</li>
+              <li>Writing an adjective that does not agree with the noun.</li>
+              <li>Using an overly informal tone in a formal message.</li>
+              <li>Adding details without a clear topic sentence.</li>
+            </ul>
+          </div>
+
+          <div id="practice-review" class="practice-block"></div>
+        </section>
+
+        <footer class="lesson-controls liquid-glass">
+          <button id="prevStepBtn" class="btn btn-secondary" type="button">Previous step</button>
+          <button id="nextStepBtn" class="btn btn-primary" type="button">Next step</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="writing-course.js"></script>
+  </body>
+</html>
