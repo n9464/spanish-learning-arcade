@@ -528,6 +528,7 @@ const elements = {
   difficultySelect: document.querySelector("#difficultySelect"),
   irregularToggle: document.querySelector("#irregularToggle"),
   vosotrosToggle: document.querySelector("#vosotrosToggle"),
+  learningToggle: document.querySelector("#learningToggle"),
   tenseChoices: [...document.querySelectorAll(".tense-choice")],
   startBtn: document.querySelector("#startBtn"),
   setupMessage: document.querySelector("#setupMessage"),
@@ -545,8 +546,10 @@ const elements = {
   targetLabel: document.querySelector("#targetLabel"),
   promptText: document.querySelector("#promptText"),
   metaText: document.querySelector("#metaText"),
+  learningHintText: document.querySelector("#learningHintText"),
 
   answerInput: document.querySelector("#answerInput"),
+  revealBtn: document.querySelector("#revealBtn"),
   submitBtn: document.querySelector("#submitBtn"),
   feedbackText: document.querySelector("#feedbackText"),
   safehouse: document.querySelector("#safehouse"),
@@ -558,6 +561,7 @@ const state = {
   difficulty: "survivor",
   includeIrregular: false,
   includeVosotros: false,
+  learningMode: false,
   selectedTenses: [...DEFAULT_TENSES],
   verbPool: [],
   profile: null,
@@ -773,6 +777,7 @@ function buildConfigurationFromControls() {
     difficulty: elements.difficultySelect.value,
     includeIrregular: elements.irregularToggle.checked,
     includeVosotros: elements.vosotrosToggle.checked,
+    learningMode: Boolean(elements.learningToggle?.checked),
     selectedTenses: collectSelectedTenses(),
   };
 }
@@ -942,6 +947,7 @@ function persistCampaignProgress(configuration = null) {
     difficulty: state.difficulty,
     includeIrregular: state.includeIrregular,
     includeVosotros: state.includeVosotros,
+    learningMode: state.learningMode,
     selectedTenses: state.selectedTenses,
   };
 
@@ -952,6 +958,7 @@ function persistCampaignProgress(configuration = null) {
         difficulty: savedConfig.difficulty,
         includeIrregular: savedConfig.includeIrregular,
         includeVosotros: savedConfig.includeVosotros,
+        learningMode: savedConfig.learningMode,
         selectedTenses: savedConfig.selectedTenses,
         bestWave: state.bestWave,
         bestScore: state.bestScore,
@@ -982,6 +989,7 @@ function loadCampaignProgress() {
     }
     state.includeIrregular = Boolean(parsed.includeIrregular);
     state.includeVosotros = Boolean(parsed.includeVosotros);
+    state.learningMode = Boolean(parsed.learningMode);
     state.selectedTenses = sanitizeSelectedTenses(parsed.selectedTenses);
     state.bestWave = Math.max(0, Math.floor(Number(parsed.bestWave) || 0));
     state.bestScore = Math.max(0, Math.floor(Number(parsed.bestScore) || 0));
@@ -992,6 +1000,7 @@ function loadCampaignProgress() {
     state.difficulty = "survivor";
     state.includeIrregular = false;
     state.includeVosotros = false;
+    state.learningMode = false;
     state.selectedTenses = [...DEFAULT_TENSES];
     state.bestWave = 0;
     state.bestScore = 0;
@@ -1006,6 +1015,7 @@ function syncConfigurationFromControls() {
   state.difficulty = configuration.difficulty;
   state.includeIrregular = configuration.includeIrregular;
   state.includeVosotros = configuration.includeVosotros;
+  state.learningMode = configuration.learningMode;
   state.selectedTenses = configuration.selectedTenses;
 }
 
@@ -1018,6 +1028,9 @@ function applySavedConfigurationToControls() {
   }
   if (elements.vosotrosToggle) {
     elements.vosotrosToggle.checked = state.includeVosotros;
+  }
+  if (elements.learningToggle) {
+    elements.learningToggle.checked = state.learningMode;
   }
   for (const tenseChoice of elements.tenseChoices) {
     tenseChoice.checked = state.selectedTenses.includes(tenseChoice.value);
@@ -1043,10 +1056,12 @@ function buildSetupSummary() {
   }
 
   if (stats.length === 0) {
-    return "Example: yo - tener (presente) -> type tengo";
+    return state.learningMode
+      ? "Example: yo - tener (presente) -> type tengo | Learning mode reveal is ON."
+      : "Example: yo - tener (presente) -> type tengo";
   }
 
-  return `Saved progress loaded. ${stats.join(" | ")}.`;
+  return `Saved progress loaded. ${stats.join(" | ")}.${state.learningMode ? " Learning mode is ON." : ""}`;
 }
 
 function buildWeightedPrompt() {
@@ -1101,6 +1116,39 @@ function formatPrompt(challenge) {
 function setFeedback(message, type = "note") {
   elements.feedbackText.textContent = message;
   elements.feedbackText.className = `feedback ${type}`;
+}
+
+function updateLearningUi() {
+  if (!elements.revealBtn || !elements.learningHintText) {
+    return;
+  }
+
+  elements.revealBtn.hidden = !state.learningMode;
+
+  const target = getNearestZombie();
+  const canReveal =
+    state.learningMode &&
+    state.active &&
+    !state.intermission &&
+    !state.menuOpen &&
+    Boolean(target);
+
+  elements.revealBtn.disabled = !canReveal;
+
+  if (
+    !state.learningMode ||
+    !state.active ||
+    state.intermission ||
+    !target ||
+    !target.answerRevealed
+  ) {
+    elements.learningHintText.hidden = true;
+    elements.learningHintText.textContent = "";
+    return;
+  }
+
+  elements.learningHintText.hidden = false;
+  elements.learningHintText.textContent = `Revealed answer: ${target.challenge.answer} | Practice clear only, no score bonus.`;
 }
 
 function addFeed(_type, _text) {
@@ -1946,6 +1994,7 @@ function renderPrompt() {
     elements.targetLabel.textContent = "Nearest zombie";
     elements.promptText.textContent = "Start survival to get your first target.";
     elements.metaText.textContent = "Type the conjugation and press Enter.";
+    updateLearningUi();
     return;
   }
 
@@ -1953,6 +2002,7 @@ function renderPrompt() {
     elements.targetLabel.textContent = "Intermission";
     elements.promptText.textContent = "Wave cleared. Reloading defenses.";
     elements.metaText.textContent = "Next wave starts in a moment.";
+    updateLearningUi();
     return;
   }
 
@@ -1961,6 +2011,7 @@ function renderPrompt() {
     elements.targetLabel.textContent = "Scanning";
     elements.promptText.textContent = "No active targets.";
     elements.metaText.textContent = "Hold position.";
+    updateLearningUi();
     return;
   }
 
@@ -1970,6 +2021,7 @@ function renderPrompt() {
   if (target.sieging) {
     elements.targetLabel.textContent = "Safehouse breach";
     elements.metaText.textContent = `Urgent: this zombie is damaging the safehouse | Meaning: ${target.challenge.verb.meaning}`;
+    updateLearningUi();
     return;
   }
 
@@ -1981,6 +2033,7 @@ function renderPrompt() {
         : "Mixed practice";
 
   elements.metaText.textContent = `Meaning: ${target.challenge.verb.meaning} | Focus: ${focusNote}`;
+  updateLearningUi();
 }
 
 function setInputEnabled(enabled) {
@@ -1994,6 +2047,7 @@ function syncInputLock() {
   if (canType) {
     elements.answerInput.focus();
   }
+  updateLearningUi();
 }
 
 function setMenuOpen(open) {
@@ -2001,6 +2055,25 @@ function setMenuOpen(open) {
   document.body.classList.toggle("menu-open", state.menuOpen);
   syncInputLock();
   updateHud();
+}
+
+function revealAnswer() {
+  if (!state.learningMode || !state.active || state.intermission || state.menuOpen) {
+    return;
+  }
+
+  const target = getNearestZombie();
+  if (!target) {
+    setFeedback("No zombie currently in range.", "note");
+    return;
+  }
+
+  target.answerRevealed = true;
+  setFeedback(
+    `Revealed: ${target.challenge.answer}. Learning-mode clears count as practice and do not add score.`,
+    "note",
+  );
+  renderPrompt();
 }
 
 function updateHud() {
@@ -2148,6 +2221,7 @@ function spawnZombie() {
     nextSmashAt: 0,
     smashAnimUntil: 0,
     timeoutRecorded: false,
+    answerRevealed: false,
     spawnedAt: Date.now(),
     exploding: false,
     runId: state.runId,
@@ -2268,26 +2342,36 @@ function submitAnswer() {
 
   const expected = normalize(target.challenge.answer);
   const given = sanitizeAnswer(raw);
+  const usedReveal = state.learningMode && Boolean(target.answerRevealed);
 
   if (given === expected) {
     startZombieExplosion(target);
-    updateConjugationStats(target.challenge, "correct");
+    updateConjugationStats(target.challenge, usedReveal ? "pass" : "correct");
 
-    const points =
-      state.profile.pointsBase +
-      Math.min(12, state.streak * 2) +
-      (target.challenge.adaptiveWeight >= 6 ? 2 : 0);
+    const points = usedReveal
+      ? 0
+      : state.profile.pointsBase +
+        Math.min(12, state.streak * 2) +
+        (target.challenge.adaptiveWeight >= 6 ? 2 : 0);
 
     state.score += points;
     state.kills += 1;
     state.totalKills += 1;
-    state.streak += 1;
+    state.streak = usedReveal ? 0 : state.streak + 1;
     rememberCampaignProgress();
     elements.answerInput.value = "";
 
     const actionNote = target.sieging ? "Zombie stopped smashing the safehouse." : "Zombie eliminated.";
-    setFeedback(`Correct: ${target.challenge.answer}. ${actionNote} (+${points}).`, "good");
-    addFeed("good", `${formatPrompt(target.challenge)} was neutralized (+${points}).`);
+    if (usedReveal) {
+      setFeedback(
+        `Revealed answer used: ${target.challenge.answer}. ${actionNote} Practice clear only (+0).`,
+        "note",
+      );
+      addFeed("note", `${formatPrompt(target.challenge)} was cleared in learning mode.`);
+    } else {
+      setFeedback(`Correct: ${target.challenge.answer}. ${actionNote} (+${points}).`, "good");
+      addFeed("good", `${formatPrompt(target.challenge)} was neutralized (+${points}).`);
+    }
   } else {
     updateConjugationStats(target.challenge, "wrong");
     state.streak = 0;
@@ -2389,7 +2473,7 @@ function startGame() {
   persistCampaignProgress();
 
   document.body.classList.add("game-live");
-  setMenuOpen(false);
+  setMenuOpen(true);
   elements.answerInput.value = "";
 
   if (state.tickTimerId) {
@@ -2399,7 +2483,9 @@ function startGame() {
 
   elements.startBtn.textContent = "Restart Survival";
   elements.setupMessage.textContent =
-    "Adaptive targeting is ON: missed conjugations are more likely to return.";
+    state.learningMode
+      ? "Adaptive targeting is ON. Learning mode reveal is available during combat."
+      : "Adaptive targeting is ON: missed conjugations are more likely to return.";
 
   addFeed(
     "note",
@@ -2424,11 +2510,18 @@ function bindEvents() {
   elements.vosotrosToggle.addEventListener("change", () => {
     persistCampaignProgress(buildConfigurationFromControls());
   });
+  elements.learningToggle.addEventListener("change", () => {
+    persistCampaignProgress(buildConfigurationFromControls());
+    syncConfigurationFromControls();
+    elements.setupMessage.textContent = buildSetupSummary();
+    updateLearningUi();
+  });
   elements.tenseChoices.forEach((choice) => {
     choice.addEventListener("change", () => {
       persistCampaignProgress(buildConfigurationFromControls());
     });
   });
+  elements.revealBtn.addEventListener("click", revealAnswer);
   elements.submitBtn.addEventListener("click", submitAnswer);
   elements.answerInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
@@ -2458,7 +2551,7 @@ function bootstrap() {
   loadConjugationStats();
   initWebglIfPossible();
   updateSafehouseVisual(false);
-  setMenuOpen(false);
+  setMenuOpen(true);
   renderPrompt();
   renderZombies();
   updateHud();

@@ -22,7 +22,7 @@
           Survive waves of zombies by typing correct verb conjugations before they
           reach your safehouse.
         </p>
-        <p class="menu-hint">Press <kbd>Esc</kbd> anytime to open this panel.</p>
+        <p class="menu-hint">Press <kbd>Esc</kbd> anytime to close or reopen this panel.</p>
 
         <div class="briefing">
           <p><strong>How it works:</strong> each zombie carries a conjugation prompt.</p>
@@ -47,6 +47,11 @@
           <label class="toggle" for="vosotrosToggle">
             <input id="vosotrosToggle" type="checkbox" />
             <span>Include vosotros forms</span>
+          </label>
+
+          <label class="toggle" for="learningToggle">
+            <input id="learningToggle" type="checkbox" />
+            <span>Learning mode: allow answer reveal</span>
           </label>
         </div>
 
@@ -88,6 +93,7 @@
             <p id="metaText" class="meta-text">
               Type the conjugation and press Enter.
             </p>
+            <p id="learningHintText" class="learning-hint" hidden></p>
           </div>
 
           <div id="safehouse" class="safehouse" aria-label="Safehouse">
@@ -108,6 +114,9 @@
                 autocomplete="off"
                 disabled
               />
+              <button id="revealBtn" class="btn btn-secondary" type="button" disabled hidden>
+                Reveal Answer
+              </button>
               <button id="submitBtn" class="btn btn-primary" disabled>Eliminate Zombie</button>
             </div>
             <p id="feedbackText" class="feedback" role="status" aria-live="polite"></p>
