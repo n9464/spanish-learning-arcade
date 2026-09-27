@@ -2175,6 +2175,9 @@ function createZombieVisual(zombie) {
 
   const root = new THREE.Group();
   root.userData.zombieId = zombie.id;
+  const spawnWorldX = ((zombie.x - 50) / 50) * webgl.worldHalfX;
+  const spawnWorldZ = ((zombie.y - 50) / 50) * webgl.worldHalfZ;
+  root.position.set(spawnWorldX, 0, spawnWorldZ);
   root.add(instance.model);
   root.scale.set(1, 1, 1);
   webgl.scene.add(root);
@@ -2190,7 +2193,7 @@ function createZombieVisual(zombie) {
     shadowMaterial,
   );
   shadow.rotation.x = -Math.PI / 2;
-  shadow.position.y = 0.012;
+  shadow.position.set(spawnWorldX, 0.012, spawnWorldZ);
   shadow.scale.set(0.52, 0.83, 1);
   shadow.renderOrder = 2;
   webgl.scene.add(shadow);
@@ -2204,6 +2207,7 @@ function createZombieVisual(zombie) {
     currentAction: null,
     currentActionKey: "",
     deathStartedAt: 0,
+    hasPosition: true,
     bobSeed: Math.random() * Math.PI * 2,
   };
 
@@ -2289,8 +2293,13 @@ function updateZombieVisual(zombie, deltaSec, nowMs) {
   const worldZ = ((zombie.y - 50) / 50) * webgl.worldHalfZ;
   const followAmount = 1 - Math.exp(-deltaSec * (zombie.exploding ? 16 : 9));
 
-  visual.root.position.x += (worldX - visual.root.position.x) * followAmount;
-  visual.root.position.z += (worldZ - visual.root.position.z) * followAmount;
+  if (!visual.hasPosition) {
+    visual.root.position.set(worldX, 0, worldZ);
+    visual.hasPosition = true;
+  } else {
+    visual.root.position.x += (worldX - visual.root.position.x) * followAmount;
+    visual.root.position.z += (worldZ - visual.root.position.z) * followAmount;
+  }
 
   if (zombie.exploding) {
     if (!visual.deathStartedAt) {
