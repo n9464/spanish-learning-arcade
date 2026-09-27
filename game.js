@@ -614,6 +614,11 @@ const webgl = {
   sharedGeometries: new Set(),
   surfaceTextures: new Map(),
   modelTemplate: null,
+  bunkerRoot: null,
+  bunkerAlarm: null,
+  bunkerHitUntil: 0,
+  bunkerDamageTier: 0,
+  bunkerCracks: [],
   promptLayer: null,
   promptElements: new Map(),
   worldHalfX: 20,
@@ -1363,6 +1368,195 @@ function createGroundDebris(THREE) {
   }
 }
 
+function createBunkerTexture(THREE, base, seed) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 512;
+  canvas.height = 512;
+  const context = canvas.getContext("2d");
+  const image = context.createImageData(canvas.width, canvas.height);
+  let value = seed;
+  const noise = () => {
+    value = (value * 16807) % 2147483647;
+    return value / 2147483647;
+  };
+
+  for (let index = 0; index < image.data.length; index += 4) {
+    const stain = (noise() - 0.5) * 42;
+    image.data[index] = clamp(base[0] + stain, 0, 255);
+    image.data[index + 1] = clamp(base[1] + stain * 0.94, 0, 255);
+    image.data[index + 2] = clamp(base[2] + stain * 0.84, 0, 255);
+    image.data[index + 3] = 255;
+  }
+  context.putImageData(image, 0, 0);
+  for (let mark = 0; mark < 160; mark += 1) {
+    const x = noise() * 512;
+    const y = noise() * 512;
+    context.strokeStyle = `rgba(15, 18, 16, ${0.03 + noise() * 0.12})`;
+    context.lineWidth = 1 + noise() * 2.4;
+    context.beginPath();
+    context.moveTo(x, y);
+    context.lineTo(x + (noise() - 0.5) * 7, y + 5 + noise() * 30);
+    context.stroke();
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = 4;
+  return texture;
+}
+
+function createSafehouseModel(THREE) {
+  const bunker = new THREE.Group();
+  bunker.name = "Concrete bunker";
+  const concreteTexture = createBunkerTexture(THREE, [101, 105, 94], 9741);
+  const steelTexture = createBunkerTexture(THREE, [54, 61, 59], 3721);
+  const cargoTexture = createBunkerTexture(THREE, [48, 69, 62], 8821);
+  const concrete = new THREE.MeshStandardMaterial({ map: concreteTexture, roughness: 0.98 });
+  const steel = new THREE.MeshStandardMaterial({ map: steelTexture, color: 0xb7b9b2, roughness: 0.84, metalness: 0.42 });
+  const armor = new THREE.MeshStandardMaterial({ map: steelTexture, color: 0x777c77, roughness: 0.93, metalness: 0.22 });
+  const darkSteel = new THREE.MeshStandardMaterial({ color: 0x252c2c, roughness: 0.92, metalness: 0.28 });
+  const cargo = new THREE.MeshStandardMaterial({ map: cargoTexture, roughness: 0.96, metalness: 0.12 });
+  const hazard = new THREE.MeshStandardMaterial({ color: 0xb39b47, roughness: 0.92 });
+  const canvas = new THREE.MeshStandardMaterial({ color: 0x777963, roughness: 1 });
+  const glass = new THREE.MeshStandardMaterial({ color: 0x182626, roughness: 0.38, metalness: 0.2 });
+  const alarmMat = new THREE.MeshStandardMaterial({ color: 0xe95c42, emissive: 0x78180c, emissiveIntensity: 0.7, roughness: 0.28 });
+
+  const add = (geometry, material, position, scale, name, bevel = 0) => {
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.name = name;
+    mesh.position.set(...position);
+    mesh.scale.set(...scale);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    bunker.add(mesh);
+    return mesh;
+  };
+  const box = (name, pos, size, material = steel, bevel = 0) => {
+    return add(new THREE.BoxGeometry(...size), material, pos, [1, 1, 1], name);
+  };
+  const cylinder = (name, pos, radius, length, material, rotation = [0, 0, 0]) => {
+    const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.9, radius, length, 20), material);
+    mesh.name = name;
+    mesh.position.set(...pos);
+    mesh.rotation.set(...rotation);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    bunker.add(mesh);
+    return mesh;
+  };
+  const sphere = (name, pos, scale, material) => add(new THREE.SphereGeometry(1, 16, 12), material, pos, scale, name);
+
+  const shellShape = new THREE.Shape();
+  shellShape.moveTo(-2.36, 0);
+  shellShape.lineTo(2.36, 0);
+  shellShape.lineTo(2.12, 2.72);
+  shellShape.lineTo(-2.12, 2.72);
+  shellShape.closePath();
+  const shellGeometry = new THREE.ExtrudeGeometry(shellShape, { depth: 3.8, bevelEnabled: true, bevelSegments: 2, bevelSize: 0.055, bevelThickness: 0.055, curveSegments: 1 });
+  shellGeometry.translate(0, 0, -1.9);
+  const shell = new THREE.Mesh(shellGeometry, concrete);
+  shell.name = "Sloped poured-concrete shelter";
+  shell.castShadow = true;
+  shell.receiveShadow = true;
+  bunker.add(shell);
+
+  const crackMaterial = new THREE.LineBasicMaterial({ color: 0x171b18, transparent: true, opacity: 0, depthWrite: false });
+  const crackPaths = [
+    [[-2.08, 2.44, 2.055], [-1.98, 2.25, 2.06], [-2.02, 2.04, 2.06], [-1.88, 1.91, 2.06]],
+    [[1.98, 2.52, 2.055], [2.02, 2.28, 2.06], [1.91, 2.12, 2.06], [1.98, 1.90, 2.06]],
+    [[-1.98, 0.76, 2.055], [-1.86, 0.91, 2.06], [-1.91, 1.05, 2.06]],
+    [[1.98, 0.82, 2.055], [1.86, 0.97, 2.06], [1.93, 1.12, 2.06]],
+  ];
+  for (const path of crackPaths) {
+    const geometry = new THREE.BufferGeometry().setFromPoints(path.map((point) => new THREE.Vector3(...point)));
+    const crack = new THREE.Line(geometry, crackMaterial);
+    crack.renderOrder = 3;
+    bunker.add(crack);
+    webgl.bunkerCracks.push(crack);
+  }
+
+  box("Foundation skirt", [0, 0.12, 0], [4.9, 0.24, 4.05], darkSteel, 0.08);
+  box("Reinforced roof cap", [0, 2.77, 0], [4.62, 0.18, 4.15], armor, 0.07);
+  box("Roof hatch rim", [-1.38, 2.89, -1.05], [0.86, 0.08, 0.78], darkSteel, 0.04);
+  box("Roof hatch plate", [-1.38, 2.94, -1.05], [0.70, 0.035, 0.61], armor, 0.03);
+  for (const [x, z] of [[-1.65, -1.3], [-1.1, -1.3], [-1.65, -0.8], [-1.1, -0.8]]) {
+    sphere("Hatch bolt", [x, 2.97, z], [0.025, 0.015, 0.025], steel);
+  }
+
+  const faceZ = 1.96;
+  box("Door left jamb", [-0.84, 1.18, faceZ], [0.17, 1.90, 0.24], darkSteel, 0.035);
+  box("Door right jamb", [0.84, 1.18, faceZ], [0.17, 1.90, 0.24], darkSteel, 0.035);
+  box("Door lintel", [0, 2.08, faceZ], [1.82, 0.17, 0.24], darkSteel, 0.035);
+  for (const x of [-0.38, 0.38]) {
+    box("Armored pressure door leaf", [x, 1.15, 2.105], [0.72, 1.52, 0.10], armor, 0.03);
+    box("Door inset plate", [x, 1.16, 2.164], [0.54, 1.28, 0.018], steel, 0.02);
+    box("Door reinforcing spine", [x, 1.16, 2.18], [0.035, 1.24, 0.018], darkSteel);
+    for (const y of [0.58, 0.85, 1.44, 1.72]) {
+      sphere("Door locking bolt", [x + (x < 0 ? -0.26 : 0.26), y, 2.19], [0.022, 0.022, 0.012], darkSteel);
+    }
+    box("Door handle", [x + (x < 0 ? 0.20 : -0.20), 1.00, 2.19], [0.035, 0.19, 0.035], darkSteel);
+  }
+  box("Door center seam", [0, 1.15, 2.18], [0.025, 1.48, 0.025], darkSteel);
+  box("Entry sill", [0, 0.19, 2.12], [1.94, 0.13, 0.34], steel, 0.025);
+  box("Entry ramp", [0, 0.075, 2.55], [2.10, 0.10, 0.82], darkSteel, 0.03);
+  for (const z of [2.30, 2.48, 2.66, 2.82]) box("Ramp anti-slip rib", [0, 0.135, z], [1.96, 0.024, 0.025], steel);
+  for (const x of [-0.52, 0.52]) box("Faded door warning stripe", [x, 0.34, 2.17], [0.21, 0.07, 0.018], hazard, 0.01);
+
+  const sticker = (label, pos, size, color) => {
+    const canvas = document.createElement("canvas"); canvas.width = 512; canvas.height = 128;
+    const ctx = canvas.getContext("2d"); ctx.fillStyle = color; ctx.fillRect(0, 0, 512, 128);
+    ctx.fillStyle = "#171b19"; ctx.font = "bold 58px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(label, 256, 64);
+    const map = new THREE.CanvasTexture(canvas); map.colorSpace = THREE.SRGBColorSpace;
+    const sign = new THREE.Mesh(new THREE.PlaneGeometry(size[0], size[1]), new THREE.MeshStandardMaterial({ map, roughness: 0.94, side: THREE.DoubleSide }));
+    sign.position.set(...pos); bunker.add(sign);
+  };
+  sticker("SHELTER 04", [0, 2.20, 2.13], [0.94, 0.23], "#a39d79");
+  sticker("CAUTION", [0, 0.43, 2.188], [0.52, 0.12], "#b49a48");
+
+  box("Vent inset frame", [1.42, 1.27, 2.03], [0.92, 0.83, 0.12], darkSteel, 0.035);
+  box("Vent backing", [1.42, 1.27, 2.105], [0.78, 0.68, 0.035], armor, 0.02);
+  for (let index = 0; index < 8; index += 1) box("Vent louver", [1.42, 0.99 + index * 0.08, 2.14], [0.72, 0.035, 0.045], darkSteel, 0.01);
+  box("Service cabinet", [-1.45, 1.23, 2.04], [0.58, 0.92, 0.14], darkSteel, 0.035);
+  box("Service panel face", [-1.45, 1.23, 2.12], [0.46, 0.77, 0.04], armor, 0.025);
+  for (let index = 0; index < 4; index += 1) box("Cabinet access seam", [-1.45, 0.91 + index * 0.20, 2.15], [0.36, 0.018, 0.02], darkSteel);
+  box("Control console housing", [-1.15, 0.66, 2.07], [0.42, 0.58, 0.20], darkSteel, 0.035);
+  box("Control console face", [-1.15, 0.66, 2.18], [0.34, 0.46, 0.035], steel, 0.025);
+  box("Smoked control readout", [-1.15, 0.83, 2.205], [0.23, 0.075, 0.018], glass, 0.01);
+  for (let row = 0; row < 3; row += 1) for (let col = 0; col < 3; col += 1) {
+    sphere("Console status lamp", [-1.25 + col * 0.10, 0.52 + row * 0.095, 2.21], [0.023, 0.023, 0.013], (row + col) % 3 === 0 ? alarmMat : hazard);
+  }
+
+  for (const [x, z, height] of [[-1.64, -1.28, 0.78], [-0.94, -1.35, 0.98], [0.20, -1.40, 0.72], [1.53, -1.28, 0.60], [0.82, 0.10, 0.66]]) {
+    cylinder("Roof exhaust stack", [x, 2.94 + height / 2, z], 0.19, height, darkSteel);
+    cylinder("Exhaust collar", [x, 2.99, z], 0.23, 0.11, steel);
+    cylinder("Stack crown", [x, 2.94 + height, z], 0.22, 0.10, armor);
+  }
+  const roofDuct = cylinder("Horizontal rooftop duct", [0.82, 3.10, 0.16], 0.20, 0.72, armor, [0, 0, Math.PI / 2]);
+  cylinder("Duct end rim", [0.82, 3.10, 0.52], 0.22, 0.07, darkSteel, [0, 0, Math.PI / 2]);
+  for (const [x, z] of [[-1.95, -1.7], [1.94, 1.65]]) {
+    cylinder("Roof antenna", [x, 3.34, z], 0.024, 0.72, steel);
+    sphere("Antenna tip", [x, 3.72, z], [0.035, 0.06, 0.035], hazard);
+  }
+
+  for (const side of [-1, 1]) {
+    const x = side * 3.05;
+    box("Flanking military supply container", [x, 0.61, 0.10], [1.08, 1.22, 1.55], cargo, 0.04);
+    for (let index = 0; index < 13; index += 1) box("Container corrugation", [x + side * 0.56, 0.17 + index * 0.12, 0.10], [0.035, 0.045, 1.42], steel, 0.008);
+    for (let index = 0; index < 8; index += 1) box("Container roof corrugation", [x - 0.47 + index * 0.135, 1.24, 0.10], [0.035, 0.026, 1.43], steel, 0.008);
+  }
+  for (const [x, z] of [[-3.64, 1.12], [-3.40, 1.50], [-3.18, 1.08], [3.64, 1.18]]) {
+    cylinder("Supply drum", [x, 0.27, z], 0.18, 0.50, cargo);
+    for (const y of [0.08, 0.47]) cylinder("Drum rim", [x, y, z], 0.19, 0.035, steel);
+  }
+  for (const [x, z, y] of [[-0.95, 0.20, 2.72], [-0.43, 0.22, 2.91], [0.15, 0.20, 2.75], [0.68, 0.23, 2.90]]) {
+    sphere("Stacked canvas sandbag", [x, y, z], [0.42, 0.15, 0.23], canvas);
+  }
+
+  const alarm = new THREE.PointLight(0xff573d, 0, 6, 2);
+  alarm.position.set(0, 2.55, 2.33); bunker.add(alarm);
+  webgl.bunkerAlarm = alarm;
+  return bunker;
+}
+
 function initWebglIfPossible() {
   if (webgl.initialized) {
     return;
@@ -1452,6 +1646,10 @@ function initWebglIfPossible() {
   webgl.scene.add(ground);
 
   createGroundDebris(THREE);
+
+  webgl.bunkerRoot = createSafehouseModel(THREE);
+  webgl.scene.add(webgl.bunkerRoot);
+  elements.safehouse.classList.add("has-3d-model");
 
   const safehouseRingMaterial = new THREE.MeshBasicMaterial({
     color: 0x65a8d4,
@@ -1691,10 +1889,27 @@ function createDetailedZombieModel(zombieId) {
 
 function cloneZombieModelInstance(zombieId) {
   if (webgl.modelTemplate) {
-    const model = webgl.modelTemplate.clone(true);
+    const model = window.SkeletonUtils
+      ? window.SkeletonUtils.clone(webgl.modelTemplate)
+      : webgl.modelTemplate.clone(true);
     model.rotation.y = Math.PI;
     model.scale.setScalar(randomRange(0.96, 1.04));
     model.userData.sharedAsset = true;
+    const bone = (name) => model.getObjectByName(name);
+    const leftUpperArm = bone("ArmUpper_L");
+    const rightUpperArm = bone("ArmUpper_R");
+    const leftThigh = bone("Thigh_L");
+    const rightThigh = bone("Thigh_R");
+    if (bone("Spine") && bone("Head") && leftUpperArm && rightUpperArm && leftThigh && rightThigh) {
+      model.userData.rig = {
+        torso: bone("Spine"),
+        head: bone("Head"),
+        leftArm: { shoulder: leftUpperArm, forearm: bone("ArmLower_L") },
+        rightArm: { shoulder: rightUpperArm, forearm: bone("ArmLower_R") },
+        leftLeg: { hip: leftThigh, knee: bone("Shin_L") },
+        rightLeg: { hip: rightThigh, knee: bone("Shin_R") },
+      };
+    }
     model.traverse((node) => {
       if (node.isMesh) {
         node.castShadow = true;
@@ -1957,17 +2172,17 @@ function updateProceduralZombiePose(visual, zombie, nowMs) {
   rig.head.rotation.y = Math.sin(phase * 0.31) * 0.08;
   rig.head.rotation.z = Math.sin(phase * 0.43) * 0.035;
 
-  rig.leftArm.shoulder.rotation.x = -0.48 + gait * 0.12 - siegeSway * 0.1 - impact * 0.55;
-  rig.rightArm.shoulder.rotation.x = -0.63 - gait * 0.12 + siegeSway * 0.1 + impact * 0.48;
+  rig.leftArm.shoulder.rotation.x = -0.48 + gait * 0.24 - siegeSway * 0.1 - impact * 0.55;
+  rig.rightArm.shoulder.rotation.x = -0.63 - gait * 0.24 + siegeSway * 0.1 + impact * 0.48;
   rig.leftArm.shoulder.rotation.z = 0.09 + Math.sin(phase * 0.5) * 0.025;
   rig.rightArm.shoulder.rotation.z = -0.1 + Math.sin(phase * 0.5 + 0.5) * 0.025;
   rig.leftArm.forearm.rotation.x = -0.12 - impact * 0.2;
   rig.rightArm.forearm.rotation.x = -0.18 + impact * 0.16;
 
-  rig.leftLeg.hip.rotation.x = gait * 0.19;
-  rig.rightLeg.hip.rotation.x = -gait * 0.19;
-  rig.leftLeg.knee.rotation.x = Math.max(0, -gait) * 0.3;
-  rig.rightLeg.knee.rotation.x = Math.max(0, gait) * 0.3;
+  rig.leftLeg.hip.rotation.x = gait * 0.31;
+  rig.rightLeg.hip.rotation.x = -gait * 0.31;
+  rig.leftLeg.knee.rotation.x = Math.max(0, -gait) * 0.42;
+  rig.rightLeg.knee.rotation.x = Math.max(0, gait) * 0.42;
 }
 
 function updateZombieVisual(zombie, deltaSec, nowMs) {
@@ -2067,6 +2282,20 @@ function tickWebglFrame(nowMs) {
       webgl.safehouseRingMaterial.opacity = 0.22;
       webgl.safehouseRingMaterial.color.setHex(0x65a8d4);
     }
+  }
+
+  if (webgl.bunkerAlarm) {
+    const sieged = state.zombies.some((zombie) => zombie.sieging && !zombie.exploding);
+    webgl.bunkerAlarm.intensity = sieged ? 2.5 + (Math.sin(nowMs * 0.012) * 0.5 + 0.5) * 3.5 : 0;
+  }
+  if (webgl.bunkerRoot) {
+    const impact = webgl.bunkerHitUntil - nowMs;
+    webgl.bunkerRoot.position.x = impact > 0
+      ? Math.sin(impact * 0.08) * 0.045 * clamp(impact / 260, 0, 1)
+      : 0;
+  }
+  for (const crack of webgl.bunkerCracks) {
+    crack.material.opacity = webgl.bunkerDamageTier * 0.14;
   }
 
   if (webgl.warmLight) {
@@ -2249,6 +2478,7 @@ function updateSafehouseVisual(hit = false) {
   }
 
   elements.safehouse.classList.remove("damage-1", "damage-2", "damage-3", "damage-4");
+  webgl.bunkerDamageTier = tier;
   if (tier > 0) {
     elements.safehouse.classList.add(`damage-${tier}`);
   }
@@ -2257,6 +2487,8 @@ function updateSafehouseVisual(hit = false) {
     elements.safehouse.classList.remove("hit");
     return;
   }
+
+  webgl.bunkerHitUntil = (performance.now ? performance.now() : Date.now()) + 260;
 
   elements.safehouse.classList.add("hit");
   if (state.safehouseHitTimerId) {

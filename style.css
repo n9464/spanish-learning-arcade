@@ -542,6 +542,19 @@ kbd {
   text-align: center;
 }
 
+.safehouse.has-3d-model::before,
+.safehouse.has-3d-model .safehouse-core {
+  display: none;
+}
+
+.safehouse.has-3d-model p {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
 .safehouse::before {
   content: "";
   position: absolute;
