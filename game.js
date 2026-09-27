@@ -1187,8 +1187,8 @@ function createRoadSurfaceTexture(THREE) {
   const image = context.createImageData(canvas.width, canvas.height);
 
   for (let index = 0; index < image.data.length; index += 4) {
-    const grain = Math.random() * 22;
-    const shade = 23 + grain;
+    const grain = Math.random() * 16;
+    const shade = 12 + grain;
     image.data[index] = shade * 0.82;
     image.data[index + 1] = shade * 0.9;
     image.data[index + 2] = shade * 0.82;
@@ -1200,8 +1200,8 @@ function createRoadSurfaceTexture(THREE) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height;
     const radius = Math.random() * 1.6 + 0.2;
-    const value = Math.floor(Math.random() * 42 + 18);
-    context.fillStyle = `rgba(${value}, ${value + 3}, ${value + 1}, ${Math.random() * 0.34})`;
+    const value = Math.floor(Math.random() * 25 + 12);
+    context.fillStyle = `rgba(${value}, ${value + 3}, ${value + 1}, ${Math.random() * 0.24})`;
     context.beginPath();
     context.ellipse(x, y, radius * 1.7, radius, Math.random() * Math.PI, 0, Math.PI * 2);
     context.fill();
@@ -1213,7 +1213,7 @@ function createRoadSurfaceTexture(THREE) {
     let y = Math.random() * canvas.height;
     context.beginPath();
     context.moveTo(x, y);
-    context.strokeStyle = `rgba(4, 7, 7, ${Math.random() * 0.34 + 0.2})`;
+    context.strokeStyle = `rgba(3, 5, 4, ${Math.random() * 0.38 + 0.24})`;
     context.lineWidth = Math.random() * 1.7 + 0.6;
     for (let segment = 0; segment < 5; segment += 1) {
       x += randomRange(-32, 32);
@@ -1228,9 +1228,9 @@ function createRoadSurfaceTexture(THREE) {
     const y = Math.random() * canvas.height;
     const radius = randomRange(16, 54);
     const puddle = context.createRadialGradient(x, y, radius * 0.1, x, y, radius);
-    puddle.addColorStop(0, "rgba(67, 83, 79, 0.24)");
-    puddle.addColorStop(0.65, "rgba(49, 65, 63, 0.11)");
-    puddle.addColorStop(1, "rgba(35, 46, 45, 0)");
+    puddle.addColorStop(0, "rgba(35, 48, 44, 0.2)");
+    puddle.addColorStop(0.65, "rgba(25, 37, 34, 0.11)");
+    puddle.addColorStop(1, "rgba(17, 25, 23, 0)");
     context.fillStyle = puddle;
     context.beginPath();
     context.ellipse(x, y, radius * 1.4, radius * 0.72, randomRange(-0.8, 0.8), 0, Math.PI * 2);
@@ -1722,10 +1722,10 @@ function initWebglIfPossible() {
   const ground = new THREE.Mesh(
     new THREE.PlaneGeometry(110, 110, 1, 1),
     new THREE.MeshStandardMaterial({
-      color: 0xb4bdb3,
+      color: 0x454c43,
       map: createRoadSurfaceTexture(THREE),
-      roughness: 0.88,
-      metalness: 0.08,
+      roughness: 0.98,
+      metalness: 0.015,
     }),
   );
   ground.rotation.x = -Math.PI / 2;
