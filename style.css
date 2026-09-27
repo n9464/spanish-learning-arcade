@@ -419,12 +419,10 @@ kbd {
   border-radius: 0;
   overflow: hidden;
   background:
-    radial-gradient(circle at 20% 8%, rgba(102, 152, 191, 0.26), transparent 42%),
-    radial-gradient(circle at 83% 18%, rgba(58, 148, 132, 0.17), transparent 35%),
-    linear-gradient(180deg, rgba(17, 32, 49, 0.88) 0%, rgba(7, 13, 21, 0.94) 66%, rgba(5, 10, 16, 0.98) 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    0 28px 52px rgba(0, 0, 0, 0.48);
+    radial-gradient(ellipse at 49% 53%, rgba(91, 86, 65, 0.22), transparent 32%),
+    radial-gradient(ellipse at 16% 25%, rgba(85, 111, 104, 0.11), transparent 36%),
+    linear-gradient(180deg, #121918 0%, #111614 42%, #090c0b 100%);
+  box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.36);
 }
 
 .battlefield::after {
@@ -434,10 +432,8 @@ kbd {
   pointer-events: none;
   z-index: 2;
   background:
-    radial-gradient(circle at 14% 16%, rgba(219, 243, 255, 0.22), transparent 32%),
-    radial-gradient(circle at 83% 11%, rgba(201, 231, 255, 0.16), transparent 31%),
-    radial-gradient(circle at 50% 96%, rgba(177, 218, 255, 0.08), transparent 36%);
-  animation: glassSheenShift 13s ease-in-out infinite alternate;
+    radial-gradient(ellipse at 50% 50%, transparent 32%, rgba(4, 7, 7, 0.18) 72%, rgba(2, 4, 4, 0.64) 100%),
+    linear-gradient(180deg, rgba(183, 204, 195, 0.025), transparent 42%);
 }
 
 @keyframes glassSheenShift {
@@ -454,11 +450,40 @@ kbd {
 .battle-grid {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(to right, rgba(191, 222, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(191, 222, 255, 0.05) 1px, transparent 1px);
-  background-size: 44px 44px;
-  animation: fogSweep 16s linear infinite;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 52%, rgba(145, 137, 101, 0.08), transparent 40%),
+    radial-gradient(ellipse at 84% 70%, rgba(116, 70, 47, 0.1), transparent 28%);
+}
+
+.battle-grid::before,
+.battle-grid::after {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  pointer-events: none;
+}
+
+.battle-grid::before {
+  background: repeating-linear-gradient(104deg, transparent 0 28px, rgba(179, 196, 184, 0.025) 29px, transparent 30px 74px);
+  opacity: 0.44;
+  animation: rainDrift 3.2s linear infinite;
+}
+
+.battle-grid::after {
+  inset: 22% -12% -24%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(145, 151, 133, 0.095), transparent 67%);
+  filter: blur(18px);
+  animation: groundMist 12s ease-in-out infinite alternate;
+}
+
+@keyframes rainDrift {
+  to { transform: translate3d(-34px, 24px, 0); }
+}
+
+@keyframes groundMist {
+  from { transform: translateX(-1.5%) scale(1); opacity: 0.5; }
+  to { transform: translateX(1.5%) scale(1.08); opacity: 0.88; }
 }
 
 @keyframes fogSweep {
@@ -731,6 +756,145 @@ kbd {
     filter 220ms ease;
   will-change: left, top, transform, opacity;
   z-index: 2;
+}
+
+/* Low-tech fallback keeps the same grounded art direction if WebGL is unavailable. */
+.zombie-shadow {
+  width: 78px;
+  height: 13px;
+  filter: blur(4px);
+  opacity: 0.8;
+}
+
+.zombie-model {
+  filter: drop-shadow(0 9px 8px rgba(0, 0, 0, 0.52)) saturate(0.72) contrast(1.08);
+}
+
+.zombie-model::after {
+  inset: 0 10px 2px;
+  border-radius: 42% 44% 25% 28%;
+  background:
+    radial-gradient(ellipse at 36% 25%, rgba(175, 177, 144, 0.12), transparent 31%),
+    repeating-linear-gradient(168deg, rgba(220, 214, 188, 0.055) 0 1px, transparent 1px 6px),
+    linear-gradient(90deg, transparent 0 24%, rgba(10, 15, 14, 0.2) 25% 27%, transparent 28% 100%);
+  opacity: 0.7;
+}
+
+.zombie-head {
+  left: 25px;
+  top: 1px;
+  width: 29px;
+  height: 32px;
+  border: 0;
+  border-radius: 47% 45% 43% 48%;
+  background:
+    radial-gradient(ellipse at 34% 24%, rgba(187, 181, 144, 0.3), transparent 36%),
+    linear-gradient(145deg, #747a65, #555e4d 74%, #383d34);
+  box-shadow: inset -4px -5px 6px rgba(0, 0, 0, 0.38), inset 2px 2px 3px rgba(208, 200, 158, 0.08);
+}
+
+.zombie-head::before {
+  top: 7px;
+  right: -4px;
+  width: 6px;
+  height: 12px;
+  border-radius: 45%;
+  background: #4a5043;
+  transform: none;
+}
+
+.zombie-head::after {
+  top: -2px;
+  left: 2px;
+  width: 21px;
+  height: 10px;
+  border-radius: 70% 50% 30% 30%;
+  background: radial-gradient(ellipse at 55% 20%, #393a34, #282a27 70%);
+  transform: rotate(-12deg);
+}
+
+.zombie-eye {
+  top: 12px;
+  width: 5px;
+  height: 4px;
+  background: radial-gradient(ellipse at 42% 34%, #c6c1a1, #8d8974 58%, #383a31 100%);
+  box-shadow: 0 0 2px rgba(181, 157, 111, 0.24);
+}
+
+.zombie-eye.eye-right {
+  top: 14px;
+  width: 4px;
+  height: 3px;
+  opacity: 0.64;
+}
+
+.zombie-mouth {
+  left: 9px;
+  top: 22px;
+  width: 13px;
+  height: 5px;
+  border: 0;
+  border-radius: 2px 2px 6px 6px;
+  background: linear-gradient(180deg, #241d1a, #161614);
+  box-shadow: inset 0 1px rgba(160, 141, 114, 0.22);
+}
+
+.zombie-neck {
+  left: 33px;
+  top: 28px;
+  width: 11px;
+  height: 12px;
+  border-radius: 40%;
+  background: linear-gradient(90deg, #42483c, #737663 45%, #343a31);
+  filter: saturate(0.7);
+}
+
+.zombie-torso {
+  left: 17px;
+  top: 35px;
+  width: 43px;
+  height: 33px;
+  border: 0;
+  border-radius: 37% 36% 22% 25%;
+  background:
+    linear-gradient(88deg, transparent 0 41%, rgba(14, 18, 17, 0.26) 42% 45%, transparent 47%),
+    repeating-linear-gradient(174deg, rgba(191, 182, 153, 0.06) 0 1px, transparent 1px 5px),
+    linear-gradient(154deg, #48504b, #303936 70%, #242a27);
+  box-shadow: inset 0 -8px 7px rgba(0, 0, 0, 0.34), inset 0 3px 5px rgba(172, 169, 137, 0.06);
+}
+
+.zombie-torso::before,
+.zombie-torso::after,
+.zombie-arm::before,
+.zombie-leg::before {
+  display: none;
+}
+
+.zombie-arm {
+  width: 12px;
+  border: 0;
+  border-radius: 48%;
+  background: linear-gradient(90deg, #343a32, #727762 48%, #41473b);
+  box-shadow: inset -2px -4px 4px rgba(0, 0, 0, 0.34);
+}
+
+.zombie-hand {
+  border: 0;
+  border-radius: 45%;
+  background: linear-gradient(100deg, #3d4338, #777966 52%, #41473b);
+}
+
+.zombie-leg {
+  border: 0;
+  border-radius: 34% 34% 20% 25%;
+  background: repeating-linear-gradient(174deg, rgba(186, 181, 155, 0.05) 0 1px, transparent 1px 5px), linear-gradient(90deg, #272e2d, #424847 52%, #242a29);
+  box-shadow: inset -2px -4px 4px rgba(0, 0, 0, 0.42);
+}
+
+.zombie-foot {
+  height: 7px;
+  border-radius: 3px 6px 4px 4px;
+  background: linear-gradient(180deg, #303431, #171b19);
 }
 
 .zombie-card.spawning {
@@ -1652,3 +1816,55 @@ body.game-live .zombie-card.sieging .zombie-model {
     width: 96px;
   }
 }
+
+body {
+  background:
+    radial-gradient(ellipse at 18% 28%, rgba(74, 96, 86, 0.14), transparent 44%),
+    radial-gradient(ellipse at 82% 72%, rgba(101, 70, 48, 0.1), transparent 38%),
+    linear-gradient(180deg, #0a0e0d 0%, #080b0a 100%);
+}
+
+.mist-a { background: radial-gradient(circle at 30% 30%, #3a4b42, #17201c); opacity: 0.14; }
+.mist-b { background: radial-gradient(circle at 30% 30%, #4d4938, #1c211b); opacity: 0.11; }
+.mist-c { background: radial-gradient(circle at 30% 30%, #393d39, #141916); opacity: 0.12; }
+
+#zombieLane .zombie-model {
+  filter: drop-shadow(0 9px 8px rgba(0, 0, 0, 0.56)) saturate(0.7) contrast(1.1);
+}
+
+#zombieLane .zombie-model::after {
+  inset: 0 10px 2px;
+  border-radius: 42% 44% 25% 28%;
+  background:
+    radial-gradient(ellipse at 36% 25%, rgba(175, 177, 144, 0.12), transparent 31%),
+    repeating-linear-gradient(168deg, rgba(220, 214, 188, 0.055) 0 1px, transparent 1px 6px),
+    linear-gradient(90deg, transparent 0 24%, rgba(10, 15, 14, 0.2) 25% 27%, transparent 28% 100%);
+  opacity: 0.7;
+}
+
+#zombieLane .zombie-head {
+  left: 25px;
+  top: 1px;
+  width: 29px;
+  height: 32px;
+  border: 0;
+  border-radius: 47% 45% 43% 48%;
+  background: radial-gradient(ellipse at 34% 24%, rgba(187, 181, 144, 0.3), transparent 36%), linear-gradient(145deg, #747a65, #555e4d 74%, #383d34);
+  box-shadow: inset -4px -5px 6px rgba(0, 0, 0, 0.38), inset 2px 2px 3px rgba(208, 200, 158, 0.08);
+}
+
+#zombieLane .zombie-head::before { top: 7px; right: -4px; width: 6px; height: 12px; border-radius: 45%; background: #4a5043; transform: none; }
+#zombieLane .zombie-head::after { top: -2px; left: 2px; width: 21px; height: 10px; border-radius: 70% 50% 30% 30%; background: radial-gradient(ellipse at 55% 20%, #393a34, #282a27 70%); transform: rotate(-12deg); }
+#zombieLane .zombie-eye { top: 12px; width: 5px; height: 4px; background: radial-gradient(ellipse at 42% 34%, #c6c1a1, #8d8974 58%, #383a31 100%); box-shadow: 0 0 2px rgba(181, 157, 111, 0.24); }
+#zombieLane .zombie-eye.eye-right { top: 14px; width: 4px; height: 3px; opacity: 0.64; }
+#zombieLane .zombie-mouth { left: 9px; top: 22px; width: 13px; height: 5px; border: 0; border-radius: 2px 2px 6px 6px; background: linear-gradient(180deg, #241d1a, #161614); box-shadow: inset 0 1px rgba(160, 141, 114, 0.22); }
+#zombieLane .zombie-neck { left: 33px; top: 28px; width: 11px; height: 12px; border-radius: 40%; background: linear-gradient(90deg, #42483c, #737663 45%, #343a31); filter: saturate(0.7); }
+#zombieLane .zombie-torso { left: 17px; top: 35px; width: 43px; height: 33px; border: 0; border-radius: 37% 36% 22% 25%; background: repeating-linear-gradient(174deg, rgba(191, 182, 153, 0.06) 0 1px, transparent 1px 5px), linear-gradient(154deg, #48504b, #303936 70%, #242a27); box-shadow: inset 0 -8px 7px rgba(0, 0, 0, 0.34), inset 0 3px 5px rgba(172, 169, 137, 0.06); }
+#zombieLane .zombie-torso::before,
+#zombieLane .zombie-torso::after,
+#zombieLane .zombie-arm::before,
+#zombieLane .zombie-leg::before { display: none; }
+#zombieLane .zombie-arm { width: 12px; border: 0; border-radius: 48%; background: linear-gradient(90deg, #343a32, #727762 48%, #41473b); box-shadow: inset -2px -4px 4px rgba(0, 0, 0, 0.34); }
+#zombieLane .zombie-hand { border: 0; border-radius: 45%; background: linear-gradient(100deg, #3d4338, #777966 52%, #41473b); }
+#zombieLane .zombie-leg { border: 0; border-radius: 34% 34% 20% 25%; background: repeating-linear-gradient(174deg, rgba(186, 181, 155, 0.05) 0 1px, transparent 1px 5px), linear-gradient(90deg, #272e2d, #424847 52%, #242a29); box-shadow: inset -2px -4px 4px rgba(0, 0, 0, 0.42); }
+#zombieLane .zombie-foot { height: 7px; border-radius: 3px 6px 4px 4px; background: linear-gradient(180deg, #303431, #171b19); }

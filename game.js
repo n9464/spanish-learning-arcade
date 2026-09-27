@@ -521,8 +521,7 @@ const SAFEHOUSE_SIEGE_TICK_MAX_MS = 2000;
 const SAFEHOUSE_SIEGE_INITIAL_DELAY_MS = 520;
 const SAFEHOUSE_SMASH_ANIM_MS = 360;
 const WEBGL_MAX_PIXEL_RATIO = 2;
-const WEBGL_ZOMBIE_MODEL_URL = "https://threejs.org/examples/models/gltf/Soldier.glb";
-const WEBGL_GROUND_COLOR = 0x0d1521;
+const WEBGL_GROUND_COLOR = 0x171b19;
 
 const elements = {
   difficultySelect: document.querySelector("#difficultySelect"),
@@ -611,14 +610,16 @@ const webgl = {
   rafId: null,
   resizeHandler: null,
   zombieVisuals: new Map(),
+  geometryCache: new Map(),
+  sharedGeometries: new Set(),
+  surfaceTextures: new Map(),
   worldHalfX: 20,
   worldHalfZ: 12,
-  modelLoadState: "idle",
-  zombieTemplate: null,
-  zombieClips: [],
   lastFrameAt: 0,
   safehouseRing: null,
   safehouseRingMaterial: null,
+  moonLight: null,
+  warmLight: null,
 };
 
 const REGULAR_BANK = REGULAR_VERBS.map((verb) => ({
@@ -1170,6 +1171,195 @@ function getThree() {
   return window.THREE || null;
 }
 
+function createRoadSurfaceTexture(THREE) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 512;
+  canvas.height = 512;
+  const context = canvas.getContext("2d");
+  const image = context.createImageData(canvas.width, canvas.height);
+
+  for (let index = 0; index < image.data.length; index += 4) {
+    const grain = Math.random() * 22;
+    const shade = 23 + grain;
+    image.data[index] = shade * 0.82;
+    image.data[index + 1] = shade * 0.9;
+    image.data[index + 2] = shade * 0.82;
+    image.data[index + 3] = 255;
+  }
+  context.putImageData(image, 0, 0);
+
+  for (let index = 0; index < 2400; index += 1) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const radius = Math.random() * 1.6 + 0.2;
+    const value = Math.floor(Math.random() * 42 + 18);
+    context.fillStyle = `rgba(${value}, ${value + 3}, ${value + 1}, ${Math.random() * 0.34})`;
+    context.beginPath();
+    context.ellipse(x, y, radius * 1.7, radius, Math.random() * Math.PI, 0, Math.PI * 2);
+    context.fill();
+  }
+
+  context.lineCap = "round";
+  for (let index = 0; index < 14; index += 1) {
+    let x = Math.random() * canvas.width;
+    let y = Math.random() * canvas.height;
+    context.beginPath();
+    context.moveTo(x, y);
+    context.strokeStyle = `rgba(4, 7, 7, ${Math.random() * 0.34 + 0.2})`;
+    context.lineWidth = Math.random() * 1.7 + 0.6;
+    for (let segment = 0; segment < 5; segment += 1) {
+      x += randomRange(-32, 32);
+      y += randomRange(12, 35);
+      context.lineTo(x, y);
+    }
+    context.stroke();
+  }
+
+  for (let index = 0; index < 8; index += 1) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const radius = randomRange(16, 54);
+    const puddle = context.createRadialGradient(x, y, radius * 0.1, x, y, radius);
+    puddle.addColorStop(0, "rgba(67, 83, 79, 0.24)");
+    puddle.addColorStop(0.65, "rgba(49, 65, 63, 0.11)");
+    puddle.addColorStop(1, "rgba(35, 46, 45, 0)");
+    context.fillStyle = puddle;
+    context.beginPath();
+    context.ellipse(x, y, radius * 1.4, radius * 0.72, randomRange(-0.8, 0.8), 0, Math.PI * 2);
+    context.fill();
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(5, 4);
+  texture.anisotropy = 4;
+  return texture;
+}
+
+function getSharedZombieGeometry(key, createGeometry) {
+  if (!webgl.geometryCache.has(key)) {
+    const geometry = createGeometry();
+    webgl.geometryCache.set(key, geometry);
+    webgl.sharedGeometries.add(geometry);
+  }
+  return webgl.geometryCache.get(key);
+}
+
+function getZombieSurfaceTexture(THREE, kind) {
+  if (webgl.surfaceTextures.has(kind)) {
+    return webgl.surfaceTextures.get(kind);
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 256;
+  canvas.height = 256;
+  const context = canvas.getContext("2d");
+  if (!context) {
+    return null;
+  }
+
+  const palettes = {
+    skin: [112, 119, 101],
+    cloth: [74, 77, 72],
+    denim: [52, 59, 61],
+  };
+  const base = palettes[kind] || palettes.cloth;
+  const image = context.createImageData(canvas.width, canvas.height);
+  let seed = kind === "skin" ? 421 : kind === "denim" ? 811 : 617;
+  const noise = () => {
+    seed = (seed * 16807) % 2147483647;
+    return seed / 2147483647;
+  };
+
+  for (let index = 0; index < image.data.length; index += 4) {
+    const grain = (noise() - 0.5) * (kind === "skin" ? 24 : 36);
+    image.data[index] = clamp(base[0] + grain + (kind === "skin" ? 3 : 0), 0, 255);
+    image.data[index + 1] = clamp(base[1] + grain, 0, 255);
+    image.data[index + 2] = clamp(base[2] + grain - (kind === "skin" ? 2 : 0), 0, 255);
+    image.data[index + 3] = 255;
+  }
+  context.putImageData(image, 0, 0);
+
+  for (let index = 0; index < 110; index += 1) {
+    const x = noise() * canvas.width;
+    const y = noise() * canvas.height;
+    const radius = 1 + noise() * (kind === "skin" ? 8 : 15);
+    const color = kind === "skin"
+      ? `rgba(${35 + noise() * 30}, ${31 + noise() * 24}, ${27 + noise() * 18}, ${0.035 + noise() * 0.09})`
+      : `rgba(${18 + noise() * 40}, ${19 + noise() * 38}, ${18 + noise() * 34}, ${0.04 + noise() * 0.14})`;
+    context.fillStyle = color;
+    context.beginPath();
+    context.ellipse(x, y, radius * (0.55 + noise() * 0.75), radius, noise() * Math.PI, 0, Math.PI * 2);
+    context.fill();
+  }
+
+  if (kind !== "skin") {
+    context.strokeStyle = "rgba(190, 184, 162, 0.14)";
+    context.lineWidth = 1;
+    for (let seam = 0; seam < 7; seam += 1) {
+      const y = 22 + seam * 34;
+      context.beginPath();
+      context.moveTo(12, y);
+      context.lineTo(244, y + (seam % 2 ? 2 : -2));
+      context.stroke();
+    }
+    context.fillStyle = "rgba(18, 20, 19, 0.32)";
+    for (let stitch = 0; stitch < 34; stitch += 1) {
+      context.fillRect(16 + stitch * 7, 19 + (stitch % 3) * 2, 2, 1);
+    }
+  } else {
+    context.strokeStyle = "rgba(43, 45, 38, 0.22)";
+    context.lineWidth = 1.2;
+    for (let mark = 0; mark < 20; mark += 1) {
+      const x = noise() * canvas.width;
+      const y = noise() * canvas.height;
+      context.beginPath();
+      context.moveTo(x, y);
+      context.quadraticCurveTo(x + noise() * 10 - 5, y + 8, x + noise() * 14 - 7, y + 18 + noise() * 14);
+      context.stroke();
+    }
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.anisotropy = 4;
+  webgl.surfaceTextures.set(kind, texture);
+  return texture;
+}
+
+function createGroundDebris(THREE) {
+  const stoneMaterial = new THREE.MeshStandardMaterial({
+    color: 0x3e4541,
+    roughness: 0.96,
+    metalness: 0.02,
+  });
+  const metalMaterial = new THREE.MeshStandardMaterial({
+    color: 0x343b3a,
+    roughness: 0.68,
+    metalness: 0.38,
+  });
+  const stoneGeometry = new THREE.DodecahedronGeometry(1, 0);
+  const scrapGeometry = new THREE.BoxGeometry(1, 1, 1);
+
+  for (let index = 0; index < 54; index += 1) {
+    const angle = randomRange(0, Math.PI * 2);
+    const radius = randomRange(14, 37);
+    const isScrap = index % 4 === 0;
+    const debris = new THREE.Mesh(isScrap ? scrapGeometry : stoneGeometry, isScrap ? metalMaterial : stoneMaterial);
+    const size = randomRange(0.12, isScrap ? 0.36 : 0.48);
+    debris.position.set(Math.cos(angle) * radius, size * 0.32, Math.sin(angle) * radius * 0.66);
+    debris.scale.set(size * randomRange(0.7, 1.5), size * randomRange(0.35, 0.8), size);
+    debris.rotation.set(randomRange(-0.25, 0.25), randomRange(0, Math.PI), randomRange(-0.25, 0.25));
+    debris.castShadow = true;
+    debris.receiveShadow = true;
+    webgl.scene.add(debris);
+  }
+}
+
 function initWebglIfPossible() {
   if (webgl.initialized) {
     return;
@@ -1196,6 +1386,10 @@ function initWebglIfPossible() {
   webgl.enabled = true;
   webgl.renderer.setPixelRatio(Math.min(WEBGL_MAX_PIXEL_RATIO, window.devicePixelRatio || 1));
   webgl.renderer.setClearColor(0x000000, 0);
+  webgl.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  webgl.renderer.toneMappingExposure = 1.08;
+  webgl.renderer.shadowMap.enabled = true;
+  webgl.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   if ("outputColorSpace" in webgl.renderer && THREE.SRGBColorSpace) {
     webgl.renderer.outputColorSpace = THREE.SRGBColorSpace;
   }
@@ -1205,36 +1399,52 @@ function initWebglIfPossible() {
   elements.zombieLane.appendChild(webgl.renderer.domElement);
 
   webgl.scene = new THREE.Scene();
-  webgl.scene.fog = new THREE.Fog(WEBGL_GROUND_COLOR, 16, 64);
+  webgl.scene.fog = new THREE.FogExp2(0x111719, 0.018);
 
-  webgl.camera = new THREE.PerspectiveCamera(46, 1, 0.1, 150);
-  webgl.camera.position.set(0, 18, 28);
+  webgl.camera = new THREE.PerspectiveCamera(44, 1, 0.1, 150);
+  webgl.camera.position.set(0, 19, 30);
   webgl.camera.lookAt(0, 0, 0);
 
-  const hemi = new THREE.HemisphereLight(0x9cc5ff, 0x1c2735, 0.72);
+  const hemi = new THREE.HemisphereLight(0xaabfd0, 0x20231f, 1.05);
   webgl.scene.add(hemi);
 
-  const key = new THREE.DirectionalLight(0xe7f5ff, 0.8);
-  key.position.set(10, 24, 11);
+  const key = new THREE.DirectionalLight(0xc7d9e3, 2.15);
+  key.position.set(-13, 22, 8);
+  key.castShadow = true;
+  key.shadow.mapSize.set(1536, 1536);
+  key.shadow.camera.left = -36;
+  key.shadow.camera.right = 36;
+  key.shadow.camera.top = 30;
+  key.shadow.camera.bottom = -30;
+  key.shadow.bias = -0.00045;
+  key.shadow.radius = 5;
   webgl.scene.add(key);
 
-  const fill = new THREE.PointLight(0x76a9d0, 0.34, 56);
-  fill.position.set(-13, 11, -11);
-  webgl.scene.add(fill);
+  const warmFill = new THREE.PointLight(0xf29459, 110, 42, 2);
+  warmFill.position.set(11, 5, 4);
+  webgl.scene.add(warmFill);
+  webgl.warmLight = warmFill;
+
+  const coldFill = new THREE.PointLight(0x7198a8, 95, 52, 2);
+  coldFill.position.set(-15, 7, -13);
+  webgl.scene.add(coldFill);
+  webgl.moonLight = coldFill;
 
   const ground = new THREE.Mesh(
-    new THREE.CircleGeometry(32, 72),
+    new THREE.PlaneGeometry(110, 78, 1, 1),
     new THREE.MeshStandardMaterial({
-      color: WEBGL_GROUND_COLOR,
-      transparent: true,
-      opacity: 0.42,
-      roughness: 1,
-      metalness: 0,
+      color: 0xb4bdb3,
+      map: createRoadSurfaceTexture(THREE),
+      roughness: 0.88,
+      metalness: 0.08,
     }),
   );
   ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -0.02;
+  ground.position.y = -0.08;
+  ground.receiveShadow = true;
   webgl.scene.add(ground);
+
+  createGroundDebris(THREE);
 
   const safehouseRingMaterial = new THREE.MeshBasicMaterial({
     color: 0x65a8d4,
@@ -1262,7 +1472,6 @@ function initWebglIfPossible() {
       : Date.now();
   webgl.rafId = requestAnimationFrame(tickWebglFrame);
 
-  loadZombieGltfModel();
 }
 
 function handleWebglResize() {
@@ -1283,183 +1492,197 @@ function handleWebglResize() {
   webgl.worldHalfZ = 12;
 }
 
-function tintZombieMaterial(material) {
-  if (!material) {
-    return material;
-  }
-
-  const tinted = material.clone();
-  if (tinted.color && typeof tinted.color.offsetHSL === "function") {
-    tinted.color.offsetHSL(0.2, -0.2, -0.2);
-  }
-  if ("roughness" in tinted) {
-    tinted.roughness = clamp((Number(tinted.roughness) || 0.75) + 0.1, 0, 1);
-  }
-  if ("metalness" in tinted) {
-    tinted.metalness = 0;
-  }
-  return tinted;
+function makeZombiePart(THREE, parent, geometry, material, position, scale, rotation = [0, 0, 0]) {
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.position.set(...position);
+  mesh.scale.set(...scale);
+  mesh.rotation.set(...rotation);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  parent.add(mesh);
+  return mesh;
 }
 
-function applyZombieTint(root) {
-  root.traverse((node) => {
-    if (!node.isMesh || !node.material) {
-      return;
-    }
-    if (Array.isArray(node.material)) {
-      node.material = node.material.map((material) => tintZombieMaterial(material));
-    } else {
-      node.material = tintZombieMaterial(node.material);
-    }
-    node.castShadow = false;
-    node.receiveShadow = false;
-    node.frustumCulled = false;
-  });
-}
-
-function loadZombieGltfModel() {
-  if (!webgl.enabled || webgl.modelLoadState !== "idle") {
-    return;
-  }
-
-  const THREE = getThree();
-  if (!THREE || typeof THREE.GLTFLoader !== "function") {
-    webgl.modelLoadState = "failed";
-    return;
-  }
-
-  webgl.modelLoadState = "loading";
-  const loader = new THREE.GLTFLoader();
-  loader.load(
-    WEBGL_ZOMBIE_MODEL_URL,
-    (gltf) => {
-      webgl.modelLoadState = "ready";
-      webgl.zombieTemplate = gltf.scene || null;
-      webgl.zombieClips = Array.isArray(gltf.animations) ? gltf.animations : [];
-      if (webgl.zombieTemplate) {
-        applyZombieTint(webgl.zombieTemplate);
-      }
-      upgradeFallbackVisualsToGltf();
-    },
-    undefined,
-    () => {
-      webgl.modelLoadState = "failed";
-    },
-  );
-}
-
-function createFallbackZombieModel() {
+function createDetailedZombieModel(zombieId) {
   const THREE = getThree();
   if (!THREE) {
     return null;
   }
 
-  const root = new THREE.Group();
-  const skin = new THREE.MeshStandardMaterial({ color: 0x6f8f62, roughness: 0.9, metalness: 0 });
-  const shirt = new THREE.MeshStandardMaterial({ color: 0x445d6a, roughness: 0.88, metalness: 0 });
-  const pants = new THREE.MeshStandardMaterial({ color: 0x35495b, roughness: 0.92, metalness: 0 });
+  const seed = Math.abs(Number(zombieId) || 0);
+  const skinTones = [0x737a61, 0x8a8066, 0x65766d, 0x89857a];
+  const shirts = [0x35413f, 0x45403a, 0x3b4149, 0x4a4039];
+  const trousers = [0x292f30, 0x343333, 0x293139, 0x39342f];
+  const skinTexture = getZombieSurfaceTexture(THREE, "skin");
+  const clothTexture = getZombieSurfaceTexture(THREE, "cloth");
+  const denimTexture = getZombieSurfaceTexture(THREE, "denim");
+  const skin = new THREE.MeshStandardMaterial({
+    color: skinTones[seed % skinTones.length],
+    map: skinTexture,
+    bumpMap: skinTexture,
+    bumpScale: 0.028,
+    roughness: 0.93,
+  });
+  const skinShadow = new THREE.MeshStandardMaterial({
+    color: 0x4c5145,
+    map: skinTexture,
+    roughness: 0.98,
+  });
+  const shirt = new THREE.MeshStandardMaterial({
+    color: shirts[seed % shirts.length],
+    map: clothTexture,
+    bumpMap: clothTexture,
+    bumpScale: 0.045,
+    roughness: 0.97,
+  });
+  const shirtDark = new THREE.MeshStandardMaterial({ color: 0x1d2424, map: clothTexture, roughness: 1 });
+  const pants = new THREE.MeshStandardMaterial({
+    color: trousers[seed % trousers.length],
+    map: denimTexture,
+    bumpMap: denimTexture,
+    bumpScale: 0.035,
+    roughness: 0.98,
+  });
+  const hair = new THREE.MeshStandardMaterial({ color: seed % 2 ? 0x171b1a : 0x332b25, roughness: 0.95 });
+  const wound = new THREE.MeshStandardMaterial({ color: 0x39211d, map: skinTexture, roughness: 0.99 });
+  const driedBlood = new THREE.MeshStandardMaterial({ color: 0x512922, map: skinTexture, roughness: 0.98 });
+  const bone = new THREE.MeshStandardMaterial({ color: 0xa59d7c, roughness: 0.8 });
+  const socket = new THREE.MeshStandardMaterial({ color: 0x22231d, roughness: 0.65 });
+  const eye = new THREE.MeshStandardMaterial({ color: 0xb8ae84, roughness: 0.62 });
+  const pupil = new THREE.MeshStandardMaterial({ color: 0x141713, roughness: 0.25 });
 
-  const head = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.44, 0.44), skin);
-  head.position.set(0, 1.62, 0);
-  root.add(head);
+  const sphere = getSharedZombieGeometry("sphere", () => new THREE.SphereGeometry(1, 28, 20));
+  const capsule = getSharedZombieGeometry("capsule", () => new THREE.CapsuleGeometry(0.5, 0.7, 6, 16));
+  const tooth = getSharedZombieGeometry("tooth", () => new THREE.BoxGeometry(1, 1, 1));
+  const tornCloth = getSharedZombieGeometry("torn-cloth", () => new THREE.ConeGeometry(0.5, 1, 3, 1));
+  const hairCap = getSharedZombieGeometry(
+    "hair-cap",
+    () => new THREE.SphereGeometry(1, 18, 8, 0, Math.PI * 2, 0, Math.PI * 0.58),
+  );
 
-  const torso = new THREE.Mesh(new THREE.BoxGeometry(0.66, 0.72, 0.4), shirt);
-  torso.position.set(0, 1.08, 0);
-  root.add(torso);
+  const model = new THREE.Group();
+  model.scale.setScalar(randomRange(0.96, 1.07));
 
-  const armL = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.62, 0.2), skin);
-  armL.position.set(-0.44, 1.09, 0);
-  root.add(armL);
-  const armR = armL.clone();
-  armR.position.x = 0.44;
-  root.add(armR);
+  const torso = new THREE.Group();
+  torso.position.y = 1.02;
+  model.add(torso);
+  makeZombiePart(THREE, torso, sphere, shirt, [0, 0.02, 0], [0.39, 0.54, 0.255]);
+  makeZombiePart(THREE, torso, sphere, skinShadow, [0, -0.26, 0.184], [0.22, 0.16, 0.018]);
+  for (let rib = 0; rib < 4; rib += 1) {
+    makeZombiePart(
+      THREE,
+      torso,
+      capsule,
+      bone,
+      [0, -0.21 + rib * 0.07, 0.205],
+      [0.12, 0.018, 0.013],
+      [0, 0, Math.PI / 2],
+    );
+  }
+  makeZombiePart(THREE, torso, sphere, wound, [-0.22, -0.1, 0.199], [0.06, 0.12, 0.014], [0, 0, -0.38]);
+  makeZombiePart(THREE, torso, sphere, driedBlood, [0.22, -0.2, 0.2], [0.052, 0.084, 0.012], [0, 0, 0.42]);
+  makeZombiePart(THREE, torso, sphere, shirt, [0, 0.47, 0], [0.43, 0.16, 0.27]);
 
-  const legL = new THREE.Mesh(new THREE.BoxGeometry(0.23, 0.74, 0.24), pants);
-  legL.position.set(-0.16, 0.38, 0);
-  root.add(legL);
-  const legR = legL.clone();
-  legR.position.x = 0.16;
-  root.add(legR);
+  for (let tear = 0; tear < 3; tear += 1) {
+    const shard = makeZombiePart(
+      THREE,
+      torso,
+      tornCloth,
+      tear === 1 ? pants : shirt,
+      [-0.2 + tear * 0.2, -0.46 + randomRange(-0.025, 0.025), 0.02],
+      [0.07, randomRange(0.16, 0.26), 0.05],
+      [randomRange(-0.2, 0.2), randomRange(0, Math.PI), Math.PI + randomRange(-0.35, 0.35)],
+    );
+    shard.castShadow = false;
+  }
 
-  root.scale.setScalar(randomRange(1, 1.08));
-  return root;
+  const head = new THREE.Group();
+  head.position.set(0, 1.48, 0);
+  model.add(head);
+  makeZombiePart(THREE, head, capsule, skinShadow, [0, -0.05, 0], [0.13, 0.2, 0.13]);
+  makeZombiePart(THREE, head, sphere, skin, [0, 0.2, 0], [0.205, 0.25, 0.2]);
+  makeZombiePart(THREE, head, sphere, skinShadow, [0, 0.04, 0.052], [0.154, 0.115, 0.177]);
+  makeZombiePart(THREE, head, sphere, skin, [0, 0.085, 0.191], [0.045, 0.062, 0.035]);
+  makeZombiePart(THREE, head, sphere, wound, [0, 0.015, 0.216], [0.118, 0.039, 0.022]);
+  for (let toothIndex = 0; toothIndex < 4; toothIndex += 1) {
+    makeZombiePart(
+      THREE,
+      head,
+      tooth,
+      bone,
+      [-0.072 + toothIndex * 0.048, 0.04, 0.234],
+      [0.026, 0.035, 0.012],
+      [0, 0, toothIndex % 2 ? 0.08 : -0.08],
+    );
+  }
+
+  for (const side of [-1, 1]) {
+    makeZombiePart(THREE, head, sphere, skinShadow, [side * 0.205, 0.16, 0], [0.052, 0.09, 0.078]);
+    makeZombiePart(THREE, head, sphere, socket, [side * 0.082, 0.22, 0.171], [0.064, 0.058, 0.038]);
+    makeZombiePart(THREE, head, sphere, eye, [side * 0.082, 0.219, 0.201], [0.034, 0.034, 0.018]);
+    makeZombiePart(THREE, head, sphere, pupil, [side * 0.082 + 0.008, 0.219, 0.216], [0.012, 0.024, 0.01]);
+    makeZombiePart(THREE, head, capsule, skinShadow, [side * 0.081, 0.285, 0.17], [0.078, 0.018, 0.031], [0, 0, side * -0.12]);
+    makeZombiePart(THREE, head, sphere, hair, [side * 0.16, 0.31, -0.015], [0.052, 0.1, 0.19], [0, 0, side * -0.12]);
+  }
+  makeZombiePart(THREE, head, hairCap, hair, [0, 0.37, -0.01], [0.214, 0.15, 0.21]);
+  makeZombiePart(THREE, head, sphere, driedBlood, [-0.13, 0.16, 0.168], [0.045, 0.062, 0.018], [0, 0, 0.3]);
+
+  const makeArm = (side) => {
+    const shoulder = new THREE.Group();
+    shoulder.position.set(side * 0.35, 1.35, 0.015);
+    model.add(shoulder);
+    makeZombiePart(THREE, shoulder, sphere, skin, [side * -0.025, -0.015, 0], [0.18, 0.19, 0.19]);
+    makeZombiePart(THREE, shoulder, capsule, skin, [0, -0.24, 0.015], [0.145, 0.31, 0.15]);
+    makeZombiePart(THREE, shoulder, sphere, skinShadow, [0, -0.49, 0.025], [0.13, 0.13, 0.13]);
+
+    const forearm = new THREE.Group();
+    forearm.position.set(0, -0.48, 0.055);
+    shoulder.add(forearm);
+    makeZombiePart(THREE, forearm, capsule, skin, [0, -0.22, 0], [0.105, 0.3, 0.11], [0, 0, side * -0.08]);
+    makeZombiePart(THREE, forearm, sphere, skinShadow, [0, -0.45, 0.035], [0.095, 0.12, 0.1]);
+    makeZombiePart(THREE, forearm, sphere, skin, [0, -0.54, 0.075], [0.09, 0.12, 0.1], [0.18, 0, side * 0.12]);
+    for (let finger = 0; finger < 3; finger += 1) {
+      makeZombiePart(
+        THREE,
+        forearm,
+        capsule,
+        skin,
+        [-0.052 + finger * 0.052, -0.65, 0.105],
+        [0.024, 0.1, 0.024],
+        [0.22, 0, (finger - 1) * 0.12],
+      );
+    }
+    makeZombiePart(THREE, forearm, capsule, skin, [side * 0.092, -0.57, 0.08], [0.025, 0.075, 0.025], [0.5, 0, side * 0.5]);
+    return { shoulder, forearm };
+  };
+
+  const makeLeg = (side) => {
+    const hip = new THREE.Group();
+    hip.position.set(side * 0.17, 0.67, 0);
+    model.add(hip);
+    makeZombiePart(THREE, hip, sphere, pants, [0, -0.14, 0], [0.19, 0.23, 0.2]);
+    makeZombiePart(THREE, hip, capsule, pants, [0, -0.34, 0], [0.155, 0.32, 0.16]);
+
+    const knee = new THREE.Group();
+    knee.position.set(0, -0.6, 0.015);
+    hip.add(knee);
+    makeZombiePart(THREE, knee, sphere, pants, [0, 0, 0], [0.135, 0.13, 0.14]);
+    makeZombiePart(THREE, knee, capsule, pants, [0, -0.27, 0], [0.12, 0.29, 0.13]);
+    makeZombiePart(THREE, knee, sphere, skin, [0, -0.5, 0.04], [0.12, 0.13, 0.18]);
+    makeZombiePart(THREE, knee, sphere, hair, [0, -0.58, 0.075], [0.14, 0.055, 0.22]);
+    return { hip, knee };
+  };
+
+  const leftArm = makeArm(-1);
+  const rightArm = makeArm(1);
+  const leftLeg = makeLeg(-1);
+  const rightLeg = makeLeg(1);
+  model.userData.rig = { torso, head, leftArm, rightArm, leftLeg, rightLeg };
+  return model;
 }
 
-function cloneZombieModelInstance() {
-  const THREE = getThree();
-  if (!THREE) {
-    return { model: null, mixer: null, isFallback: true };
-  }
-
-  if (webgl.modelLoadState === "ready" && webgl.zombieTemplate) {
-    let model = null;
-    if (THREE.SkeletonUtils && typeof THREE.SkeletonUtils.clone === "function") {
-      model = THREE.SkeletonUtils.clone(webgl.zombieTemplate);
-    } else {
-      model = webgl.zombieTemplate.clone(true);
-    }
-    if (model) {
-      applyZombieTint(model);
-      model.scale.setScalar(randomRange(1.03, 1.14));
-      model.rotation.y = Math.PI;
-      const mixer = webgl.zombieClips.length > 0 ? new THREE.AnimationMixer(model) : null;
-      return { model, mixer, isFallback: false };
-    }
-  }
-
-  return { model: createFallbackZombieModel(), mixer: null, isFallback: true };
-}
-
-function findClipByPatterns(patterns) {
-  for (const pattern of patterns) {
-    const clip = webgl.zombieClips.find((candidate) => pattern.test(candidate.name || ""));
-    if (clip) {
-      return clip;
-    }
-  }
-  return webgl.zombieClips[0] || null;
-}
-
-function setZombieVisualAnimation(visual, mode) {
-  if (!visual || !visual.mixer) {
-    return;
-  }
-
-  let clip = null;
-  if (mode === "siege") {
-    clip = findClipByPatterns([/attack|punch|kick|melee|hit/i, /run/i, /walk/i, /idle/i]);
-  } else {
-    clip = findClipByPatterns([/walk/i, /run/i, /idle/i]);
-  }
-  if (!clip) {
-    return;
-  }
-
-  const actionKey = `${mode}:${clip.name || "clip"}`;
-  if (visual.currentActionKey === actionKey) {
-    if (visual.currentAction) {
-      visual.currentAction.timeScale = mode === "siege" ? 1.12 : 0.88;
-    }
-    return;
-  }
-
-  let nextAction = visual.actions[actionKey];
-  if (!nextAction) {
-    nextAction = visual.mixer.clipAction(clip);
-    visual.actions[actionKey] = nextAction;
-  }
-
-  nextAction.reset();
-  nextAction.fadeIn(0.2);
-  nextAction.timeScale = mode === "siege" ? 1.12 : 0.88;
-  nextAction.play();
-
-  if (visual.currentAction && visual.currentAction !== nextAction) {
-    visual.currentAction.fadeOut(0.2);
-  }
-
-  visual.currentAction = nextAction;
-  visual.currentActionKey = actionKey;
+function cloneZombieModelInstance(zombieId) {
+  return { model: createDetailedZombieModel(zombieId), mixer: null, isFallback: false };
 }
 
 function disposeObject3D(root) {
@@ -1467,7 +1690,7 @@ function disposeObject3D(root) {
     return;
   }
   root.traverse((node) => {
-    if (node.geometry) {
+    if (node.geometry && !webgl.sharedGeometries.has(node.geometry)) {
       node.geometry.dispose();
     }
     if (!node.material) {
@@ -1506,7 +1729,13 @@ function removeZombieVisualById(id) {
   if (visual.root && visual.root.parent) {
     visual.root.parent.remove(visual.root);
   }
+  if (visual.shadow && visual.shadow.parent) {
+    visual.shadow.parent.remove(visual.shadow);
+  }
   disposeObject3D(visual.root);
+  if (visual.shadow && visual.shadow.material) {
+    visual.shadow.material.dispose();
+  }
   webgl.zombieVisuals.delete(id);
 }
 
@@ -1529,7 +1758,7 @@ function createZombieVisual(zombie) {
     return null;
   }
 
-  const instance = cloneZombieModelInstance();
+  const instance = cloneZombieModelInstance(zombie.id);
   if (!instance.model) {
     return null;
   }
@@ -1540,54 +1769,36 @@ function createZombieVisual(zombie) {
   root.scale.set(1, 1, 1);
   webgl.scene.add(root);
 
+  const shadowMaterial = new THREE.MeshBasicMaterial({
+    color: 0x050807,
+    transparent: true,
+    opacity: 0.46,
+    depthWrite: false,
+  });
+  const shadow = new THREE.Mesh(
+    getSharedZombieGeometry("contact-shadow", () => new THREE.CircleGeometry(1, 24)),
+    shadowMaterial,
+  );
+  shadow.rotation.x = -Math.PI / 2;
+  shadow.position.y = 0.012;
+  shadow.scale.set(0.52, 0.83, 1);
+  shadow.renderOrder = 2;
+  webgl.scene.add(shadow);
+
   const visual = {
     root,
     model: instance.model,
+    shadow,
     mixer: instance.mixer,
     actions: Object.create(null),
     currentAction: null,
     currentActionKey: "",
-    isFallback: instance.isFallback,
     deathStartedAt: 0,
     bobSeed: Math.random() * Math.PI * 2,
   };
 
   webgl.zombieVisuals.set(zombie.id, visual);
-  setZombieVisualAnimation(visual, zombie.sieging ? "siege" : "walk");
   return visual;
-}
-
-function upgradeFallbackVisualsToGltf() {
-  if (!webgl.enabled || !webgl.scene || webgl.modelLoadState !== "ready") {
-    return;
-  }
-
-  for (const [id, visual] of webgl.zombieVisuals.entries()) {
-    if (!visual.isFallback) {
-      continue;
-    }
-
-    const zombie = state.zombies.find((item) => item.id === id);
-    if (!zombie || zombie.exploding) {
-      continue;
-    }
-
-    const replacement = cloneZombieModelInstance();
-    if (!replacement.model || replacement.isFallback) {
-      continue;
-    }
-
-    visual.root.remove(visual.model);
-    disposeObject3D(visual.model);
-    visual.model = replacement.model;
-    visual.mixer = replacement.mixer;
-    visual.actions = Object.create(null);
-    visual.currentAction = null;
-    visual.currentActionKey = "";
-    visual.isFallback = false;
-    visual.root.add(replacement.model);
-    setZombieVisualAnimation(visual, zombie.sieging ? "siege" : "walk");
-  }
 }
 
 function syncZombieVisuals() {
@@ -1621,6 +1832,39 @@ function lerpAngle(from, to, amount) {
   return from + delta * clamp(amount, 0, 1);
 }
 
+function updateProceduralZombiePose(visual, zombie, nowMs) {
+  const rig = visual.model && visual.model.userData.rig;
+  if (!rig) {
+    return;
+  }
+
+  const phase = nowMs * 0.00215 + visual.bobSeed;
+  const gait = zombie.sieging ? 0 : Math.sin(phase);
+  const breathing = Math.sin(phase * 0.53 + 1.1);
+  const siegeSway = zombie.sieging ? Math.sin(nowMs * 0.0028 + visual.bobSeed) : 0;
+  const smashing = zombie.sieging && nowMs < (zombie.smashAnimUntil || 0);
+  const impact = smashing ? Math.max(0, Math.sin(nowMs * 0.012)) : 0;
+
+  rig.torso.rotation.x = 0.12 + breathing * 0.018 + impact * 0.11;
+  rig.torso.rotation.y = Math.sin(phase * 0.38) * 0.025;
+  rig.torso.rotation.z = Math.sin(phase * 0.52) * 0.025;
+  rig.head.rotation.x = -0.13 + Math.sin(phase * 0.6) * 0.045 - impact * 0.08;
+  rig.head.rotation.y = Math.sin(phase * 0.31) * 0.08;
+  rig.head.rotation.z = Math.sin(phase * 0.43) * 0.035;
+
+  rig.leftArm.shoulder.rotation.x = -0.48 + gait * 0.12 - siegeSway * 0.1 - impact * 0.55;
+  rig.rightArm.shoulder.rotation.x = -0.63 - gait * 0.12 + siegeSway * 0.1 + impact * 0.48;
+  rig.leftArm.shoulder.rotation.z = 0.09 + Math.sin(phase * 0.5) * 0.025;
+  rig.rightArm.shoulder.rotation.z = -0.1 + Math.sin(phase * 0.5 + 0.5) * 0.025;
+  rig.leftArm.forearm.rotation.x = -0.12 - impact * 0.2;
+  rig.rightArm.forearm.rotation.x = -0.18 + impact * 0.16;
+
+  rig.leftLeg.hip.rotation.x = gait * 0.19;
+  rig.rightLeg.hip.rotation.x = -gait * 0.19;
+  rig.leftLeg.knee.rotation.x = Math.max(0, -gait) * 0.3;
+  rig.rightLeg.knee.rotation.x = Math.max(0, gait) * 0.3;
+}
+
 function updateZombieVisual(zombie, deltaSec, nowMs) {
   if (!webgl.enabled) {
     return;
@@ -1644,13 +1888,16 @@ function updateZombieVisual(zombie, deltaSec, nowMs) {
     }
 
     const deathProgress = clamp((nowMs - visual.deathStartedAt) / ZOMBIE_EXPLODE_ANIM_MS, 0, 1);
-    const scale = Math.max(0.03, (1 - deathProgress) * (1 + deathProgress * 0.38));
-    visual.root.scale.setScalar(scale);
-    visual.root.position.y = deathProgress * 1.5;
-    visual.root.rotation.y += deltaSec * 8;
-
-    if (visual.mixer) {
-      visual.mixer.update(deltaSec * 1.18);
+    const fall = deathProgress * deathProgress;
+    const fallDirection = zombie.id % 2 ? 1 : -1;
+    visual.root.scale.set(1 - deathProgress * 0.14, 1 - deathProgress * 0.32, 1 - deathProgress * 0.14);
+    visual.root.position.y = Math.sin(deathProgress * Math.PI) * 0.08;
+    visual.root.rotation.z = fallDirection * fall * 1.35;
+    visual.root.rotation.x = fall * 0.16;
+    if (visual.shadow) {
+      visual.shadow.position.set(visual.root.position.x, 0.012, visual.root.position.z);
+      visual.shadow.material.opacity = 0.46 * (1 - deathProgress * 0.7);
+      visual.shadow.scale.set(0.52 + fall * 0.3, 0.83 + fall * 0.16, 1);
     }
     return;
   }
@@ -1661,8 +1908,8 @@ function updateZombieVisual(zombie, deltaSec, nowMs) {
   visual.root.scale.y += (1 - visual.root.scale.y) * settle;
   visual.root.scale.z += (1 - visual.root.scale.z) * settle;
   visual.root.position.y = zombie.sieging
-    ? Math.sin(nowMs * 0.012 + visual.bobSeed) * 0.08
-    : Math.sin(nowMs * 0.007 + visual.bobSeed) * 0.03;
+    ? Math.sin(nowMs * 0.003 + visual.bobSeed) * 0.022
+    : Math.abs(Math.sin(nowMs * 0.00215 + visual.bobSeed)) * 0.035;
 
   let dirX = 0;
   let dirZ = 0;
@@ -1680,11 +1927,14 @@ function updateZombieVisual(zombie, deltaSec, nowMs) {
 
   const targetYaw = Math.atan2(dirX, dirZ);
   visual.root.rotation.y = lerpAngle(visual.root.rotation.y, targetYaw, 1 - Math.exp(-deltaSec * 8.2));
-
-  setZombieVisualAnimation(visual, zombie.sieging ? "siege" : "walk");
-  if (visual.mixer) {
-    visual.mixer.update(deltaSec * (zombie.sieging ? 1.12 : 0.9));
+  visual.root.rotation.x = 0;
+  visual.root.rotation.z = zombie.sieging ? Math.sin(nowMs * 0.0024 + visual.bobSeed) * 0.018 : 0;
+  if (visual.shadow) {
+    visual.shadow.position.set(visual.root.position.x, 0.012, visual.root.position.z);
+    visual.shadow.material.opacity = zombie.sieging ? 0.52 : 0.42;
+    visual.shadow.scale.set(0.52, 0.83, 1);
   }
+  updateProceduralZombiePose(visual, zombie, nowMs);
 }
 
 function tickWebglFrame(nowMs) {
@@ -1711,6 +1961,10 @@ function tickWebglFrame(nowMs) {
       webgl.safehouseRingMaterial.opacity = 0.22;
       webgl.safehouseRingMaterial.color.setHex(0x65a8d4);
     }
+  }
+
+  if (webgl.warmLight) {
+    webgl.warmLight.intensity = 106 + Math.sin(nowMs * 0.006) * 3.5 + Math.sin(nowMs * 0.017) * 1.2;
   }
 
   webgl.renderer.render(webgl.scene, webgl.camera);

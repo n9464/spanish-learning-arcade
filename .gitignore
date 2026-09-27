@@ -1,1 +1,11 @@
 .DS_Store
+/Icon*
+/dist/
+/node_modules/
+/package.json
+/package-lock.json
+/electron-main.cjs
+/spanish-arcade.is-a.dev.json
+/assets/icon.iconset/
+/assets/spanish-arcade.icns
+/assets/spanish-arcade-icon.png
