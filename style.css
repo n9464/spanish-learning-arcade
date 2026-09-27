@@ -730,6 +730,62 @@ kbd {
   pointer-events: none;
 }
 
+.zombie-prompt-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.webgl-zombie-prompt {
+  position: absolute;
+  display: grid;
+  gap: 3px;
+  width: max-content;
+  max-width: min(210px, 34vw);
+  transform: translate(12px, -100%);
+  padding: 8px 11px;
+  border: 1px solid rgba(194, 210, 207, 0.52);
+  border-radius: 10px;
+  color: #f4f4ec;
+  background: rgba(13, 19, 18, 0.88);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.48), inset 0 1px rgba(255, 255, 255, 0.09);
+  font-size: clamp(0.72rem, 1vw, 0.9rem);
+  line-height: 1.2;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: opacity 100ms ease, border-color 100ms ease, box-shadow 100ms ease;
+}
+
+.webgl-prompt-text {
+  font-weight: 750;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.webgl-prompt-meta {
+  color: #c2d3c9;
+  font-size: 0.82em;
+}
+
+.webgl-zombie-prompt.target {
+  border-color: #ff9588;
+  box-shadow: 0 0 0 2px rgba(255, 121, 104, 0.24), 0 8px 26px rgba(0, 0, 0, 0.55);
+}
+
+.webgl-zombie-prompt.sieging {
+  border-color: #ffb37b;
+}
+
+.webgl-zombie-prompt.sieging .webgl-prompt-meta {
+  color: #ffbf91;
+}
+
+.webgl-zombie-prompt.hidden-zombie {
+  opacity: 0;
+}
+
 .lane-placeholder {
   position: absolute;
   left: 50%;

@@ -613,6 +613,9 @@ const webgl = {
   geometryCache: new Map(),
   sharedGeometries: new Set(),
   surfaceTextures: new Map(),
+  modelTemplate: null,
+  promptLayer: null,
+  promptElements: new Map(),
   worldHalfX: 20,
   worldHalfZ: 12,
   lastFrameAt: 0,
@@ -1397,6 +1400,10 @@ function initWebglIfPossible() {
 
   elements.zombieLane.innerHTML = "";
   elements.zombieLane.appendChild(webgl.renderer.domElement);
+  webgl.promptLayer = document.createElement("div");
+  webgl.promptLayer.className = "zombie-prompt-layer";
+  webgl.promptLayer.setAttribute("aria-live", "polite");
+  elements.zombieLane.appendChild(webgl.promptLayer);
 
   webgl.scene = new THREE.Scene();
   webgl.scene.fog = new THREE.FogExp2(0x111719, 0.018);
@@ -1471,6 +1478,7 @@ function initWebglIfPossible() {
       ? performance.now()
       : Date.now();
   webgl.rafId = requestAnimationFrame(tickWebglFrame);
+  loadRealisticZombieModel();
 
 }
 
@@ -1682,7 +1690,104 @@ function createDetailedZombieModel(zombieId) {
 }
 
 function cloneZombieModelInstance(zombieId) {
+  if (webgl.modelTemplate) {
+    const model = webgl.modelTemplate.clone(true);
+    model.rotation.y = Math.PI;
+    model.scale.setScalar(randomRange(0.96, 1.04));
+    model.userData.sharedAsset = true;
+    model.traverse((node) => {
+      if (node.isMesh) {
+        node.castShadow = true;
+        node.receiveShadow = true;
+      }
+    });
+    return { model, mixer: null, isFallback: false };
+  }
   return { model: createDetailedZombieModel(zombieId), mixer: null, isFallback: false };
+}
+
+function loadRealisticZombieModel() {
+  const THREE = getThree();
+  if (!THREE || !window.GLTFLoader) return;
+  const loader = new window.GLTFLoader();
+  const onModelLoaded = (gltf) => {
+      const template = gltf.scene;
+      template.traverse((node) => {
+        if (node.isMesh) {
+          node.castShadow = true;
+          node.receiveShadow = true;
+          if (node.material) node.material.side = THREE.FrontSide;
+        }
+      });
+      webgl.modelTemplate = template;
+
+      for (const [id, visual] of webgl.zombieVisuals) {
+        const replacement = cloneZombieModelInstance(id).model;
+        visual.root.remove(visual.model);
+        if (!visual.model.userData.sharedAsset) disposeObject3D(visual.model);
+        visual.model = replacement;
+        visual.root.add(replacement);
+      }
+    };
+  const onModelError = (error) => console.error("Could not load realistic zombie model; using built-in fallback.", error);
+
+  if (window.ZOMBIE_GLB_BASE64) {
+    const binary = window.atob(window.ZOMBIE_GLB_BASE64);
+    const buffer = new ArrayBuffer(binary.length);
+    const bytes = new Uint8Array(buffer);
+    for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+    loader.parse(buffer, "", onModelLoaded, onModelError);
+    return;
+  }
+
+  loader.load("assets/models/zombie-realistic.glb", onModelLoaded, undefined, onModelError);
+}
+
+function updateZombiePromptOverlays() {
+  if (!webgl.promptLayer || !webgl.camera) return;
+  const liveIds = new Set();
+  const nearest = getNearestZombie();
+  const bounds = elements.zombieLane.getBoundingClientRect();
+  const THREE = getThree();
+
+  for (const zombie of state.zombies) {
+    liveIds.add(zombie.id);
+    let prompt = webgl.promptElements.get(zombie.id);
+    if (!prompt) {
+      prompt = document.createElement("div");
+      prompt.className = "webgl-zombie-prompt";
+      prompt.innerHTML = '<span class="webgl-prompt-text"></span><span class="webgl-prompt-meta"></span>';
+      webgl.promptLayer.appendChild(prompt);
+      webgl.promptElements.set(zombie.id, prompt);
+    }
+
+    const isTarget = nearest && nearest.id === zombie.id;
+    prompt.classList.toggle("target", Boolean(isTarget));
+    prompt.classList.toggle("sieging", Boolean(zombie.sieging));
+    prompt.classList.toggle("hidden-zombie", Boolean(zombie.exploding));
+    prompt.querySelector(".webgl-prompt-text").textContent = formatPrompt(zombie.challenge);
+    const meters = Math.max(0, Math.ceil(getDistanceToSafehouse(zombie) * 2.25));
+    prompt.querySelector(".webgl-prompt-meta").textContent = zombie.sieging ? "Breaking safehouse" : `${meters}m to safehouse`;
+
+    const visual = webgl.zombieVisuals.get(zombie.id);
+    if (!visual || zombie.exploding) continue;
+    const headPoint = new THREE.Vector3(0, 2.18, 0);
+    visual.root.localToWorld(headPoint);
+    headPoint.project(webgl.camera);
+    const x = (headPoint.x * 0.5 + 0.5) * bounds.width;
+    const y = (-headPoint.y * 0.5 + 0.5) * bounds.height;
+    const onScreen = headPoint.z < 1 && Math.abs(headPoint.x) < 1.12 && Math.abs(headPoint.y) < 1.12;
+    prompt.style.display = onScreen ? "grid" : "none";
+    prompt.style.left = `${x}px`;
+    prompt.style.top = `${y}px`;
+  }
+
+  for (const [id, prompt] of webgl.promptElements) {
+    if (!liveIds.has(id)) {
+      prompt.remove();
+      webgl.promptElements.delete(id);
+    }
+  }
 }
 
 function disposeObject3D(root) {
@@ -1732,7 +1837,7 @@ function removeZombieVisualById(id) {
   if (visual.shadow && visual.shadow.parent) {
     visual.shadow.parent.remove(visual.shadow);
   }
-  disposeObject3D(visual.root);
+  if (!visual.model || !visual.model.userData.sharedAsset) disposeObject3D(visual.root);
   if (visual.shadow && visual.shadow.material) {
     visual.shadow.material.dispose();
   }
@@ -1950,6 +2055,7 @@ function tickWebglFrame(nowMs) {
   for (const zombie of state.zombies) {
     updateZombieVisual(zombie, deltaSec, nowMs);
   }
+  updateZombiePromptOverlays();
 
   if (webgl.safehouseRingMaterial) {
     const sieged = state.zombies.some((zombie) => zombie.sieging && !zombie.exploding);

@@ -1,0 +1,4 @@
+The Three.js module and example utilities in this folder are from Three.js r150.1.
+Copyright © 2010-2023 three.js authors
+SPDX-License-Identifier: MIT
+See https://github.com/mrdoob/three.js/blob/r150/LICENSE
