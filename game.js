@@ -1340,195 +1340,122 @@ function getZombieSurfaceTexture(THREE, kind) {
 }
 
 function createGroundDebris(THREE) {
-  const stoneMaterial = new THREE.MeshStandardMaterial({
-    color: 0x3e4541,
-    roughness: 0.96,
-    metalness: 0.02,
-  });
-  const metalMaterial = new THREE.MeshStandardMaterial({
-    color: 0x343b3a,
-    roughness: 0.68,
-    metalness: 0.38,
-  });
-  const stoneGeometry = new THREE.DodecahedronGeometry(1, 0);
-  const scrapGeometry = new THREE.BoxGeometry(1, 1, 1);
-
-  for (let index = 0; index < 54; index += 1) {
+  const material = new THREE.MeshStandardMaterial({ color: 0x343b3a, roughness: 0.82, metalness: 0.32 });
+  const geometry = new THREE.BoxGeometry(1, 0.08, 0.42);
+  const scraps = new THREE.InstancedMesh(geometry, material, 24);
+  const dummy = new THREE.Object3D();
+  for (let index = 0; index < scraps.count; index += 1) {
     const angle = randomRange(0, Math.PI * 2);
-    const radius = randomRange(14, 37);
-    const isScrap = index % 4 === 0;
-    const debris = new THREE.Mesh(isScrap ? scrapGeometry : stoneGeometry, isScrap ? metalMaterial : stoneMaterial);
-    const size = randomRange(0.12, isScrap ? 0.36 : 0.48);
-    debris.position.set(Math.cos(angle) * radius, size * 0.32, Math.sin(angle) * radius * 0.66);
-    debris.scale.set(size * randomRange(0.7, 1.5), size * randomRange(0.35, 0.8), size);
-    debris.rotation.set(randomRange(-0.25, 0.25), randomRange(0, Math.PI), randomRange(-0.25, 0.25));
-    debris.castShadow = true;
-    debris.receiveShadow = true;
-    webgl.scene.add(debris);
+    const radius = randomRange(15, 37);
+    const size = randomRange(0.28, 0.9);
+    dummy.position.set(Math.cos(angle) * radius, 0.04, Math.sin(angle) * radius * 0.66);
+    dummy.rotation.set(randomRange(-0.12, 0.12), randomRange(0, Math.PI), randomRange(-0.12, 0.12));
+    dummy.scale.set(size, randomRange(0.65, 1.5), randomRange(0.6, 1.4));
+    dummy.updateMatrix();
+    scraps.setMatrixAt(index, dummy.matrix);
+    scraps.setColorAt(index, new THREE.Color().setHSL(0.1, randomRange(0.025, 0.09), randomRange(0.15, 0.26)));
   }
+  scraps.instanceMatrix.needsUpdate = true;
+  if (scraps.instanceColor) scraps.instanceColor.needsUpdate = true;
+  scraps.castShadow = true;
+  scraps.receiveShadow = true;
+  webgl.scene.add(scraps);
 }
 
 function createForestBackdrop(THREE) {
-  const forest = new THREE.Group();
-  const bark = new THREE.MeshStandardMaterial({ color: 0x514439, roughness: 1 });
-  const needles = new THREE.MeshStandardMaterial({ color: 0x293b32, roughness: 1 });
-  const broadLeaves = new THREE.MeshStandardMaterial({ color: 0x35463a, roughness: 1 });
-  const rockMaterial = new THREE.MeshStandardMaterial({ color: 0x50534c, roughness: 1 });
-  const woodMaterial = new THREE.MeshStandardMaterial({ color: 0x3e352c, roughness: 1 });
-  const dummy = new THREE.Object3D();
-
-  // A soft, distant tree mass prevents the ground plane from ending at a hard edge.
-  const backdropCanvas = document.createElement("canvas");
-  backdropCanvas.width = 1024;
-  backdropCanvas.height = 512;
-  const ctx = backdropCanvas.getContext("2d");
-  const haze = ctx.createLinearGradient(0, 0, 0, backdropCanvas.height);
-  haze.addColorStop(0, "#263431");
-  haze.addColorStop(0.58, "#202b27");
-  haze.addColorStop(1, "#141b18");
-  ctx.fillStyle = haze;
-  ctx.fillRect(0, 0, backdropCanvas.width, backdropCanvas.height);
-  let seed = 47291;
-  const noise = () => {
-    seed = (seed * 16807) % 2147483647;
-    return seed / 2147483647;
+  const image = new Image();
+  image.onload = () => {
+    const texture = new THREE.Texture(image);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.needsUpdate = true;
+    webgl.scene.background = texture;
+    webgl.forestBackdropTexture = texture;
   };
-  for (let i = 0; i < 950; i += 1) {
-    const x = noise() * backdropCanvas.width;
-    const y = 130 + noise() * 280;
-    const r = 8 + noise() * 44;
-    ctx.fillStyle = `rgba(${18 + Math.floor(noise() * 23)}, ${30 + Math.floor(noise() * 28)}, ${24 + Math.floor(noise() * 20)}, ${0.08 + noise() * 0.2})`;
-    ctx.beginPath();
-    ctx.ellipse(x, y, r * (0.5 + noise()), r, noise() * Math.PI, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  const backdropTexture = new THREE.CanvasTexture(backdropCanvas);
-  backdropTexture.colorSpace = THREE.SRGBColorSpace;
-  const backdrop = new THREE.Mesh(
-    new THREE.PlaneGeometry(150, 34),
-    new THREE.MeshBasicMaterial({ map: backdropTexture, fog: false, depthWrite: false }),
-  );
-  backdrop.position.set(0, 13, -43);
-  forest.add(backdrop);
-
-  const conifers = [];
-  const broadleafTrees = [];
-  // Keep the nearer tree line behind the fighting lanes; the second row fills the skyline.
-  for (let i = 0; i < 104; i += 1) {
-    const x = randomRange(-54, 54);
-    const z = randomRange(-38, -26);
-    const h = randomRange(6.2, 12.5);
-    conifers.push({ x, z, h, radius: h * randomRange(0.16, 0.23), lean: randomRange(-0.09, 0.09) });
-  }
-  for (let i = 0; i < 23; i += 1) {
-    const x = randomRange(-53, 53);
-    const z = randomRange(-37, -29);
-    const h = randomRange(5.5, 9.5);
-    broadleafTrees.push({ x, z, h, crown: randomRange(1.7, 3.2), lean: randomRange(-0.12, 0.12) });
-  }
-
-  const trunkGeometry = new THREE.CylinderGeometry(0.16, 0.38, 1, 7, 2);
-  const trunkInstances = new THREE.InstancedMesh(trunkGeometry, bark, conifers.length + broadleafTrees.length);
-  trunkInstances.castShadow = true;
-  trunkInstances.receiveShadow = true;
-  let trunkIndex = 0;
-  for (const tree of [...conifers, ...broadleafTrees]) {
-    const height = tree.h * 0.66;
-    dummy.position.set(tree.x, height / 2, tree.z);
-    dummy.rotation.set(0, 0, tree.lean);
-    dummy.scale.set(randomRange(0.72, 1.35), height, randomRange(0.72, 1.35));
-    dummy.updateMatrix();
-    trunkInstances.setMatrixAt(trunkIndex, dummy.matrix);
-    trunkInstances.setColorAt(trunkIndex, new THREE.Color().setHSL(0.075, randomRange(0.12, 0.25), randomRange(0.2, 0.34)));
-    trunkIndex += 1;
-  }
-  trunkInstances.instanceMatrix.needsUpdate = true;
-  if (trunkInstances.instanceColor) trunkInstances.instanceColor.needsUpdate = true;
-  forest.add(trunkInstances);
-
-  const tierGeometry = [0, 1, 2, 3].map((tier) => new THREE.ConeGeometry(1, 1, 8, 2));
-  for (let tier = 0; tier < 4; tier += 1) {
-    const instances = new THREE.InstancedMesh(tierGeometry[tier], needles, conifers.length);
-    instances.castShadow = true;
-    instances.receiveShadow = true;
-    conifers.forEach((tree, index) => {
-      const tierHeight = tree.h * (0.31 - tier * 0.025);
-      const radius = tree.radius * (1.22 - tier * 0.2);
-      const centerY = tree.h * (0.39 + tier * 0.145);
-      dummy.position.set(tree.x, centerY, tree.z);
-      dummy.rotation.set(0, randomRange(0, Math.PI * 2), tree.lean * 0.4);
-      dummy.scale.set(radius, tierHeight, radius * randomRange(0.82, 1.08));
-      dummy.updateMatrix();
-      instances.setMatrixAt(index, dummy.matrix);
-      instances.setColorAt(index, new THREE.Color().setHSL(0.31 + randomRange(-0.025, 0.025), randomRange(0.22, 0.43), randomRange(0.13, 0.23)));
-    });
-    instances.instanceMatrix.needsUpdate = true;
-    if (instances.instanceColor) instances.instanceColor.needsUpdate = true;
-    forest.add(instances);
-  }
-
-  const crownGeometry = new THREE.IcosahedronGeometry(1, 1);
-  const crownInstances = new THREE.InstancedMesh(crownGeometry, broadLeaves, broadleafTrees.length * 5);
-  crownInstances.castShadow = true;
-  crownInstances.receiveShadow = true;
-  let crownIndex = 0;
-  for (const tree of broadleafTrees) {
-    for (let clump = 0; clump < 5; clump += 1) {
-      const angle = (clump / 5) * Math.PI * 2 + randomRange(-0.28, 0.28);
-      const spread = tree.crown * (clump === 4 ? 0.1 : 0.45);
-      const size = tree.crown * randomRange(0.38, 0.62);
-      dummy.position.set(tree.x + Math.cos(angle) * spread, tree.h * randomRange(0.65, 0.86), tree.z + Math.sin(angle) * spread);
-      dummy.rotation.set(randomRange(-0.35, 0.35), randomRange(0, Math.PI * 2), randomRange(-0.25, 0.25));
-      dummy.scale.set(size * randomRange(0.8, 1.2), size * randomRange(0.72, 1.15), size * randomRange(0.8, 1.2));
-      dummy.updateMatrix();
-      crownInstances.setMatrixAt(crownIndex, dummy.matrix);
-      crownInstances.setColorAt(crownIndex, new THREE.Color().setHSL(0.29 + randomRange(-0.04, 0.04), randomRange(0.18, 0.36), randomRange(0.16, 0.27)));
-      crownIndex += 1;
-    }
-  }
-  crownInstances.instanceMatrix.needsUpdate = true;
-  if (crownInstances.instanceColor) crownInstances.instanceColor.needsUpdate = true;
-  forest.add(crownInstances);
-
-  const rocks = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 1), rockMaterial, 46);
-  const logs = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.2, 0.29, 1, 8, 1), woodMaterial, 15);
-  const stumps = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.3, 0.42, 1, 9, 1), bark, 12);
-  for (const mesh of [rocks, logs, stumps]) {
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-  }
-  for (let i = 0; i < rocks.count; i += 1) {
-    const side = i % 3 === 0;
-    const x = side ? randomRange(-49, 49) : randomRange(-53, 53);
-    const z = side ? randomRange(-22, 13) : randomRange(-38, -20);
-    const size = randomRange(0.32, 1.05);
-    dummy.position.set(x, size * 0.36, z);
-    dummy.rotation.set(randomRange(-0.4, 0.4), randomRange(0, Math.PI * 2), randomRange(-0.4, 0.4));
-    dummy.scale.set(size * randomRange(0.8, 1.6), size * randomRange(0.45, 0.9), size * randomRange(0.8, 1.4));
-    dummy.updateMatrix(); rocks.setMatrixAt(i, dummy.matrix);
-    rocks.setColorAt(i, new THREE.Color().setHSL(0.12, randomRange(0.03, 0.12), randomRange(0.22, 0.38)));
-  }
-  for (let i = 0; i < logs.count; i += 1) {
-    const x = randomRange(-50, 50), z = randomRange(-37, -20), length = randomRange(1.8, 4.4);
-    dummy.position.set(x, 0.3, z); dummy.rotation.set(0, randomRange(0, Math.PI), Math.PI / 2 + randomRange(-0.1, 0.1));
-    dummy.scale.set(randomRange(0.7, 1.2), length, randomRange(0.7, 1.2)); dummy.updateMatrix(); logs.setMatrixAt(i, dummy.matrix);
-    logs.setColorAt(i, new THREE.Color().setHSL(0.075, randomRange(0.14, 0.25), randomRange(0.16, 0.27)));
-  }
-  for (let i = 0; i < stumps.count; i += 1) {
-    const x = randomRange(-52, 52), z = randomRange(-38, -21), height = randomRange(0.5, 1.25);
-    dummy.position.set(x, height / 2, z); dummy.rotation.set(randomRange(-0.08, 0.08), randomRange(0, Math.PI * 2), randomRange(-0.08, 0.08));
-    dummy.scale.set(1, height, 1); dummy.updateMatrix(); stumps.setMatrixAt(i, dummy.matrix);
-    stumps.setColorAt(i, new THREE.Color().setHSL(0.08, 0.15, randomRange(0.19, 0.31)));
-  }
-  for (const mesh of [rocks, logs, stumps]) {
-    mesh.instanceMatrix.needsUpdate = true;
-    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
-    forest.add(mesh);
-  }
-  webgl.scene.add(forest);
-  webgl.forest = forest;
+  image.src = window.FOREST_BACKDROP_DATA || "assets/images/forest-backdrop.png";
 }
 
+function loadForestEnvironment(THREE) {
+  if (!window.GLTFLoader || !window.FOREST_GLB_BASE64) return;
+  const binary = window.atob(window.FOREST_GLB_BASE64);
+  const buffer = new ArrayBuffer(binary.length);
+  const bytes = new Uint8Array(buffer);
+  for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+
+  const loader = new window.GLTFLoader();
+  loader.parse(buffer, "", (gltf) => {
+    const models = new Map();
+    gltf.scene.updateMatrixWorld(true);
+    gltf.scene.traverse((node) => {
+      if (node.isMesh && node.name) {
+        node.geometry.computeBoundingBox();
+        models.set(node.name, node);
+      }
+    });
+
+    const forest = new THREE.Group();
+    forest.name = "Photogrammetry forest props";
+    const treeNames = ["Pine_A", "Pine_B", "Pine_C"];
+    treeNames.forEach((name, variant) => {
+      const source = models.get(name);
+      if (!source) return;
+      const count = [30, 28, 30][variant];
+      const instances = new THREE.InstancedMesh(source.geometry, source.material, count);
+      instances.name = `${name} forest instances`;
+      instances.castShadow = false;
+      instances.receiveShadow = false;
+      const bounds = source.geometry.boundingBox;
+      const sourceMatrix = source.matrixWorld.clone();
+      const dummy = new THREE.Object3D();
+
+      for (let index = 0; index < count; index += 1) {
+        const x = randomRange(-53, 53);
+        const z = randomRange(-48, -25);
+        const scale = randomRange(0.72, 1.42);
+        dummy.position.set(x, -bounds.min.y * scale, z);
+        dummy.rotation.set(0, randomRange(0, Math.PI * 2), randomRange(-0.035, 0.035));
+        dummy.scale.setScalar(scale);
+        dummy.updateMatrix();
+        instances.setMatrixAt(index, dummy.matrix.multiply(sourceMatrix));
+        const tint = randomRange(0.72, 1.04);
+        instances.setColorAt(index, new THREE.Color(tint, tint * randomRange(0.96, 1), tint * randomRange(0.9, 1)));
+      }
+      instances.instanceMatrix.needsUpdate = true;
+      if (instances.instanceColor) instances.instanceColor.needsUpdate = true;
+      forest.add(instances);
+    });
+
+    const rock = models.get("Weathered_Rock");
+    if (rock) {
+      const count = 42;
+      const instances = new THREE.InstancedMesh(rock.geometry, rock.material, count);
+      instances.name = "Weathered rock scatter";
+      instances.castShadow = true;
+      instances.receiveShadow = true;
+      const bounds = rock.geometry.boundingBox;
+      const sourceMatrix = rock.matrixWorld.clone();
+      const dummy = new THREE.Object3D();
+      for (let index = 0; index < count; index += 1) {
+        const angle = randomRange(0, Math.PI * 2);
+        const radiusX = randomRange(22, 51);
+        const radiusZ = randomRange(16, 43);
+        const scale = randomRange(0.8, 1.65);
+        dummy.position.set(Math.cos(angle) * radiusX, -bounds.min.y * scale, Math.sin(angle) * radiusZ);
+        dummy.rotation.set(randomRange(-0.14, 0.14), randomRange(0, Math.PI * 2), randomRange(-0.14, 0.14));
+        dummy.scale.setScalar(scale);
+        dummy.updateMatrix();
+        instances.setMatrixAt(index, dummy.matrix.multiply(sourceMatrix));
+        const tint = randomRange(0.76, 1.12);
+        instances.setColorAt(index, new THREE.Color(tint, tint * 0.98, tint * 0.92));
+      }
+      instances.instanceMatrix.needsUpdate = true;
+      if (instances.instanceColor) instances.instanceColor.needsUpdate = true;
+      forest.add(instances);
+    }
+
+    webgl.scene.add(forest);
+    webgl.forest = forest;
+  }, (error) => console.error("Could not load forest environment assets.", error));
+}
 function createBunkerTexture(THREE, base, seed) {
   const canvas = document.createElement("canvas");
   canvas.width = 512;
@@ -1793,7 +1720,7 @@ function initWebglIfPossible() {
   webgl.moonLight = coldFill;
 
   const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(110, 78, 1, 1),
+    new THREE.PlaneGeometry(110, 110, 1, 1),
     new THREE.MeshStandardMaterial({
       color: 0xb4bdb3,
       map: createRoadSurfaceTexture(THREE),
@@ -1808,6 +1735,7 @@ function initWebglIfPossible() {
 
   createGroundDebris(THREE);
   createForestBackdrop(THREE);
+  loadForestEnvironment(THREE);
 
   webgl.bunkerRoot = createSafehouseModel(THREE);
   webgl.scene.add(webgl.bunkerRoot);
