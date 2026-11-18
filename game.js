@@ -520,6 +520,15 @@ const SAFEHOUSE_SIEGE_TICK_MIN_MS = 1400;
 const SAFEHOUSE_SIEGE_TICK_MAX_MS = 2000;
 const SAFEHOUSE_SIEGE_INITIAL_DELAY_MS = 520;
 const SAFEHOUSE_SMASH_ANIM_MS = 360;
+const WARMUP_VERBS = new Set(["hablar", "comer", "vivir"]);
+const OPENING_WAVES = [
+  { count: 1, limit: 1, speed: 0.38, spawnMs: 3000, siegeGraceMs: 8000, siegeInterval: 2.8, rush: 0 },
+  { count: 2, limit: 1, speed: 0.55, spawnMs: 2600, siegeGraceMs: 5000, siegeInterval: 2.2, rush: 0.25 },
+  { count: 4, limit: 2, speed: 0.68, spawnMs: 2200, siegeGraceMs: 3000, siegeInterval: 1.65, rush: 0.48 },
+  { count: 7, limit: 3, speed: 0.8, spawnMs: 1800, siegeGraceMs: 1800, siegeInterval: 1.4, rush: 0.66 },
+  { count: 10, limit: 3, speed: 0.9, spawnMs: 1600, siegeGraceMs: 1000, siegeInterval: 1.2, rush: 0.82 },
+  { count: 13, limit: 4, speed: 0.95, spawnMs: 1400, siegeGraceMs: 750, siegeInterval: 1.1, rush: 0.92 },
+];
 const WEBGL_MAX_PIXEL_RATIO = 2;
 const WEBGL_GROUND_COLOR = 0x171b19;
 
@@ -583,6 +592,7 @@ const state = {
   waveSpawnInterval: 1300,
   waveSpeed: 1,
   waveMaxOnField: 3,
+  openingWave: null,
 
   zombies: [],
   nextZombieId: 1,
@@ -1080,10 +1090,15 @@ function buildSetupSummary() {
 
 function buildWeightedPrompt() {
   const candidates = [];
-  const activePronouns = getActivePronouns();
+  const warmup = state.difficulty === "survivor" && state.wave === 1;
+  const verbs = warmup ? state.verbPool.filter((verb) => WARMUP_VERBS.has(verb.infinitive)) : state.verbPool;
+  const tenses = warmup
+    ? [state.selectedTenses.includes("present") ? "present" : state.selectedTenses[0]]
+    : state.selectedTenses;
+  const activePronouns = warmup ? PRONOUNS.filter((pronoun) => pronoun.key === "yo") : getActivePronouns();
 
-  for (const verb of state.verbPool) {
-    for (const tense of state.selectedTenses) {
+  for (const verb of verbs) {
+    for (const tense of tenses) {
       for (const pronoun of activePronouns) {
         const answer = verb.forms[tense][pronoun.key];
         const adaptiveKey = getConjugationKey(verb.infinitive, tense, pronoun.key);
@@ -2586,7 +2601,8 @@ function startZombieSiege(zombie, reason = "") {
   clampZombieToSiegeRing(target);
   const now = Date.now();
   target.nextSmashAt =
-    now + randomRange(SAFEHOUSE_SIEGE_INITIAL_DELAY_MS * 0.8, SAFEHOUSE_SIEGE_INITIAL_DELAY_MS * 1.35);
+    now + (state.openingWave?.siegeGraceMs ??
+      randomRange(SAFEHOUSE_SIEGE_INITIAL_DELAY_MS * 0.8, SAFEHOUSE_SIEGE_INITIAL_DELAY_MS * 1.35));
   target.smashAnimUntil = now;
   target.timeoutRecorded = false;
 
@@ -2611,7 +2627,8 @@ function applyZombieSiegeDamage(zombie, now) {
   }
 
   zombie.smashAnimUntil = now + SAFEHOUSE_SMASH_ANIM_MS;
-  zombie.nextSmashAt = now + randomRange(SAFEHOUSE_SIEGE_TICK_MIN_MS, SAFEHOUSE_SIEGE_TICK_MAX_MS);
+  zombie.nextSmashAt = now + randomRange(SAFEHOUSE_SIEGE_TICK_MIN_MS, SAFEHOUSE_SIEGE_TICK_MAX_MS) *
+    (state.openingWave?.siegeInterval ?? 1);
   updateSafehouseVisual(true);
 
   setFeedback(
@@ -2849,6 +2866,10 @@ function renderPrompt() {
     elements.targetLabel.textContent = "Scanning";
     elements.promptText.textContent = webgl.fps ? "Find a zombie" : "No active targets.";
     elements.metaText.textContent = webgl.fps ? "Follow the threat indicator." : "Hold position.";
+    if (webgl.fps && state.difficulty === "survivor" && state.wave === 1) {
+      elements.promptText.textContent = "One zombie approaching";
+      elements.metaText.textContent = "Watch the clearing to the left of the bunker.";
+    }
     updateLearningUi();
     return;
   }
@@ -3026,7 +3047,7 @@ function checkWaveCompletion() {
   state.waveDelayId = setTimeout(() => {
     state.waveDelayId = null;
     startWave(state.wave + 1);
-  }, 2000);
+  }, state.openingWave ? 3500 : 2000);
 }
 
 function spawnZombie() {
@@ -3053,14 +3074,16 @@ function spawnZombie() {
     return;
   }
 
-  const spawnPoint = spawnOffscreenPosition();
+  const practiceZombie = webgl.fps && state.difficulty === "survivor" && state.wave === 1;
+  // Start just out of view on the left, with a clear path across the player's sights.
+  const spawnPoint = practiceZombie ? { x: 28, y: 65 } : spawnOffscreenPosition();
   const zombie = {
     id: state.nextZombieId,
     look: chooseZombieLook(state.zombies),
     challenge,
     x: spawnPoint.x,
     y: spawnPoint.y,
-    speed: state.waveSpeed + Math.random() * 0.25,
+    speed: state.waveSpeed + Math.random() * 0.25 * (state.openingWave?.speed ?? 1),
     vx: 0,
     vy: 0,
     headingDeg: 0,
@@ -3147,10 +3170,17 @@ function startWave(waveNumber) {
   state.wave = waveNumber;
   state.intermission = false;
   state.spawnedThisWave = 0;
-  state.toSpawnThisWave = state.profile.baseWaveCount + waveNumber * 2;
-  state.waveSpawnInterval = Math.max(380, state.profile.spawnInterval - (waveNumber - 1) * 65);
-  state.waveSpeed = state.profile.zombieSpeed + (waveNumber - 1) * 0.085;
-  state.waveMaxOnField = state.profile.maxOnField + Math.floor((waveNumber - 1) / 3);
+  const opening = OPENING_WAVES[waveNumber - 1] || null;
+  state.openingWave = opening;
+  const difficultyBonus = state.profile.baseWaveCount - 4;
+  state.toSpawnThisWave = opening ? opening.count + difficultyBonus : state.profile.baseWaveCount + waveNumber * 2;
+  state.waveSpawnInterval = opening
+    ? opening.spawnMs - difficultyBonus * 150
+    : Math.max(380, state.profile.spawnInterval - (waveNumber - 1) * 65);
+  state.waveSpeed = (state.profile.zombieSpeed + (waveNumber - 1) * 0.085) * (opening?.speed ?? 1);
+  state.waveMaxOnField = opening
+    ? opening.limit + Math.floor(difficultyBonus / 2)
+    : state.profile.maxOnField + Math.floor((waveNumber - 1) / 3);
   rememberCampaignProgress();
 
   if (state.spawnTimerId) {
@@ -3163,7 +3193,8 @@ function startWave(waveNumber) {
     return;
   }
 
-  setFeedback(`Wave ${waveNumber} is live.`, "note");
+  const firstPracticeWave = state.difficulty === "survivor" && waveNumber === 1;
+  setFeedback(firstPracticeWave ? "Warm-up wave. Take your time and retry if you miss." : `Wave ${waveNumber} is live.`, "note");
   addFeed("note", `Wave ${waveNumber} started: ${state.toSpawnThisWave} zombies detected.`);
 
   updateHud();
@@ -3234,8 +3265,9 @@ function submitAnswer() {
     updateConjugationStats(target.challenge, "wrong");
     state.streak = 0;
 
-    const rush = (state.profile.missPush + Math.min(8, Math.floor(state.wave / 2))) * 0.35;
-    const remaining = target.sieging ? 0 : moveZombieTowardSafehouse(target, rush);
+    const rush = (state.profile.missPush + Math.min(8, Math.floor(state.wave / 2))) * 0.35 *
+      (state.openingWave?.rush ?? 1);
+    const remaining = !target.sieging && rush > 0 ? moveZombieTowardSafehouse(target, rush) : Infinity;
     let enteredSiege = false;
     if (remaining <= SAFEHOUSE_HIT_RADIUS) {
       enteredSiege = startZombieSiege(
@@ -3246,11 +3278,11 @@ function submitAnswer() {
 
     if (!enteredSiege) {
       setFeedback(
-        `Missed. Correct form: ${target.challenge.answer}. Zombie rushes forward!`,
+        `Missed. Correct form: ${target.challenge.answer}. ${rush > 0 && !target.sieging ? "Zombie rushes forward!" : "Try again."}`,
         "bad",
       );
     }
-    addFeed("bad", `${formatPrompt(target.challenge)} missed. Zombie closed in fast.`);
+    addFeed("bad", `${formatPrompt(target.challenge)} missed.`);
     if (webgl.fps) elements.answerInput.select();
   }
 
@@ -3337,7 +3369,7 @@ function startGame() {
 
   document.body.classList.add("game-live");
   if (webgl.fps) {
-    webgl.fps.reset();
+    webgl.fps.reset(state.difficulty === "survivor" ? 0.08 : undefined);
     clearCombatTarget();
   }
   setMenuOpen(false);

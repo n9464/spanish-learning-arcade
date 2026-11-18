@@ -54,9 +54,9 @@ class ZombieFirstPerson {
     this.bindControls();
   }
 
-  reset() {
+  reset(yaw = -0.56) {
     this.position.set(-6, 1.68, 8.5);
-    this.yaw = -0.56;
+    this.yaw = yaw;
     this.pitch = -0.04;
     this.walkPhase = 0;
     this.recoil = 0;
