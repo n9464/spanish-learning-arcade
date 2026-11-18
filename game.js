@@ -614,6 +614,7 @@ const webgl = {
   sharedGeometries: new Set(),
   surfaceTextures: new Map(),
   modelTemplate: null,
+  zombieAppearance: null,
   zombieWalkClip: null,
   bunkerRoot: null,
   bunkerAlarm: null,
@@ -2069,15 +2070,14 @@ function createDetailedZombieModel(zombieId) {
   return model;
 }
 
-function cloneZombieModelInstance(zombieId) {
+function cloneZombieModelInstance(zombie) {
   if (webgl.modelTemplate) {
     const THREE = getThree();
     const model = window.SkeletonUtils
       ? window.SkeletonUtils.clone(webgl.modelTemplate)
       : webgl.modelTemplate.clone(true);
     model.rotation.y = Math.PI;
-    const height = randomRange(0.96, 1.10);
-    model.scale.set(height * randomRange(0.91, 1.06), height, height);
+    webgl.zombieAppearance.apply(model, zombie.look, zombie.id);
     model.userData.sharedAsset = true;
     const bone = (name) => model.getObjectByName(name);
     const leftUpperArm = bone("ArmUpper_L");
@@ -2094,21 +2094,12 @@ function cloneZombieModelInstance(zombieId) {
         rightLeg: { hip: rightThigh, knee: bone("Shin_R") },
       };
     }
-    model.traverse((node) => {
-      if (node.isMesh) {
-        node.castShadow = true;
-        node.receiveShadow = true;
-        if (node.isSkinnedMesh) node.frustumCulled = false;
-        const variants = webgl.zombieMaterialVariants.get(node.material);
-        if (variants) node.material = variants[(zombieId - 1) % variants.length];
-      }
-    });
     const mixer = webgl.zombieWalkClip ? new THREE.AnimationMixer(model) : null;
     const walkAction = mixer?.clipAction(webgl.zombieWalkClip).play();
     if (walkAction) walkAction.paused = true;
     return { model, mixer, walkAction };
   }
-  return { model: createDetailedZombieModel(zombieId), mixer: null, walkAction: null };
+  return { model: createDetailedZombieModel(zombie.id), mixer: null, walkAction: null };
 }
 
 function loadRealisticZombieModel() {
@@ -2116,42 +2107,22 @@ function loadRealisticZombieModel() {
   if (!THREE || !window.GLTFLoader) return;
   const loader = new window.GLTFLoader();
   const onModelLoaded = (gltf) => {
-      const template = gltf.scene;
-      webgl.zombieMaterialVariants = new Map();
-      webgl.zombieWalkClip = THREE.AnimationClip.findByName(gltf.animations, "Shamble");
-      template.traverse((node) => {
-        if (node.isMesh) {
-          node.castShadow = true;
-          node.receiveShadow = true;
-          const material = node.material;
-          if (!material || webgl.zombieMaterialVariants.has(material)) return;
-          material.side = THREE.FrontSide;
-          const trims = material.name === "Torn gray work shirt"
-            ? [[1, 1, 1], [0.75, 0.91, 1.02], [1, 0.79, 0.67], [0.8, 0.81, 0.75]]
-            : material.name === "Pallid dead skin"
-              ? [[1, 1, 1], [0.84, 0.87, 0.88], [0.91, 0.79, 0.70], [0.78, 0.82, 0.73]]
-              : null;
-          if (trims) {
-            webgl.zombieMaterialVariants.set(material, trims.map(([r, g, b]) => {
-              const variant = material.clone();
-              variant.color.multiply(new THREE.Color().setRGB(r, g, b));
-              return variant;
-            }));
-          }
-        }
-      });
-      webgl.modelTemplate = template;
+    webgl.zombieAppearance = new ZombieAppearance(THREE, gltf.scene);
+    webgl.zombieWalkClip = THREE.AnimationClip.findByName(gltf.animations, "Shamble");
+    webgl.modelTemplate = gltf.scene;
 
-      for (const [id, visual] of webgl.zombieVisuals) {
-        const replacement = cloneZombieModelInstance(id);
-        visual.root.remove(visual.model);
-        if (!visual.model.userData.sharedAsset) disposeObject3D(visual.model);
-        visual.model = replacement.model;
-        visual.mixer = replacement.mixer;
-        visual.walkAction = replacement.walkAction;
-        visual.root.add(visual.model);
-      }
-    };
+    for (const zombie of state.zombies) {
+      const visual = webgl.zombieVisuals.get(zombie.id);
+      if (!visual) continue;
+      const replacement = cloneZombieModelInstance(zombie);
+      visual.root.remove(visual.model);
+      if (!visual.model.userData.sharedAsset) disposeObject3D(visual.model);
+      visual.model = replacement.model;
+      visual.mixer = replacement.mixer;
+      visual.walkAction = replacement.walkAction;
+      visual.root.add(visual.model);
+    }
+  };
   const onModelError = (error) => console.error("Could not load realistic zombie model; using built-in fallback.", error);
 
   if (window.ZOMBIE_GLB_BASE64) {
@@ -2288,7 +2259,7 @@ function createZombieVisual(zombie) {
     return null;
   }
 
-  const instance = cloneZombieModelInstance(zombie.id);
+  const instance = cloneZombieModelInstance(zombie);
   if (!instance.model) {
     return null;
   }
@@ -3085,6 +3056,7 @@ function spawnZombie() {
   const spawnPoint = spawnOffscreenPosition();
   const zombie = {
     id: state.nextZombieId,
+    look: chooseZombieLook(state.zombies),
     challenge,
     x: spawnPoint.x,
     y: spawnPoint.y,
