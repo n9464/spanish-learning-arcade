@@ -614,6 +614,7 @@ const webgl = {
   sharedGeometries: new Set(),
   surfaceTextures: new Map(),
   modelTemplate: null,
+  zombieWalkClip: null,
   bunkerRoot: null,
   bunkerAlarm: null,
   bunkerHitUntil: 0,
@@ -2070,11 +2071,13 @@ function createDetailedZombieModel(zombieId) {
 
 function cloneZombieModelInstance(zombieId) {
   if (webgl.modelTemplate) {
+    const THREE = getThree();
     const model = window.SkeletonUtils
       ? window.SkeletonUtils.clone(webgl.modelTemplate)
       : webgl.modelTemplate.clone(true);
     model.rotation.y = Math.PI;
-    model.scale.setScalar(randomRange(0.96, 1.04));
+    const height = randomRange(0.96, 1.10);
+    model.scale.set(height * randomRange(0.91, 1.06), height, height);
     model.userData.sharedAsset = true;
     const bone = (name) => model.getObjectByName(name);
     const leftUpperArm = bone("ArmUpper_L");
@@ -2095,11 +2098,17 @@ function cloneZombieModelInstance(zombieId) {
       if (node.isMesh) {
         node.castShadow = true;
         node.receiveShadow = true;
+        if (node.isSkinnedMesh) node.frustumCulled = false;
+        const variants = webgl.zombieMaterialVariants.get(node.material);
+        if (variants) node.material = variants[(zombieId - 1) % variants.length];
       }
     });
-    return { model, mixer: null, isFallback: false };
+    const mixer = webgl.zombieWalkClip ? new THREE.AnimationMixer(model) : null;
+    const walkAction = mixer?.clipAction(webgl.zombieWalkClip).play();
+    if (walkAction) walkAction.paused = true;
+    return { model, mixer, walkAction };
   }
-  return { model: createDetailedZombieModel(zombieId), mixer: null, isFallback: false };
+  return { model: createDetailedZombieModel(zombieId), mixer: null, walkAction: null };
 }
 
 function loadRealisticZombieModel() {
@@ -2108,21 +2117,39 @@ function loadRealisticZombieModel() {
   const loader = new window.GLTFLoader();
   const onModelLoaded = (gltf) => {
       const template = gltf.scene;
+      webgl.zombieMaterialVariants = new Map();
+      webgl.zombieWalkClip = THREE.AnimationClip.findByName(gltf.animations, "Shamble");
       template.traverse((node) => {
         if (node.isMesh) {
           node.castShadow = true;
           node.receiveShadow = true;
-          if (node.material) node.material.side = THREE.FrontSide;
+          const material = node.material;
+          if (!material || webgl.zombieMaterialVariants.has(material)) return;
+          material.side = THREE.FrontSide;
+          const trims = material.name === "Torn gray work shirt"
+            ? [[1, 1, 1], [0.75, 0.91, 1.02], [1, 0.79, 0.67], [0.8, 0.81, 0.75]]
+            : material.name === "Pallid dead skin"
+              ? [[1, 1, 1], [0.84, 0.87, 0.88], [0.91, 0.79, 0.70], [0.78, 0.82, 0.73]]
+              : null;
+          if (trims) {
+            webgl.zombieMaterialVariants.set(material, trims.map(([r, g, b]) => {
+              const variant = material.clone();
+              variant.color.multiply(new THREE.Color().setRGB(r, g, b));
+              return variant;
+            }));
+          }
         }
       });
       webgl.modelTemplate = template;
 
       for (const [id, visual] of webgl.zombieVisuals) {
-        const replacement = cloneZombieModelInstance(id).model;
+        const replacement = cloneZombieModelInstance(id);
         visual.root.remove(visual.model);
         if (!visual.model.userData.sharedAsset) disposeObject3D(visual.model);
-        visual.model = replacement;
-        visual.root.add(replacement);
+        visual.model = replacement.model;
+        visual.mixer = replacement.mixer;
+        visual.walkAction = replacement.walkAction;
+        visual.root.add(visual.model);
       }
     };
   const onModelError = (error) => console.error("Could not load realistic zombie model; using built-in fallback.", error);
@@ -2225,11 +2252,9 @@ function removeZombieVisualById(id) {
     return;
   }
 
-  if (visual.currentAction) {
-    visual.currentAction.stop();
-  }
   if (visual.mixer) {
     visual.mixer.stopAllAction();
+    visual.mixer.uncacheRoot(visual.model);
   }
   if (visual.root && visual.root.parent) {
     visual.root.parent.remove(visual.root);
@@ -2298,9 +2323,9 @@ function createZombieVisual(zombie) {
     model: instance.model,
     shadow,
     mixer: instance.mixer,
-    actions: Object.create(null),
-    currentAction: null,
-    currentActionKey: "",
+    walkAction: instance.walkAction,
+    stridePhase: Math.random(),
+    gaitWeight: 0,
     deathStartedAt: 0,
     hasPosition: true,
     bobSeed: Math.random() * Math.PI * 2,
@@ -2341,29 +2366,41 @@ function lerpAngle(from, to, amount) {
   return from + delta * clamp(amount, 0, 1);
 }
 
-function updateProceduralZombiePose(visual, zombie, nowMs) {
+function updateProceduralZombiePose(visual, zombie, nowMs, travel, deltaSec) {
   const rig = visual.model && visual.model.userData.rig;
   if (!rig) {
     return;
   }
 
-  const phase = nowMs * 0.00215 + visual.bobSeed;
-  const gait = zombie.sieging ? 0 : Math.sin(phase);
-  const breathing = Math.sin(phase * 0.53 + 1.1);
+  // The Blender clip moves the planted foot back 0.95 m per full stride cycle.
+  const strideLength = 0.95 * visual.model.scale.y;
+  const walking = zombie.sieging ? 0 : clamp(travel / (deltaSec * 0.72), 0, 1);
+  visual.gaitWeight += (walking - visual.gaitWeight) * (1 - Math.exp(-deltaSec * 12));
+  if (!zombie.sieging) visual.stridePhase = (visual.stridePhase + travel / strideLength) % 1;
+  if (visual.walkAction) {
+    visual.walkAction.time = visual.stridePhase * webgl.zombieWalkClip.duration;
+    visual.walkAction.setEffectiveWeight(visual.gaitWeight);
+    visual.mixer.update(0);
+  }
+  const phase = visual.stridePhase * Math.PI * 2;
+  const gait = Math.sin(phase) * visual.gaitWeight;
+  const breathing = Math.sin(nowMs * 0.0013 + visual.bobSeed);
   const siegeSway = zombie.sieging ? Math.sin(nowMs * 0.0028 + visual.bobSeed) : 0;
   const smashRemaining = zombie.sieging ? (zombie.smashAnimUntil || 0) - Date.now() : 0;
   const impact = smashRemaining > 0 ? Math.sin(Math.PI * clamp(smashRemaining / SAFEHOUSE_SMASH_ANIM_MS, 0, 1)) : 0;
 
-  poseZombieJoint(rig.torso, 0.055 + breathing * 0.018 + impact * 0.11, Math.sin(phase * 0.38) * 0.025, Math.sin(phase * 0.52) * 0.025);
-  poseZombieJoint(rig.head, -0.06 + Math.sin(phase * 0.6) * 0.045 - impact * 0.08, Math.sin(phase * 0.31) * 0.08);
-  poseZombieJoint(rig.leftArm.shoulder, gait * 0.16 - siegeSway * 0.1 - impact * 0.46, 0, 0.06);
-  poseZombieJoint(rig.rightArm.shoulder, -gait * 0.16 + siegeSway * 0.1 + impact * 0.38, 0, -0.06);
-  poseZombieJoint(rig.leftArm.forearm, -0.06 - impact * 0.2);
-  poseZombieJoint(rig.rightArm.forearm, -0.06 + impact * 0.16);
-  poseZombieJoint(rig.leftLeg.hip, gait * 0.23);
-  poseZombieJoint(rig.rightLeg.hip, -gait * 0.23);
-  poseZombieJoint(rig.leftLeg.knee, Math.max(0, -gait) * 0.3);
-  poseZombieJoint(rig.rightLeg.knee, Math.max(0, gait) * 0.3);
+  poseZombieJoint(rig.torso, 0.09 + breathing * 0.016 + impact * 0.16, gait * 0.07, gait * 0.034);
+  poseZombieJoint(rig.head, -0.07 + breathing * 0.037 - impact * 0.09, -gait * 0.042);
+  poseZombieJoint(rig.leftArm.shoulder, -0.13 - gait * 0.15 + siegeSway * 0.05 + impact * 1.05, 0, 0.025);
+  poseZombieJoint(rig.rightArm.shoulder, gait * 0.18 - siegeSway * 0.05 + impact * 0.85, 0, -0.036);
+  poseZombieJoint(rig.leftArm.forearm, 0.11 + impact * 0.22);
+  poseZombieJoint(rig.rightArm.forearm, 0.06 + impact * 0.28);
+  if (!visual.walkAction) {
+    poseZombieJoint(rig.leftLeg.hip, gait * 0.29);
+    poseZombieJoint(rig.rightLeg.hip, -gait * 0.29);
+    poseZombieJoint(rig.leftLeg.knee, Math.max(0, -gait) * 0.36);
+    poseZombieJoint(rig.rightLeg.knee, Math.max(0, gait) * 0.36);
+  }
 }
 
 const zombieJointRest = new WeakMap();
@@ -2390,6 +2427,8 @@ function updateZombieVisual(zombie, deltaSec, nowMs) {
   const worldX = ((zombie.x - 50) / 50) * webgl.worldHalfX;
   const worldZ = ((zombie.y - 50) / 50) * webgl.worldHalfZ;
   const followAmount = 1 - Math.exp(-deltaSec * (zombie.exploding ? 16 : 9));
+  const previousX = visual.root.position.x;
+  const previousZ = visual.root.position.z;
 
   if (!visual.hasPosition) {
     visual.root.position.set(worldX, 0, worldZ);
@@ -2424,9 +2463,7 @@ function updateZombieVisual(zombie, deltaSec, nowMs) {
   visual.root.scale.x += (1 - visual.root.scale.x) * settle;
   visual.root.scale.y += (1 - visual.root.scale.y) * settle;
   visual.root.scale.z += (1 - visual.root.scale.z) * settle;
-  visual.root.position.y = zombie.sieging
-    ? Math.sin(nowMs * 0.003 + visual.bobSeed) * 0.022
-    : Math.abs(Math.sin(nowMs * 0.00215 + visual.bobSeed)) * 0.035;
+  visual.root.position.y = 0;
 
   let dirX = 0;
   let dirZ = 0;
@@ -2451,7 +2488,8 @@ function updateZombieVisual(zombie, deltaSec, nowMs) {
     visual.shadow.material.opacity = zombie.sieging ? 0.52 : 0.42;
     visual.shadow.scale.set(0.52, 0.83, 1);
   }
-  updateProceduralZombiePose(visual, zombie, nowMs);
+  const travel = Math.hypot(visual.root.position.x - previousX, visual.root.position.z - previousZ);
+  updateProceduralZombiePose(visual, zombie, nowMs, travel, deltaSec);
 }
 
 function tickWebglFrame(nowMs) {

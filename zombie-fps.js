@@ -17,6 +17,8 @@ class ZombieFirstPerson {
     this.flashUntil = 0;
     this.tracerUntil = 0;
     this.walkPhase = 0;
+    this.mouseSway = new THREE.Vector2();
+    this.unlockedPointer = null;
     this.fpsCapture = document.getElementById("fpsCapture");
     this.reticle = document.getElementById("fpsReticle");
     this.heading = document.getElementById("fpsHeading");
@@ -61,6 +63,8 @@ class ZombieFirstPerson {
     this.flashUntil = 0;
     this.tracerUntil = 0;
     this.keys.clear();
+    this.mouseSway.set(0, 0);
+    this.unlockedPointer = null;
     this.updateCamera(0);
   }
 
@@ -74,12 +78,13 @@ class ZombieFirstPerson {
       const request = this.canvas.requestPointerLock();
       request?.catch(() => {});
     } catch (_error) {
-      // Drag and arrow look remain available if the browser denies capture.
+      // Hover and arrow look remain available if the browser denies capture.
     }
   }
 
   release() {
     this.keys.clear();
+    this.unlockedPointer = null;
     if (this.locked) document.exitPointerLock();
   }
 
@@ -98,20 +103,34 @@ class ZombieFirstPerson {
       }
     });
     document.addEventListener("keyup", (event) => this.keys.delete(event.code));
-    window.addEventListener("blur", () => this.keys.clear());
+    window.addEventListener("blur", () => {
+      this.keys.clear();
+      this.unlockedPointer = null;
+    });
     let wasLocked = false;
     document.addEventListener("pointerlockchange", () => {
       this.keys.clear();
+      this.unlockedPointer = null;
       if (wasLocked && !this.locked) this.controls.lostMouse();
       wasLocked = this.locked;
     });
     document.addEventListener("mousemove", (event) => {
       if (this.locked && this.controls.canMove()) this.look(event.movementX, event.movementY);
     });
+    this.canvas.addEventListener("pointermove", (event) => {
+      if (event.pointerType !== "mouse" || this.locked) return;
+      const previous = this.unlockedPointer;
+      this.unlockedPointer = { x: event.clientX, y: event.clientY };
+      if (previous && this.controls.canMove()) {
+        this.look(event.clientX - previous.x, event.clientY - previous.y);
+      }
+    });
+    this.canvas.addEventListener("pointerleave", () => { this.unlockedPointer = null; });
     let drag = null;
     this.canvas.addEventListener("pointerdown", (event) => {
       if (!this.controls.canMove() || event.button !== 0) return;
-      if (this.locked) {
+      if (event.pointerType === "mouse") {
+        this.updateCamera(0);
         this.controls.target();
         return;
       }
@@ -152,6 +171,8 @@ class ZombieFirstPerson {
   look(dx, dy) {
     this.yaw -= dx * 0.0027;
     this.pitch = this.THREE.MathUtils.clamp(this.pitch - dy * 0.0027, -1.34, 1.34);
+    this.mouseSway.x = this.THREE.MathUtils.clamp(this.mouseSway.x + dx * 0.0013, -0.12, 0.12);
+    this.mouseSway.y = this.THREE.MathUtils.clamp(this.mouseSway.y + dy * 0.0013, -0.09, 0.09);
   }
 
   canStand(x, z) {
@@ -167,6 +188,18 @@ class ZombieFirstPerson {
       const pressed = (code) => Number(this.keys.has(code));
       this.look((pressed("ArrowRight") - pressed("ArrowLeft")) * delta * 740,
         (pressed("ArrowDown") - pressed("ArrowUp")) * delta * 580);
+      // The viewport edge lets mouse-look keep turning even in an embedded browser.
+      if (!this.locked && this.unlockedPointer && delta > 0) {
+        const { x, y } = this.unlockedPointer;
+        const rect = this.canvas.getBoundingClientRect();
+        const edge = 28;
+        const edgeTurn = (value, start, end) => {
+          if (value < start + edge) return (value - start - edge) / edge;
+          if (value > end - edge) return (value - end + edge) / edge;
+          return 0;
+        };
+        this.look(edgeTurn(x, rect.left, rect.right) * delta * 680, edgeTurn(y, rect.top, rect.bottom) * delta * 440);
+      }
       const forward = pressed("KeyW") - pressed("KeyS");
       const strafe = pressed("KeyD") - pressed("KeyA");
       if (forward || strafe) {
@@ -182,6 +215,7 @@ class ZombieFirstPerson {
     }
     if (walking) this.walkPhase += delta * 10.5;
     this.recoil *= Math.exp(-delta * 15);
+    this.mouseSway.multiplyScalar(Math.exp(-delta * 11));
     const bob = walking ? Math.sin(this.walkPhase) * 0.024 : 0;
     this.camera.position.copy(this.position);
     this.camera.position.y += bob;
@@ -191,7 +225,11 @@ class ZombieFirstPerson {
     this.flashlight.position.copy(this.camera.position);
     this.flashlight.target.position.copy(this.camera.position).addScaledVector(this.direction, 10);
     this.weapon.position.set(0.27 + bob * 0.48, -0.29 + bob * 0.62, -0.69 + this.recoil * 0.1);
-    this.weapon.rotation.set(-0.035 + this.recoil * 0.15, 0.23, -0.04);
+    this.weapon.rotation.set(
+      -0.035 + this.recoil * 0.15 - this.mouseSway.y,
+      0.23 - this.mouseSway.x,
+      -0.04 - this.mouseSway.x * 0.27,
+    );
   }
 
   obstructionDistance() {
