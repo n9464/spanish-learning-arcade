@@ -628,6 +628,9 @@ const webgl = {
   safehouseRingMaterial: null,
   moonLight: null,
   warmLight: null,
+  fps: null,
+  aimedZombie: null,
+  lockedZombie: null,
 };
 
 const REGULAR_BANK = REGULAR_VERBS.map((verb) => ({
@@ -1134,7 +1137,7 @@ function updateLearningUi() {
 
   elements.revealBtn.hidden = !state.learningMode;
 
-  const target = getNearestZombie();
+  const target = getCombatTarget();
   const canReveal =
     state.learningMode &&
     state.active &&
@@ -1362,16 +1365,102 @@ function createGroundDebris(THREE) {
   webgl.scene.add(scraps);
 }
 
-function createForestBackdrop(THREE) {
-  const image = new Image();
-  image.onload = () => {
-    const texture = new THREE.Texture(image);
-    texture.colorSpace = THREE.SRGBColorSpace;
-    texture.needsUpdate = true;
-    webgl.scene.background = texture;
-    webgl.forestBackdropTexture = texture;
-  };
-  image.src = window.FOREST_BACKDROP_DATA || "assets/images/forest-backdrop.png";
+function createNightSky(THREE) {
+  const sky = new THREE.Mesh(new THREE.SphereGeometry(108, 32, 16), new THREE.ShaderMaterial({
+    side: THREE.BackSide,
+    depthWrite: false,
+    uniforms: {
+      moon: { value: new THREE.Vector3(-0.48, 0.28, -0.85).normalize() },
+      low: { value: new THREE.Color().setRGB(0.010, 0.020, 0.030) },
+      high: { value: new THREE.Color().setRGB(0.002, 0.004, 0.011) },
+    },
+    vertexShader: `
+      varying vec3 ray;
+      void main() {
+        ray = position;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      varying vec3 ray;
+      uniform vec3 moon;
+      uniform vec3 low;
+      uniform vec3 high;
+      void main() {
+        vec3 dir = normalize(ray);
+        float height = clamp(dir.y, 0.0, 1.0);
+        float moonAngle = length(dir - moon);
+        float halo = exp(-moonAngle * 12.0);
+        float disc = 1.0 - smoothstep(0.019, 0.022, moonAngle);
+        float cloud = sin(dir.x * 15.0 + dir.z * 10.0 + sin(dir.y * 12.0)) *
+                      sin(dir.y * 38.0 + dir.z * 7.0) * 0.5 + 0.5;
+        vec3 color = mix(low, high, smoothstep(0.01, 0.7, height));
+        color += vec3(0.044, 0.060, 0.095) * halo * (0.4 + cloud * 0.6);
+        color += vec3(0.003, 0.005, 0.008) * cloud * smoothstep(0.0, 0.4, height);
+        color = mix(color, vec3(0.73, 0.82, 0.85), disc * (0.77 + cloud * 0.23));
+        gl_FragColor = vec4(color, 1.0);
+        #include <tonemapping_fragment>
+        #include <encodings_fragment>
+      }
+    `,
+  }));
+  sky.renderOrder = -1;
+  webgl.scene.add(sky);
+}
+
+function createForestGroundCover(THREE) {
+  const blades = new THREE.BufferGeometry();
+  blades.setAttribute("position", new THREE.Float32BufferAttribute([
+    -0.04, 0, 0, 0.02, 0, 0.02, -0.15, 0.27, 0.08,
+    -0.01, 0, -0.04, 0.03, 0, -0.02, 0.14, 0.31, -0.11,
+    0, 0, -0.03, 0.04, 0, 0.03, 0.01, 0.38, 0.14,
+  ], 3));
+  blades.computeVertexNormals();
+  const tufts = new THREE.InstancedMesh(blades, new THREE.MeshStandardMaterial({
+    side: THREE.DoubleSide,
+    roughness: 1,
+  }), 1400);
+  const dummy = new THREE.Object3D();
+  const tint = new THREE.Color();
+  tufts.frustumCulled = false;
+  for (let index = 0; index < tufts.count; index += 1) {
+    const angle = randomRange(0, Math.PI * 2);
+    const radius = randomRange(5, 46);
+    const height = randomRange(0.3, 1.15);
+    dummy.position.set(Math.cos(angle) * radius, -0.075, Math.sin(angle) * radius);
+    dummy.rotation.y = randomRange(0, Math.PI * 2);
+    dummy.scale.set(randomRange(0.5, 1.3), height, randomRange(0.6, 1.2));
+    dummy.updateMatrix();
+    tufts.setMatrixAt(index, dummy.matrix);
+    tufts.setColorAt(index, tint.setHSL(randomRange(0.15, 0.26), 0.18, randomRange(0.045, 0.105)));
+  }
+  tufts.receiveShadow = true;
+  webgl.scene.add(tufts);
+
+  for (const [radius, height, color] of [[51, 4.5, 0x131e23], [66, 7, 0x1a2731]]) {
+    const vertices = [];
+    const stepCount = 240;
+    const ridgeline = Array.from({ length: stepCount }, (_, index) => {
+      const angle = index / stepCount * Math.PI * 2;
+      const y = height + Math.sin(angle * 4 + radius) * 1.4 + Math.sin(angle * 7) * 0.85 + randomRange(-1.1, 1.1);
+      return [Math.cos(angle) * radius, y, Math.sin(angle) * radius];
+    });
+    for (let index = 0; index < stepCount; index += 1) {
+      const top = ridgeline[index];
+      const next = ridgeline[(index + 1) % stepCount];
+      const bottom = [top[0], -1, top[2]];
+      const nextBottom = [next[0], -1, next[2]];
+      vertices.push(...bottom, ...top, ...next, ...bottom, ...next, ...nextBottom);
+    }
+    const mesh = new THREE.BufferGeometry();
+    mesh.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+    webgl.scene.add(new THREE.Mesh(mesh, new THREE.MeshBasicMaterial({
+      color: new THREE.Color(color).convertSRGBToLinear(),
+      side: THREE.DoubleSide,
+      fog: false,
+      toneMapped: false,
+    })));
+  }
 }
 
 function loadForestEnvironment(THREE) {
@@ -1383,74 +1472,62 @@ function loadForestEnvironment(THREE) {
 
   const loader = new window.GLTFLoader();
   loader.parse(buffer, "", (gltf) => {
-    const models = new Map();
     gltf.scene.updateMatrixWorld(true);
-    gltf.scene.traverse((node) => {
-      if (node.isMesh && node.name) {
-        node.geometry.computeBoundingBox();
-        models.set(node.name, node);
-      }
-    });
 
     const forest = new THREE.Group();
     forest.name = "Photogrammetry forest props";
+    const scatter = (name, count, place, shadows) => {
+      const source = gltf.scene.getObjectByName(name);
+      if (!source) return;
+      const bounds = new THREE.Box3().setFromObject(source);
+      const dummy = new THREE.Object3D();
+      const transforms = [];
+      const tints = [];
+      for (let index = 0; index < count; index += 1) {
+        place(dummy, bounds, index);
+        dummy.updateMatrix();
+        transforms.push(dummy.matrix.clone());
+        const tint = randomRange(0.72, 1.06);
+        tints.push(new THREE.Color(tint, tint * 0.98, tint * 0.93));
+      }
+      const matrix = new THREE.Matrix4();
+      source.traverse((part) => {
+        if (!part.isMesh) return;
+        const instances = new THREE.InstancedMesh(part.geometry, part.material, count);
+        instances.name = name + " scatter";
+        instances.castShadow = shadows;
+        instances.receiveShadow = shadows;
+        // Three r150 culls instanced geometry from the base mesh bounds.
+        instances.frustumCulled = false;
+        transforms.forEach((transform, index) => {
+          instances.setMatrixAt(index, matrix.multiplyMatrices(transform, part.matrixWorld));
+          instances.setColorAt(index, tints[index]);
+        });
+        forest.add(instances);
+      });
+    };
+
     const treeNames = ["Pine_A", "Pine_B", "Pine_C"];
     treeNames.forEach((name, variant) => {
-      const source = models.get(name);
-      if (!source) return;
-      const count = [30, 28, 30][variant];
-      const instances = new THREE.InstancedMesh(source.geometry, source.material, count);
-      instances.name = `${name} forest instances`;
-      instances.castShadow = false;
-      instances.receiveShadow = false;
-      const bounds = source.geometry.boundingBox;
-      const sourceMatrix = source.matrixWorld.clone();
-      const dummy = new THREE.Object3D();
-
-      for (let index = 0; index < count; index += 1) {
-        const x = randomRange(-53, 53);
-        const z = randomRange(-48, -25);
-        const scale = randomRange(0.72, 1.42);
-        dummy.position.set(x, -bounds.min.y * scale, z);
-        dummy.rotation.set(0, randomRange(0, Math.PI * 2), randomRange(-0.035, 0.035));
+      const count = 32;
+      scatter(name, count, (dummy, bounds, index) => {
+        const angle = (index / count) * Math.PI * 2 + variant * 0.08 + randomRange(-0.08, 0.08);
+        const radius = randomRange(33, 46);
+        const scale = randomRange(0.85, 1.52);
+        dummy.position.set(Math.cos(angle) * radius, -bounds.min.y * scale - 0.08, Math.sin(angle) * radius);
+        dummy.rotation.set(0, randomRange(0, Math.PI * 2), 0);
         dummy.scale.setScalar(scale);
-        dummy.updateMatrix();
-        instances.setMatrixAt(index, dummy.matrix.multiply(sourceMatrix));
-        const tint = randomRange(0.72, 1.04);
-        instances.setColorAt(index, new THREE.Color(tint, tint * randomRange(0.96, 1), tint * randomRange(0.9, 1)));
-      }
-      instances.instanceMatrix.needsUpdate = true;
-      if (instances.instanceColor) instances.instanceColor.needsUpdate = true;
-      forest.add(instances);
+      }, false);
     });
 
-    const rock = models.get("Weathered_Rock");
-    if (rock) {
-      const count = 42;
-      const instances = new THREE.InstancedMesh(rock.geometry, rock.material, count);
-      instances.name = "Weathered rock scatter";
-      instances.castShadow = true;
-      instances.receiveShadow = true;
-      const bounds = rock.geometry.boundingBox;
-      const sourceMatrix = rock.matrixWorld.clone();
-      const dummy = new THREE.Object3D();
-      for (let index = 0; index < count; index += 1) {
-        const angle = randomRange(0, Math.PI * 2);
-        const radiusX = randomRange(22, 51);
-        const radiusZ = randomRange(16, 43);
-        const scale = randomRange(0.8, 1.65);
-        dummy.position.set(Math.cos(angle) * radiusX, -bounds.min.y * scale, Math.sin(angle) * radiusZ);
-        dummy.rotation.set(randomRange(-0.14, 0.14), randomRange(0, Math.PI * 2), randomRange(-0.14, 0.14));
-        dummy.scale.setScalar(scale);
-        dummy.updateMatrix();
-        instances.setMatrixAt(index, dummy.matrix.multiply(sourceMatrix));
-        const tint = randomRange(0.76, 1.12);
-        instances.setColorAt(index, new THREE.Color(tint, tint * 0.98, tint * 0.92));
-      }
-      instances.instanceMatrix.needsUpdate = true;
-      if (instances.instanceColor) instances.instanceColor.needsUpdate = true;
-      forest.add(instances);
-    }
+    scatter("Weathered_Rock", 28, (dummy, bounds) => {
+      const angle = randomRange(0, Math.PI * 2);
+      const radius = randomRange(12, 43);
+      const scale = randomRange(0.65, 1.4);
+      dummy.position.set(Math.cos(angle) * radius, -bounds.min.y * scale - 0.08, Math.sin(angle) * radius);
+      dummy.rotation.set(0, randomRange(0, Math.PI * 2), 0);
+      dummy.scale.setScalar(scale);
+    }, true);
 
     webgl.scene.add(forest);
     webgl.forest = forest;
@@ -1673,11 +1750,10 @@ function initWebglIfPossible() {
   webgl.renderer.setClearColor(0x000000, 0);
   webgl.renderer.toneMapping = THREE.ACESFilmicToneMapping;
   webgl.renderer.toneMappingExposure = 1.08;
+  webgl.renderer.useLegacyLights = false;
+  webgl.renderer.outputEncoding = THREE.sRGBEncoding;
   webgl.renderer.shadowMap.enabled = true;
   webgl.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  if ("outputColorSpace" in webgl.renderer && THREE.SRGBColorSpace) {
-    webgl.renderer.outputColorSpace = THREE.SRGBColorSpace;
-  }
   webgl.renderer.domElement.className = "zombie-webgl-canvas";
 
   elements.zombieLane.innerHTML = "";
@@ -1688,16 +1764,17 @@ function initWebglIfPossible() {
   elements.zombieLane.appendChild(webgl.promptLayer);
 
   webgl.scene = new THREE.Scene();
-  webgl.scene.fog = new THREE.FogExp2(0x111719, 0.018);
+  webgl.scene.fog = new THREE.FogExp2(0x111b23, 0.028);
+  webgl.scene.fog.color.convertSRGBToLinear();
 
-  webgl.camera = new THREE.PerspectiveCamera(44, 1, 0.1, 150);
-  webgl.camera.position.set(0, 19, 30);
-  webgl.camera.lookAt(0, 0, 0);
+  webgl.camera = new THREE.PerspectiveCamera(63, 1, 0.045, 150);
+  webgl.worldHalfX = 24;
+  webgl.worldHalfZ = 24;
 
-  const hemi = new THREE.HemisphereLight(0xaabfd0, 0x20231f, 1.05);
+  const hemi = new THREE.HemisphereLight(0xaabfd0, 0x20231f, 0.75);
   webgl.scene.add(hemi);
 
-  const key = new THREE.DirectionalLight(0xc7d9e3, 2.15);
+  const key = new THREE.DirectionalLight(0xc7d9e3, 1.28);
   key.position.set(-13, 22, 8);
   key.castShadow = true;
   key.shadow.mapSize.set(1536, 1536);
@@ -1734,12 +1811,24 @@ function initWebglIfPossible() {
   webgl.scene.add(ground);
 
   createGroundDebris(THREE);
-  createForestBackdrop(THREE);
+  createNightSky(THREE);
+  createForestGroundCover(THREE);
   loadForestEnvironment(THREE);
 
   webgl.bunkerRoot = createSafehouseModel(THREE);
   webgl.scene.add(webgl.bunkerRoot);
   elements.safehouse.classList.add("has-3d-model");
+  webgl.fps = new ZombieFirstPerson(THREE, webgl.scene, webgl.camera, webgl.renderer.domElement, {
+    canMove: () => state.active && !state.menuOpen && !webgl.lockedZombie,
+    target: lockAimedZombie,
+    pause: () => setMenuOpen(true),
+    lostMouse: () => {
+      if (!state.active || state.menuOpen) return;
+      if (webgl.lockedZombie) clearCombatTarget();
+      else setMenuOpen(true);
+    },
+  });
+  document.body.classList.add("fps-enabled");
 
   const safehouseRingMaterial = new THREE.MeshBasicMaterial({
     color: 0x65a8d4,
@@ -1784,8 +1873,10 @@ function handleWebglResize() {
   webgl.camera.aspect = aspect;
   webgl.camera.updateProjectionMatrix();
 
-  webgl.worldHalfX = 10.5 + aspect * 10.4;
-  webgl.worldHalfZ = 12;
+  if (webgl.fps) {
+    webgl.fps.weaponCamera.aspect = Math.max(0.9, aspect);
+    webgl.fps.weaponCamera.updateProjectionMatrix();
+  }
 }
 
 function makeZombiePart(THREE, parent, geometry, material, position, scale, rotation = [0, 0, 0]) {
@@ -2051,11 +2142,12 @@ function loadRealisticZombieModel() {
 function updateZombiePromptOverlays() {
   if (!webgl.promptLayer || !webgl.camera) return;
   const liveIds = new Set();
-  const nearest = getNearestZombie();
+  const nearest = getCombatTarget();
   const bounds = elements.zombieLane.getBoundingClientRect();
   const THREE = getThree();
 
   for (const zombie of state.zombies) {
+    if (webgl.fps && zombie !== nearest) continue;
     liveIds.add(zombie.id);
     let prompt = webgl.promptElements.get(zombie.id);
     if (!prompt) {
@@ -2075,16 +2167,19 @@ function updateZombiePromptOverlays() {
     prompt.querySelector(".webgl-prompt-meta").textContent = zombie.sieging ? "Breaking safehouse" : `${meters}m to safehouse`;
 
     const visual = webgl.zombieVisuals.get(zombie.id);
-    if (!visual || zombie.exploding) continue;
+    if (!visual || zombie.exploding) {
+      prompt.style.display = "none";
+      continue;
+    }
     const headPoint = new THREE.Vector3(0, 2.18, 0);
     visual.root.localToWorld(headPoint);
     headPoint.project(webgl.camera);
     const x = (headPoint.x * 0.5 + 0.5) * bounds.width;
     const y = (-headPoint.y * 0.5 + 0.5) * bounds.height;
-    const onScreen = headPoint.z < 1 && Math.abs(headPoint.x) < 1.12 && Math.abs(headPoint.y) < 1.12;
+    const onScreen = Math.abs(headPoint.z) < 1 && Math.abs(headPoint.x) < 1 && Math.abs(headPoint.y) < 1;
     prompt.style.display = onScreen ? "grid" : "none";
-    prompt.style.left = `${x}px`;
-    prompt.style.top = `${y}px`;
+    prompt.style.left = `${clamp(x, 68, bounds.width - 68)}px`;
+    prompt.style.top = `${clamp(y, 112, bounds.height - 56)}px`;
   }
 
   for (const [id, prompt] of webgl.promptElements) {
@@ -2256,27 +2351,30 @@ function updateProceduralZombiePose(visual, zombie, nowMs) {
   const gait = zombie.sieging ? 0 : Math.sin(phase);
   const breathing = Math.sin(phase * 0.53 + 1.1);
   const siegeSway = zombie.sieging ? Math.sin(nowMs * 0.0028 + visual.bobSeed) : 0;
-  const smashing = zombie.sieging && nowMs < (zombie.smashAnimUntil || 0);
-  const impact = smashing ? Math.max(0, Math.sin(nowMs * 0.012)) : 0;
+  const smashRemaining = zombie.sieging ? (zombie.smashAnimUntil || 0) - Date.now() : 0;
+  const impact = smashRemaining > 0 ? Math.sin(Math.PI * clamp(smashRemaining / SAFEHOUSE_SMASH_ANIM_MS, 0, 1)) : 0;
 
-  rig.torso.rotation.x = 0.12 + breathing * 0.018 + impact * 0.11;
-  rig.torso.rotation.y = Math.sin(phase * 0.38) * 0.025;
-  rig.torso.rotation.z = Math.sin(phase * 0.52) * 0.025;
-  rig.head.rotation.x = -0.13 + Math.sin(phase * 0.6) * 0.045 - impact * 0.08;
-  rig.head.rotation.y = Math.sin(phase * 0.31) * 0.08;
-  rig.head.rotation.z = Math.sin(phase * 0.43) * 0.035;
+  poseZombieJoint(rig.torso, 0.055 + breathing * 0.018 + impact * 0.11, Math.sin(phase * 0.38) * 0.025, Math.sin(phase * 0.52) * 0.025);
+  poseZombieJoint(rig.head, -0.06 + Math.sin(phase * 0.6) * 0.045 - impact * 0.08, Math.sin(phase * 0.31) * 0.08);
+  poseZombieJoint(rig.leftArm.shoulder, gait * 0.16 - siegeSway * 0.1 - impact * 0.46, 0, 0.06);
+  poseZombieJoint(rig.rightArm.shoulder, -gait * 0.16 + siegeSway * 0.1 + impact * 0.38, 0, -0.06);
+  poseZombieJoint(rig.leftArm.forearm, -0.06 - impact * 0.2);
+  poseZombieJoint(rig.rightArm.forearm, -0.06 + impact * 0.16);
+  poseZombieJoint(rig.leftLeg.hip, gait * 0.23);
+  poseZombieJoint(rig.rightLeg.hip, -gait * 0.23);
+  poseZombieJoint(rig.leftLeg.knee, Math.max(0, -gait) * 0.3);
+  poseZombieJoint(rig.rightLeg.knee, Math.max(0, gait) * 0.3);
+}
 
-  rig.leftArm.shoulder.rotation.x = -0.48 + gait * 0.24 - siegeSway * 0.1 - impact * 0.55;
-  rig.rightArm.shoulder.rotation.x = -0.63 - gait * 0.24 + siegeSway * 0.1 + impact * 0.48;
-  rig.leftArm.shoulder.rotation.z = 0.09 + Math.sin(phase * 0.5) * 0.025;
-  rig.rightArm.shoulder.rotation.z = -0.1 + Math.sin(phase * 0.5 + 0.5) * 0.025;
-  rig.leftArm.forearm.rotation.x = -0.12 - impact * 0.2;
-  rig.rightArm.forearm.rotation.x = -0.18 + impact * 0.16;
+const zombieJointRest = new WeakMap();
 
-  rig.leftLeg.hip.rotation.x = gait * 0.31;
-  rig.rightLeg.hip.rotation.x = -gait * 0.31;
-  rig.leftLeg.knee.rotation.x = Math.max(0, -gait) * 0.42;
-  rig.rightLeg.knee.rotation.x = Math.max(0, gait) * 0.42;
+function poseZombieJoint(joint, x, y = 0, z = 0) {
+  if (!joint) return;
+  if (!zombieJointRest.has(joint)) zombieJointRest.set(joint, joint.quaternion.clone());
+  joint.quaternion.copy(zombieJointRest.get(joint));
+  joint.rotateX(x);
+  if (y) joint.rotateY(y);
+  if (z) joint.rotateZ(z);
 }
 
 function updateZombieVisual(zombie, deltaSec, nowMs) {
@@ -2369,6 +2467,18 @@ function tickWebglFrame(nowMs) {
   for (const zombie of state.zombies) {
     updateZombieVisual(zombie, deltaSec, nowMs);
   }
+  const fps = webgl.fps;
+  fps.updateCamera(deltaSec);
+  if (state.active && !state.menuOpen && !state.intermission && !webgl.lockedZombie) {
+    const aimed = fps.aim(state.zombies, webgl.zombieVisuals);
+    if (aimed !== webgl.aimedZombie) {
+      webgl.aimedZombie = aimed;
+      renderPrompt();
+    }
+  }
+  const threat = state.active && !state.menuOpen ? getNearestZombie() : null;
+  fps.updateHud(webgl.aimedZombie, webgl.lockedZombie, webgl.zombieVisuals.get(threat?.id)?.root);
+  fps.updateEffects(nowMs);
   updateZombiePromptOverlays();
 
   if (webgl.safehouseRingMaterial) {
@@ -2402,6 +2512,7 @@ function tickWebglFrame(nowMs) {
   }
 
   webgl.renderer.render(webgl.scene, webgl.camera);
+  if (!state.menuOpen) fps.renderWeapon(webgl.renderer);
   webgl.rafId = requestAnimationFrame(tickWebglFrame);
 }
 
@@ -2558,6 +2669,33 @@ function getNearestZombie() {
   return nearest;
 }
 
+function getCombatTarget() {
+  return webgl.fps ? webgl.lockedZombie || webgl.aimedZombie : getNearestZombie();
+}
+
+function clearCombatTarget() {
+  webgl.lockedZombie = null;
+  webgl.aimedZombie = null;
+  elements.answerInput.value = "";
+  document.body.classList.remove("fps-answering");
+  syncInputLock();
+  renderPrompt();
+}
+
+function lockAimedZombie() {
+  if (!state.active || state.menuOpen || state.intermission || webgl.lockedZombie) return;
+  const target = webgl.fps.aim(state.zombies, webgl.zombieVisuals);
+  if (!target) {
+    setFeedback("Put the crosshair on a zombie, then target it.", "note");
+    return;
+  }
+  webgl.lockedZombie = target;
+  webgl.fps.keys.clear();
+  document.body.classList.add("fps-answering");
+  syncInputLock();
+  renderPrompt();
+}
+
 function updateSafehouseVisual(hit = false) {
   if (!elements.safehouse) {
     return;
@@ -2697,19 +2835,19 @@ function renderPrompt() {
     return;
   }
 
-  const target = getNearestZombie();
+  const target = getCombatTarget();
   if (!target) {
     elements.targetLabel.textContent = "Scanning";
-    elements.promptText.textContent = "No active targets.";
-    elements.metaText.textContent = "Hold position.";
+    elements.promptText.textContent = webgl.fps ? "Find a zombie" : "No active targets.";
+    elements.metaText.textContent = webgl.fps ? "Follow the threat indicator." : "Hold position.";
     updateLearningUi();
     return;
   }
 
-  elements.targetLabel.textContent = "Nearest zombie";
+  elements.targetLabel.textContent = webgl.fps ? (webgl.lockedZombie ? "Target locked" : "In your sights") : "Nearest zombie";
   elements.promptText.textContent = formatPrompt(target.challenge);
 
-  if (target.sieging) {
+  if (target.sieging && !webgl.lockedZombie) {
     elements.targetLabel.textContent = "Safehouse breach";
     elements.metaText.textContent = `Urgent: this zombie is damaging the safehouse | Meaning: ${target.challenge.verb.meaning}`;
     updateLearningUi();
@@ -2730,10 +2868,12 @@ function renderPrompt() {
 function setInputEnabled(enabled) {
   elements.answerInput.disabled = !enabled;
   elements.submitBtn.disabled = !enabled;
+  document.getElementById("fpsCancel").hidden = !webgl.lockedZombie;
 }
 
 function syncInputLock() {
-  const canType = state.active && !state.intermission && !state.menuOpen;
+  const canType = state.active && !state.intermission && !state.menuOpen &&
+    (!webgl.fps || Boolean(webgl.lockedZombie));
   setInputEnabled(canType);
   if (canType) {
     elements.answerInput.focus();
@@ -2744,6 +2884,12 @@ function syncInputLock() {
 function setMenuOpen(open) {
   state.menuOpen = Boolean(open);
   document.body.classList.toggle("menu-open", state.menuOpen);
+  const resume = document.getElementById("resumeBtn");
+  resume.hidden = !state.active || !state.menuOpen;
+  if (webgl.fps && open) {
+    webgl.fps.release();
+    clearCombatTarget();
+  }
   syncInputLock();
   updateHud();
 }
@@ -2753,7 +2899,7 @@ function revealAnswer() {
     return;
   }
 
-  const target = getNearestZombie();
+  const target = getCombatTarget();
   if (!target) {
     setFeedback("No zombie currently in range.", "note");
     return;
@@ -3006,7 +3152,7 @@ function startWave(waveNumber) {
     return;
   }
 
-  setFeedback(`Wave ${waveNumber} is live. Keep typing.`, "note");
+  setFeedback(`Wave ${waveNumber} is live.`, "note");
   addFeed("note", `Wave ${waveNumber} started: ${state.toSpawnThisWave} zombies detected.`);
 
   updateHud();
@@ -3019,7 +3165,7 @@ function submitAnswer() {
     return;
   }
 
-  const target = getNearestZombie();
+  const target = webgl.fps ? webgl.lockedZombie : getNearestZombie();
   if (!target) {
     setFeedback("No zombie currently in range.", "note");
     return;
@@ -3030,12 +3176,22 @@ function submitAnswer() {
     setFeedback("Type a conjugation first.", "note");
     return;
   }
+  const targetRoot = webgl.zombieVisuals.get(target.id)?.root;
+  if (webgl.fps && (!targetRoot || target.exploding || !webgl.fps.canFireAt(targetRoot))) {
+    clearCombatTarget();
+    setFeedback("Target moved out of sight. Reposition and aim again.", "note");
+    return;
+  }
 
   const expected = normalize(target.challenge.answer);
   const given = sanitizeAnswer(raw);
   const usedReveal = state.learningMode && Boolean(target.answerRevealed);
 
   if (given === expected) {
+    if (webgl.fps) {
+      webgl.fps.fire(targetRoot, performance.now());
+      clearCombatTarget();
+    }
     startZombieExplosion(target);
     updateConjugationStats(target.challenge, usedReveal ? "pass" : "correct");
 
@@ -3084,6 +3240,7 @@ function submitAnswer() {
       );
     }
     addFeed("bad", `${formatPrompt(target.challenge)} missed. Zombie closed in fast.`);
+    if (webgl.fps) elements.answerInput.select();
   }
 
   updateHud();
@@ -3097,6 +3254,10 @@ function endGame(won, message) {
   state.intermission = false;
   clearTimers();
   document.body.classList.remove("game-live");
+  if (webgl.fps) {
+    webgl.fps.release();
+    clearCombatTarget();
+  }
   syncInputLock();
 
   state.resultText = won ? "Victory" : "Defeat";
@@ -3164,7 +3325,12 @@ function startGame() {
   persistCampaignProgress();
 
   document.body.classList.add("game-live");
-  setMenuOpen(true);
+  if (webgl.fps) {
+    webgl.fps.reset();
+    clearCombatTarget();
+  }
+  setMenuOpen(false);
+  webgl.fps?.capture();
   elements.answerInput.value = "";
 
   if (state.tickTimerId) {
@@ -3192,6 +3358,11 @@ function startGame() {
 
 function bindEvents() {
   elements.startBtn.addEventListener("click", startGame);
+  document.getElementById("fpsCancel").addEventListener("click", clearCombatTarget);
+  document.getElementById("resumeBtn").addEventListener("click", () => {
+    setMenuOpen(false);
+    webgl.fps?.capture();
+  });
   elements.difficultySelect.addEventListener("change", () => {
     persistCampaignProgress(buildConfigurationFromControls());
   });
@@ -3220,12 +3391,12 @@ function bindEvents() {
     }
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape" || event.repeat) {
+    if (event.key !== "Escape" || event.repeat || event.defaultPrevented) {
       return;
     }
 
-    if (!state.active) {
-      setMenuOpen(!state.menuOpen);
+    if (webgl.lockedZombie) {
+      clearCombatTarget();
       event.preventDefault();
       return;
     }
@@ -3241,6 +3412,9 @@ function bootstrap() {
   applySavedConfigurationToControls();
   loadConjugationStats();
   initWebglIfPossible();
+  if (!webgl.fps) {
+    document.getElementById("combatBriefing").textContent = "Type the conjugation shown for the nearest zombie.";
+  }
   updateSafehouseVisual(false);
   setMenuOpen(true);
   renderPrompt();

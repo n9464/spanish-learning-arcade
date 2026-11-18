@@ -2,9 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
     <title>Zombie Conjugation Survival</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="zombie-fps.css" />
   </head>
   <body>
     <div class="night-fx" aria-hidden="true">
@@ -22,11 +23,12 @@
           Survive waves of zombies by typing correct verb conjugations before they
           reach your safehouse.
         </p>
-        <p class="menu-hint">Press <kbd>Esc</kbd> anytime to close or reopen this panel.</p>
+        <p class="menu-hint">Press <kbd>Esc</kbd> to cancel an answer or open the pause menu.</p>
 
         <div class="briefing">
-          <p><strong>How it works:</strong> each zombie carries a conjugation prompt.</p>
-          <p><strong>Correct:</strong> zombie eliminated. <strong>Wrong:</strong> zombie rushes closer.</p>
+          <p id="combatBriefing"><strong>Move:</strong> WASD. <strong>Look:</strong> mouse or arrow keys. <strong>Target:</strong> click or press F with a zombie in your sights.</p>
+          <p class="fps-touch-briefing"><strong>Move:</strong> hold the direction buttons. <strong>Look:</strong> drag the battlefield. <strong>Target:</strong> put a zombie in the crosshair and tap Target.</p>
+          <p><strong>Fire:</strong> type the conjugation and press Enter. A wrong answer lets the zombie rush closer.</p>
         </div>
 
         <div class="setup-grid">
@@ -65,6 +67,7 @@
         </fieldset>
 
         <button id="startBtn" class="btn btn-primary">Start Survival</button>
+        <button id="resumeBtn" class="btn btn-secondary" type="button" hidden>Resume</button>
         <p id="setupMessage" class="setup-message">
           Example: <code>yo - tener (presente)</code> -> type <code>tengo</code>
         </p>
@@ -86,6 +89,13 @@
               <div class="hud-pill liquid-glass"><span>Status</span><strong id="statusValue">Idle</strong></div>
             </div>
           </div>
+
+          <div class="fps-navigation" aria-hidden="true">
+            <span id="fpsHeading"></span>
+            <span id="fpsThreat"></span>
+          </div>
+          <div id="fpsReticle" class="fps-reticle" aria-hidden="true"></div>
+          <button id="fpsCapture" class="fps-capture btn btn-secondary" type="button" hidden>Enable mouse look</button>
 
           <div class="battle-ui battle-ui-center liquid-glass">
             <p id="targetLabel" class="target-label">Nearest zombie</p>
@@ -117,17 +127,28 @@
               <button id="revealBtn" class="btn btn-secondary" type="button" disabled hidden>
                 Reveal Answer
               </button>
-              <button id="submitBtn" class="btn btn-primary" disabled>Eliminate Zombie</button>
+              <button id="submitBtn" class="btn btn-primary" disabled>Fire</button>
+              <button id="fpsCancel" class="btn btn-secondary" type="button" hidden>Cancel</button>
             </div>
             <p id="feedbackText" class="feedback" role="status" aria-live="polite"></p>
+          </div>
+          <div class="fps-touch">
+            <div class="fps-dpad" aria-label="Movement">
+              <button type="button" data-move="KeyW" aria-label="Move forward">▲</button>
+              <button type="button" data-move="KeyA" aria-label="Move left">◀</button>
+              <button type="button" data-move="KeyS" aria-label="Move backward">▼</button>
+              <button type="button" data-move="KeyD" aria-label="Move right">▶</button>
+            </div>
+            <button id="fpsTouchTarget" type="button">Target</button>
+            <button id="fpsTouchPause" type="button">Pause</button>
           </div>
         </div>
       </section>
     </main>
 
-    <script src="assets/images/forest-backdrop-data.js"></script>
     <script src="assets/models/forest-environment-data.js"></script>
     <script src="assets/models/zombie-realistic-data.js"></script>
+    <script src="zombie-fps.js"></script>
     <script src="assets/vendor/game-bootstrap.bundle.js"></script>
   </body>
 </html>

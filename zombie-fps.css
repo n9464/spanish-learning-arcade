@@ -1,0 +1,247 @@
+.fps-reticle,
+.fps-navigation,
+.fps-touch,
+.fps-touch-briefing {
+  display: none;
+}
+
+.fps-enabled .battlefield,
+.fps-enabled .combat-panel {
+  height: 100dvh;
+  min-height: 100dvh;
+}
+
+.fps-enabled .safehouse,
+.fps-enabled .battle-grid {
+  display: none;
+}
+
+.fps-enabled .zombie-webgl-canvas {
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.fps-enabled .battle-ui-top,
+.fps-enabled .battle-ui-center,
+.fps-enabled .battle-ui-bottom {
+  pointer-events: none;
+}
+
+.fps-enabled .battle-ui-bottom button,
+.fps-enabled .battle-ui-bottom input {
+  pointer-events: auto;
+}
+
+.fps-enabled .battle-ui-center {
+  top: auto;
+  bottom: 22px;
+  left: 20px;
+  transform: none;
+  width: min(440px, 53vw);
+  padding: 10px 14px;
+  text-align: left;
+  border: 1px solid #abc6bc40;
+  border-radius: 8px;
+  background: #0d1719df;
+  backdrop-filter: none;
+}
+
+.fps-enabled #promptText {
+  font-size: clamp(1.05rem, 2.5vw, 1.55rem);
+  margin-top: 3px;
+}
+
+.fps-enabled .battle-ui-center .meta-text {
+  margin-top: 3px;
+}
+
+.fps-enabled .battle-ui-bottom {
+  bottom: 22px;
+  right: 20px;
+  left: auto;
+  transform: none;
+  width: min(510px, 39vw);
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #0d1719df;
+  backdrop-filter: none;
+}
+
+.fps-enabled:not(.fps-answering) .typing-row,
+.fps-enabled .webgl-prompt-meta {
+  display: none;
+}
+
+.fps-enabled .feedback {
+  margin: 0;
+  min-height: 0;
+}
+
+.fps-enabled.fps-answering .feedback {
+  margin-top: 6px;
+}
+
+.fps-enabled .webgl-zombie-prompt {
+  transform: translate(-50%, -115%);
+  max-width: min(260px, 70vw);
+  background: #0d1719e6;
+  border-color: #badacc7d;
+  backdrop-filter: none;
+}
+
+.fps-enabled.fps-answering .webgl-zombie-prompt {
+  visibility: hidden;
+}
+
+.fps-enabled.game-live:not(.menu-open) .fps-navigation {
+  position: absolute;
+  top: 63px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 11px;
+  border: 1px solid #abc6bc40;
+  border-radius: 5px;
+  background: #0d1719db;
+  color: #dbede7;
+  z-index: 2350;
+  font: 600 0.72rem/1.2 ui-monospace, monospace;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+#fpsThreat {
+  color: #f3b08c;
+}
+
+#fpsThreat:empty {
+  display: none;
+}
+
+.fps-enabled.game-live:not(.menu-open) .fps-reticle {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translate(-50%, -50%);
+  color: #effcf8d9;
+  z-index: 2350;
+  pointer-events: none;
+  filter: drop-shadow(0 0 2px #000);
+}
+
+.fps-reticle::before,
+.fps-reticle::after {
+  content: "";
+  position: absolute;
+  inset: 8px 0 auto;
+  height: 2px;
+  background: linear-gradient(to right, currentColor 30%, transparent 30% 70%, currentColor 70%);
+}
+
+.fps-reticle::after {
+  transform: rotate(90deg);
+}
+
+.fps-enabled .fps-reticle.on-target {
+  color: #ffc078;
+}
+
+.fps-capture {
+  position: absolute;
+  z-index: 2400;
+  top: 62px;
+  right: 15px;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+}
+
+#resumeBtn[hidden],
+.fps-capture[hidden],
+#fpsCancel[hidden] {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .fps-enabled.game-live:not(.menu-open) .fps-navigation,
+  .fps-capture {
+    top: 94px;
+  }
+
+  .fps-enabled .battle-ui-center,
+  .fps-enabled .battle-ui-bottom {
+    left: 12px;
+    right: 12px;
+    width: auto;
+  }
+
+  .fps-enabled .battle-ui-center {
+    bottom: 62px;
+  }
+
+  .fps-enabled .battle-ui-bottom {
+    bottom: 8px;
+  }
+
+  .fps-enabled.fps-answering .battle-ui-center {
+    bottom: 144px;
+  }
+
+  .fps-enabled .typing-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fps-enabled .typing-row input {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (pointer: coarse) {
+  .fps-capture,
+  .fps-enabled #combatBriefing {
+    display: none;
+  }
+
+  .fps-enabled .fps-touch-briefing {
+    display: block;
+  }
+
+  .fps-enabled.game-live:not(.menu-open):not(.fps-answering) .fps-touch {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    position: absolute;
+    left: 12px;
+    bottom: 142px;
+    z-index: 2450;
+  }
+
+  .fps-touch button {
+    min-width: 40px;
+    min-height: 38px;
+    border: 1px solid #abc6bc70;
+    background: #0d1719e6;
+    color: #effcf8;
+    border-radius: 7px;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .fps-dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 40px);
+    gap: 3px;
+  }
+
+  .fps-dpad button:first-child {
+    grid-column: 2;
+  }
+
+  .fps-dpad button:nth-child(2) {
+    grid-column: 1;
+  }
+}
