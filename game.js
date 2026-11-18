@@ -2884,6 +2884,7 @@ function syncInputLock() {
 function setMenuOpen(open) {
   state.menuOpen = Boolean(open);
   document.body.classList.toggle("menu-open", state.menuOpen);
+  document.querySelector(".setup-panel").inert = !state.menuOpen;
   const resume = document.getElementById("resumeBtn");
   resume.hidden = !state.active || !state.menuOpen;
   if (webgl.fps && open) {

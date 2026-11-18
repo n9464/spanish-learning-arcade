@@ -27,6 +27,15 @@
   pointer-events: none;
 }
 
+.fps-enabled .typing-row {
+  display: flex;
+}
+
+.fps-enabled .typing-row input {
+  min-width: 0;
+  flex: 1;
+}
+
 .fps-enabled .battle-ui-bottom button,
 .fps-enabled .battle-ui-bottom input {
   pointer-events: auto;
@@ -172,31 +181,35 @@
     top: 94px;
   }
 
-  .fps-enabled .battle-ui-center,
-  .fps-enabled .battle-ui-bottom {
+  .fps-enabled .fps-combat-ui {
+    display: grid;
+    gap: 6px;
+    position: absolute;
+    bottom: 8px;
     left: 12px;
     right: 12px;
+    z-index: 2400;
+    pointer-events: none;
+  }
+
+  .fps-enabled .battle-ui-center,
+  .fps-enabled .battle-ui-bottom {
+    position: static;
     width: auto;
   }
 
-  .fps-enabled .battle-ui-center {
-    bottom: 62px;
-  }
-
-  .fps-enabled .battle-ui-bottom {
-    bottom: 8px;
-  }
-
-  .fps-enabled.fps-answering .battle-ui-center {
-    bottom: 144px;
-  }
-
   .fps-enabled .typing-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    flex-wrap: wrap;
+    gap: 6px;
   }
 
   .fps-enabled .typing-row input {
-    grid-column: 1 / -1;
+    flex-basis: 100%;
+  }
+
+  .fps-enabled .typing-row .btn {
+    flex: auto;
+    width: auto;
   }
 }
 

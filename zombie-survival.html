@@ -97,15 +97,6 @@
           <div id="fpsReticle" class="fps-reticle" aria-hidden="true"></div>
           <button id="fpsCapture" class="fps-capture btn btn-secondary" type="button" hidden>Enable mouse look</button>
 
-          <div class="battle-ui battle-ui-center liquid-glass">
-            <p id="targetLabel" class="target-label">Nearest zombie</p>
-            <h3 id="promptText">Start survival to get your first target.</h3>
-            <p id="metaText" class="meta-text">
-              Type the conjugation and press Enter.
-            </p>
-            <p id="learningHintText" class="learning-hint" hidden></p>
-          </div>
-
           <div id="safehouse" class="safehouse" aria-label="Concrete safehouse bunker">
             <div class="safehouse-core"></div>
             <p>Shelter 04</p>
@@ -114,23 +105,33 @@
             <p class="lane-placeholder">No zombies yet.</p>
           </div>
 
-          <div class="battle-ui battle-ui-bottom liquid-glass">
-            <div class="typing-row">
-              <input
-                id="answerInput"
-                class="liquid-glass-input"
-                type="text"
-                placeholder="Type conjugation"
-                autocomplete="off"
-                disabled
-              />
-              <button id="revealBtn" class="btn btn-secondary" type="button" disabled hidden>
-                Reveal Answer
-              </button>
-              <button id="submitBtn" class="btn btn-primary" disabled>Fire</button>
-              <button id="fpsCancel" class="btn btn-secondary" type="button" hidden>Cancel</button>
+          <div class="fps-combat-ui">
+            <div class="battle-ui battle-ui-center liquid-glass">
+              <p id="targetLabel" class="target-label">Nearest zombie</p>
+              <h3 id="promptText">Start survival to get your first target.</h3>
+              <p id="metaText" class="meta-text">Type the conjugation and press Enter.</p>
+              <p id="learningHintText" class="learning-hint" hidden></p>
             </div>
-            <p id="feedbackText" class="feedback" role="status" aria-live="polite"></p>
+            <div class="battle-ui battle-ui-bottom liquid-glass">
+              <div class="typing-row">
+                <input
+                  id="answerInput"
+                  class="liquid-glass-input"
+                  type="text"
+                  placeholder="Type conjugation"
+                  autocomplete="off"
+                  autocapitalize="none"
+                  spellcheck="false"
+                  disabled
+                />
+                <button id="revealBtn" class="btn btn-secondary" type="button" disabled hidden>
+                  Reveal Answer
+                </button>
+                <button id="submitBtn" class="btn btn-primary" disabled>Fire</button>
+                <button id="fpsCancel" class="btn btn-secondary" type="button" hidden>Cancel</button>
+              </div>
+              <p id="feedbackText" class="feedback" role="status" aria-live="polite"></p>
+            </div>
           </div>
           <div class="fps-touch">
             <div class="fps-dpad" aria-label="Movement">
